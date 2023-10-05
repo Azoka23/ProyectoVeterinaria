@@ -84,6 +84,9 @@
             </Property>
             <Property name="text" type="java.lang.String" value="Administracion"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMbarAdmActionPerformed"/>
+          </Events>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMIVisitas">
               <Properties>
@@ -95,6 +98,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Visitas"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMIVisitasActionPerformed"/>
+              </Events>
             </MenuItem>
             <MenuItem class="javax.swing.JMenuItem" name="jMITratam">
               <Properties>

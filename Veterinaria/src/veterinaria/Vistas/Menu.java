@@ -118,10 +118,20 @@ public class Menu extends javax.swing.JFrame {
 
         jMbarAdm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/pet_folder_file_document_page_icon_124627.png"))); // NOI18N
         jMbarAdm.setText("Administracion");
+        jMbarAdm.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMbarAdmActionPerformed(evt);
+            }
+        });
 
         jMIVisitas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
         jMIVisitas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/checklist_medical_healthcare_pen_clipboard_clipchart_icon_142002.png"))); // NOI18N
         jMIVisitas.setText("Visitas");
+        jMIVisitas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMIVisitasActionPerformed(evt);
+            }
+        });
         jMbarAdm.add(jMIVisitas);
 
         jMITratam.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
@@ -199,7 +209,7 @@ public class Menu extends javax.swing.JFrame {
             jEscritorio.add(cargarMascotas);
             cargarMascotas.setVisible(true);
 
-            // TODO add your handling code here:
+            
         } catch (ClassNotFoundException ex) {
             Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -216,21 +226,39 @@ public class Menu extends javax.swing.JFrame {
     private void jMINuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMINuevoActionPerformed
         jEscritorio.removeAll();
         jEscritorio.repaint();
-        //jEscritorio.add(jLULP);
+
         FormularioCliente cargarCliente = new FormularioCliente();
 
-        // Configurar el tamaño del JInternalFrame
         cargarCliente.setSize(600, 500);
 
-        // Calcular el centro del JDesktopPane
         int x = (jEscritorio.getWidth() - cargarCliente.getWidth()) / 2;
         int y = (jEscritorio.getHeight() - cargarCliente.getHeight()) / 2;
 
-        // Establecer la ubicación y agregar el JInternalFrame
         cargarCliente.setBounds(x, y, cargarCliente.getWidth(), cargarCliente.getHeight());
         jEscritorio.add(cargarCliente);
         cargarCliente.setVisible(true);
     }//GEN-LAST:event_jMINuevoActionPerformed
+
+    private void jMbarAdmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMbarAdmActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMbarAdmActionPerformed
+
+    private void jMIVisitasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMIVisitasActionPerformed
+        jEscritorio.removeAll();
+        jEscritorio.repaint();
+        //jEscritorio.add(jLULP);
+        FormularioVisitas visitas = new FormularioVisitas();
+        // Configurar el tamaño del JInternalFrame
+        visitas.setSize(600, 500);
+        visitas.pack();
+        // Calcular el centro del JDesktopPane
+        int x = (jEscritorio.getWidth() - visitas.getWidth()) / 2;
+        int y = (jEscritorio.getHeight() - visitas.getHeight()) / 2;
+        // Establecer la ubicación y agregar el JInternalFrame
+        visitas.setBounds(x, y, visitas.getWidth(), visitas.getHeight());
+        jEscritorio.add(visitas);
+        visitas.setVisible(true);
+    }//GEN-LAST:event_jMIVisitasActionPerformed
 
     /**
      * @param args the command line arguments

@@ -74,12 +74,12 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
         jTPesoM = new javax.swing.JTextField();
         jLAño4 = new javax.swing.JLabel();
         jTPesoA = new javax.swing.JTextField();
-        jDCFechaNac = new com.toedter.calendar.JDateChooser();
         jCBClientes = new javax.swing.JComboBox<>();
         jRBEstado = new javax.swing.JRadioButton();
         jBGuardar = new javax.swing.JButton();
         jBBuscar = new javax.swing.JButton();
         jBSalir = new javax.swing.JButton();
+        jDCFechaNac = new com.toedter.calendar.JDateChooser();
 
         setBackground(new java.awt.Color(0, 51, 51));
         setBorder(null);
@@ -221,8 +221,7 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
                         .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(jTEspecies, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 294, Short.MAX_VALUE)
-                                .addComponent(jTRaza, javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jDCFechaNac, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jTRaza, javax.swing.GroupLayout.Alignment.LEADING))
                             .addGroup(jPanel7Layout.createSequentialGroup()
                                 .addComponent(jTPesoM, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -248,13 +247,17 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
                                 .addComponent(jTAlias, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)))
                         .addGap(0, 0, Short.MAX_VALUE))))
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addComponent(jCBClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jCBClientes, javax.swing.GroupLayout.PREFERRED_SIZE, 247, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jDCFechaNac, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(16, Short.MAX_VALUE)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jBSalir)
                     .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -276,15 +279,15 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jTPesoA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jLAño4)))
-                .addGap(18, 18, 18)
+                .addGap(11, 11, 11)
                 .addComponent(jDCFechaNac, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(13, 13, 13)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jCBClientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBGuardar)
                     .addComponent(jRBEstado))
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         jSplitPane1.setRightComponent(jPanel7);
