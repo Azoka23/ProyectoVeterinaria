@@ -127,6 +127,11 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
         jTContNombre.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
 
         jRBEstado.setText("Estado");
+        jRBEstado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRBEstadoActionPerformed(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel4.setText("Apellido, Nombre");
@@ -359,6 +364,19 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_jBGuardarActionPerformed
 
+    private void jRBEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRBEstadoActionPerformed
+
+
+        // TODO add your handling code here:
+        if (jRBEstado.isSelected() ) {
+            jRBEstado.setText("Cliente dado de Alta");
+        }else{
+                   jRBEstado.setText("Cliente dado de Baja");
+        }
+        
+ 
+    }//GEN-LAST:event_jRBEstadoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBBuscar;
@@ -423,7 +441,7 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
     private void limpiarBuscar() {
 
         Utilidades.limpiarSetText(jTApellido, jTNombre, jTDireccion, jTtelefono, jTMail, jTContNombre, jTContactoTelefono);
-
+        modelo.setRowCount(0); // Limpiar la tabla antes de agregar nuevos datos
     }
 
     private void eliminadologico() {
@@ -466,6 +484,7 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
             }
 
             mostrarClienteEnFormulario(cliente);
+            cargarTabla(cliente.getIdCliente());
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "No se encontro el DNI");
@@ -478,7 +497,7 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
         int documento;
         try {
             try {
-                
+
                 documento = Integer.parseInt(jTDocumento.getText());
 
                 cliente = clienteD.buscarListaClientexDni(documento);
@@ -528,11 +547,14 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
                     cliente.setEstado(true);
                     clienteD.guardarCliente(cliente);
                 } catch (Exception ex) {
+
                     Utilidades.mostrarError(ex, this);
                 }
 
             } else if (estado.equals(Estado.BUSCAR)) {
-
+//                    if (cliente.isEstado()) {
+//                        Utilidades.confirmarEstado(this);
+//                    }
                 clienteD.modificarCliente(cliente);
             }
 
@@ -567,23 +589,20 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
         modelo.addColumn("Peso");
         jTMascotas.setModel(modelo);
     }
+
     private void cargarTabla(int idCliente) throws Exception {
 
         MascotaDAO cursadas = new MascotaDAO();
         Collection<Mascota> listaMascota = new ArrayList<>(); // Inicialización predeterminada
 
-//        if (jRBMInscriptas.isSelected() && !jRBMNoInscriptas.isSelected()) {
-////            listaMascota = cursadas.obtenerMateriaCursada(idCliente);
-//        } else if (!jRBMInscriptas.isSelected() && jRBMNoInscriptas.isSelected()) {
-            listaMascota = cursadas.listarMascotasxIdCliente(idCliente);
-       // }
+        listaMascota = cursadas.listarMascotasxIdCliente(idCliente);
 
         for (Mascota tipo : listaMascota) {
             if (tipo.isEstado()) {
                 modelo.addRow(new Object[]{tipo.getIdMascota(), tipo.getAlias(), tipo.getPesoActual()});
 
             }
-            
+
         }
 
     }
