@@ -34,7 +34,7 @@ public class IngresoAlSistema extends javax.swing.JFrame {
         jlBienvenida = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Universidad");
+        setTitle("Pet Doctor Veterinaria");
 
         jpLogging.setBackground(new java.awt.Color(0, 153, 153));
         jpLogging.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
@@ -72,7 +72,7 @@ public class IngresoAlSistema extends javax.swing.JFrame {
             jpLoggingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpLoggingLayout.createSequentialGroup()
                 .addGap(51, 51, 51)
-                .addGroup(jpLoggingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jpLoggingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jBIngresar)
                     .addGroup(jpLoggingLayout.createSequentialGroup()
                         .addGroup(jpLoggingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -81,9 +81,9 @@ public class IngresoAlSistema extends javax.swing.JFrame {
                         .addGap(18, 18, 18)
                         .addGroup(jpLoggingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jTUsuario, javax.swing.GroupLayout.DEFAULT_SIZE, 139, Short.MAX_VALUE)
-                            .addComponent(jTPassword))
-                        .addGap(18, 18, 18)
-                        .addComponent(jLMostrar))))
+                            .addComponent(jTPassword))))
+                .addGap(18, 18, 18)
+                .addComponent(jLMostrar))
         );
         jpLoggingLayout.setVerticalGroup(
             jpLoggingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -98,9 +98,9 @@ public class IngresoAlSistema extends javax.swing.JFrame {
                     .addGroup(jpLoggingLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jlPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jTPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(24, 24, 24)
+                .addGap(27, 27, 27)
                 .addComponent(jBIngresar)
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addContainerGap(61, Short.MAX_VALUE))
         );
 
         jlBienvenida.setBackground(new java.awt.Color(204, 204, 204));

@@ -74,7 +74,7 @@ public class Menu extends javax.swing.JFrame {
         jBarClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/people_114360.png"))); // NOI18N
         jBarClientes.setText("Clientes");
 
-        jMIBuscar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.SHIFT_DOWN_MASK));
+        jMIBuscar.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.ALT_MASK));
         jMIBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/free-30-instagram-stories-icons23_122570.png"))); // NOI18N
         jMIBuscar.setText("Buscar");
         jMIBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -84,7 +84,7 @@ public class Menu extends javax.swing.JFrame {
         });
         jBarClientes.add(jMIBuscar);
 
-        jMINuevo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.SHIFT_DOWN_MASK));
+        jMINuevo.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.ALT_MASK));
         jMINuevo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/free-30-instagram-stories-icons53_122600.png"))); // NOI18N
         jMINuevo.setText("Nuevo");
         jMINuevo.addActionListener(new java.awt.event.ActionListener() {
@@ -99,12 +99,12 @@ public class Menu extends javax.swing.JFrame {
         jBarMascotas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/labrador_dog_animal_15967.png"))); // NOI18N
         jBarMascotas.setText("Mascotas");
 
-        jMIBuscarMascotas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        jMIBuscarMascotas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_MASK));
         jMIBuscarMascotas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/free-30-instagram-stories-icons21_122568.png"))); // NOI18N
         jMIBuscarMascotas.setText("Buscar");
         jBarMascotas.add(jMIBuscarMascotas);
 
-        jMINuevaMasc.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        jMINuevaMasc.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_B, java.awt.event.InputEvent.CTRL_MASK));
         jMINuevaMasc.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/free-30-instagram-stories-icons51_122598.png"))); // NOI18N
         jMINuevaMasc.setText("Nueva");
         jMINuevaMasc.addActionListener(new java.awt.event.ActionListener() {
@@ -119,12 +119,12 @@ public class Menu extends javax.swing.JFrame {
         jMbarAdm.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/pet_folder_file_document_page_icon_124627.png"))); // NOI18N
         jMbarAdm.setText("Administracion");
 
-        jMIVisitas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        jMIVisitas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_MASK));
         jMIVisitas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/checklist_medical_healthcare_pen_clipboard_clipchart_icon_142002.png"))); // NOI18N
         jMIVisitas.setText("Visitas");
         jMbarAdm.add(jMIVisitas);
 
-        jMITratam.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        jMITratam.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_D, java.awt.event.InputEvent.CTRL_MASK));
         jMITratam.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/medical-12_icon-icons.com_73944.png"))); // NOI18N
         jMITratam.setText("Tratamiento");
         jMITratam.addActionListener(new java.awt.event.ActionListener() {
@@ -134,7 +134,7 @@ public class Menu extends javax.swing.JFrame {
         });
         jMbarAdm.add(jMITratam);
 
-        jMIOtros.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        jMIOtros.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
         jMIOtros.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/household_chores_feeding_pet_feed_dog_food_icon_133347.png"))); // NOI18N
         jMIOtros.setText("Otros");
         jMIOtros.addActionListener(new java.awt.event.ActionListener() {
@@ -149,7 +149,7 @@ public class Menu extends javax.swing.JFrame {
         jMBarFacturacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/budget256_24775.png"))); // NOI18N
         jMBarFacturacion.setText("Facturacion");
 
-        jMICosto.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        jMICosto.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
         jMICosto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/pet_rat_mouse_11098.png"))); // NOI18N
         jMICosto.setText("Costo visita");
         jMBarFacturacion.add(jMICosto);
