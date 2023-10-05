@@ -1,5 +1,7 @@
 package veterinaria.Vistas;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import veterinaria.AccesoADatos.ClienteDAO;
@@ -10,17 +12,20 @@ import veterinaria.Utilidades;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
 
 public class FormularioCliente extends javax.swing.JInternalFrame {
 
     //private JButton botonAnterior = null; // Variable para almacenar el botón anterior
-    private Estado estado;
+    private Estado estado = Estado.NADA;
 
     private Cliente selectedCliente = null;
     private int idMascotas = 0;
     private int idCliente = 0;
+    private boolean estadoCliente;
 
     private DefaultTableModel modelo = new DefaultTableModel() {
 
@@ -38,6 +43,56 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
         armarCabecera();
         // Establecer el foco en jTDocumento
         jTDocumento.requestFocusInWindow();
+
+        jRBEstado.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                // Verifica si el cliente ya existe (es decir, está en modo edición)
+                if (estado.equals(Estado.BUSCAR)) {
+                    int option = JOptionPane.showConfirmDialog(
+                            FormularioCliente.this, // El componente padre para el cuadro de diálogo
+                            "¿Está seguro de cambiar el estado del cliente?", // El mensaje que se mostrará
+                            "Confirmar Cambio de Estado", // El título del cuadro de diálogo
+                            JOptionPane.YES_NO_OPTION); // Tipo de opciones (Sí o No)
+
+                    // Si el usuario selecciona "Sí" en el cuadro de diálogo
+                    if (option == JOptionPane.YES_OPTION) {
+                        try {
+                            int dni = Integer.parseInt(jTDocumento.getText());
+                            ClienteDAO clienteD = new ClienteDAO();
+//JOptionPane.showMessageDialog(FormularioCliente.this, estadoCliente+" "+jRBEstado.isSelected());
+                            // Si el estado actual es true, llama a bajaLogica(int dni)
+                            //if (jRBEstado.isSelected()) {
+                            if (estadoCliente) {
+                                try {
+                                    clienteD.bajaLogica(dni);
+                                    setTitle("Cliente -- DNI dado de Baja");
+                                    JOptionPane.showMessageDialog(FormularioCliente.this, "El cliente ha sido dado de baja");
+                                } catch (Exception ex) {
+                                    Utilidades.mostrarError(ex, FormularioCliente.this);
+                                }
+                            } else {
+                                // Si el estado actual es false, llama a altaLogica(int dni)
+                                try {
+                                    clienteD.altaLogica(dni);
+                                    setTitle("Cliente");
+                                    JOptionPane.showMessageDialog(FormularioCliente.this, "El cliente ha sido dado de alta");
+                                } catch (Exception ex) {
+                                    Utilidades.mostrarError(ex, FormularioCliente.this);
+                                }
+                            }
+                        } catch (ClassNotFoundException ex) {
+                            Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (SQLException ex) {
+                            Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
+                        }
+                    } else {
+                        // Si el usuario selecciona "No", deshace el cambio en el estado del JRadioButton
+                        jRBEstado.setSelected(!jRBEstado.isSelected());
+                    }
+                }
+            }
+        });
 
     }
 
@@ -366,15 +421,14 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
 
     private void jRBEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRBEstadoActionPerformed
 
+//
+//        // TODO add your handling code here:
+//        if (jRBEstado.isSelected() ) {
+//            jRBEstado.setText("Cliente dado de Alta");
+//        }else{
+//                   jRBEstado.setText("Cliente dado de Baja");
+//        }
 
-        // TODO add your handling code here:
-        if (jRBEstado.isSelected() ) {
-            jRBEstado.setText("Cliente dado de Alta");
-        }else{
-                   jRBEstado.setText("Cliente dado de Baja");
-        }
-        
- 
     }//GEN-LAST:event_jRBEstadoActionPerformed
 
 
@@ -444,26 +498,25 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
         modelo.setRowCount(0); // Limpiar la tabla antes de agregar nuevos datos
     }
 
-    private void eliminadologico() {
-        //if (botonAnterior == jBBuscar) {
-        if (estado.equals(Estado.BUSCAR)) {
-            try {
-                int dni = Integer.parseInt(jTDocumento.getText());
-                ClienteDAO clienteD = new ClienteDAO();
-                clienteD.eliminarLogico(dni);
-                JOptionPane.showMessageDialog(this, "El alumno fue dado de baja");
-                limpiar();
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Por favor, ingrese un número de documento válido.");
-            } catch (Exception ex) {
-                JOptionPane.showMessageDialog(this, "Se produjo un error al eliminar el alumno.");
-                ex.printStackTrace();
-            }
-        } else {
-            JOptionPane.showMessageDialog(this, "Por favor, ingrese un número de documento que exista.");
-        }
-    }
-
+//    private void eliminadologico() {
+//        //if (botonAnterior == jBBuscar) {
+//        if (estado.equals(Estado.BUSCAR)) {
+//            try {
+//                int dni = Integer.parseInt(jTDocumento.getText());
+//                ClienteDAO clienteD = new ClienteDAO();
+//                clienteD.eliminarLogico(dni);
+//                JOptionPane.showMessageDialog(this, "El alumno fue dado de baja");
+//                limpiar();
+//            } catch (NumberFormatException ex) {
+//                JOptionPane.showMessageDialog(this, "Por favor, ingrese un número de documento válido.");
+//            } catch (Exception ex) {
+//                JOptionPane.showMessageDialog(this, "Se produjo un error al eliminar el alumno.");
+//                ex.printStackTrace();
+//            }
+//        } else {
+//            JOptionPane.showMessageDialog(this, "Por favor, ingrese un número de documento que exista.");
+//        }
+//    }
     private void buscarxDni() throws ClassNotFoundException, SQLException {
 
         ClienteDAO clienteD = new ClienteDAO();
@@ -520,7 +573,8 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
             String direccion = jTDireccion.getText();
             String telefono = jTtelefono.getText();
             String email = jTMail.getText();
-            boolean estadoCliente = jRBEstado.isSelected();
+            //boolean estadoCliente = jRBEstado.isSelected();
+            estadoCliente = jRBEstado.isSelected();
             String contactoNombre = jTContNombre.getText();
             String contactoTel = jTContactoTelefono.getText();
 
@@ -578,6 +632,7 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
         }
 
         jRBEstado.setSelected(cliente.isEstado());
+        estadoCliente=cliente.isEstado();
         jTContNombre.setText(cliente.getContactoNombre());
         jTContactoTelefono.setText(cliente.getContactoTelefono());
     }
