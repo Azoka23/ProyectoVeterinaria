@@ -187,7 +187,19 @@ public class Menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jMIBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMIBuscarActionPerformed
-        // TODO add your handling code here:
+jEscritorio.removeAll();
+        jEscritorio.repaint();
+
+        FormularioClienteBuscar cargarCliente = new FormularioClienteBuscar();
+
+        cargarCliente.setSize(600, 500);
+
+        int x = (jEscritorio.getWidth() - cargarCliente.getWidth()) / 2;
+        int y = (jEscritorio.getHeight() - cargarCliente.getHeight()) / 2;
+
+        cargarCliente.setBounds(x, y, cargarCliente.getWidth(), cargarCliente.getHeight());
+        jEscritorio.add(cargarCliente);
+        cargarCliente.setVisible(true);        
     }//GEN-LAST:event_jMIBuscarActionPerformed
 
     private void jMINuevaMascActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMINuevaMascActionPerformed

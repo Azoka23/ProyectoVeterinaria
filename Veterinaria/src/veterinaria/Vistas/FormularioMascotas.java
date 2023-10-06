@@ -130,7 +130,7 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
         jDCFechaNac = new com.toedter.calendar.JDateChooser();
 
         setBackground(new java.awt.Color(0, 51, 51));
-        setBorder(null);
+        setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         setClosable(true);
         setTitle("Mascota");
 
