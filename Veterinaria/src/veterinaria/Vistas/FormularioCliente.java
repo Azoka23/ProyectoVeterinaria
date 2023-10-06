@@ -60,7 +60,7 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
                         try {
                             int dni = Integer.parseInt(jTDocumento.getText());
                             ClienteDAO clienteD = new ClienteDAO();
-//JOptionPane.showMessageDialog(FormularioCliente.this, estadoCliente+" "+jRBEstado.isSelected());
+
                             // Si el estado actual es true, llama a bajaLogica(int dni)
                             //if (jRBEstado.isSelected()) {
                             if (estadoCliente) {
