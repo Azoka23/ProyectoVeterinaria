@@ -23,7 +23,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 
-public class FormularioMascotas extends javax.swing.JInternalFrame {
+public class FormularioMascotasBuscar extends javax.swing.JInternalFrame {
 
     //private JButton botonAnterior = null; // Variable para almacenar el botón anterior
     //private JButton botonAnterior = null; // Variable para almacenar el botón anterior
@@ -37,7 +37,7 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
     /**
      * Creates new form InfoMateria
      */
-    public FormularioMascotas() throws ClassNotFoundException {
+    public FormularioMascotasBuscar() throws ClassNotFoundException {
         initComponents();
         setTitle("Cargar Mascotas");
         try {
@@ -53,7 +53,7 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
                 // Verifica si el cliente ya existe (es decir, está en modo edición)
                 if (estado.equals(Estado.BUSCAR)) {
                     int option = JOptionPane.showConfirmDialog(
-                            FormularioMascotas.this, // El componente padre para el cuadro de diálogo
+                            FormularioMascotasBuscar.this, // El componente padre para el cuadro de diálogo
                             "¿Está seguro de cambiar el estado de la Mascota?", // El mensaje que se mostrará
                             "Confirmar Cambio de Estado", // El título del cuadro de diálogo
                             JOptionPane.YES_NO_OPTION); // Tipo de opciones (Sí o No)
@@ -69,18 +69,18 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
                                 try {
                                     mascotaD.bajaLogica(codigo);
                                     setTitle("Mascota -- Codigo dado de Baja");
-                                    JOptionPane.showMessageDialog(FormularioMascotas.this, "La Mascota ha sido dado de baja");
+                                    JOptionPane.showMessageDialog(FormularioMascotasBuscar.this, "La Mascota ha sido dado de baja");
                                 } catch (Exception ex) {
-                                    Utilidades.mostrarError(ex, FormularioMascotas.this);
+                                    Utilidades.mostrarError(ex, FormularioMascotasBuscar.this);
                                 }
                             } else {
                                 // Si el estado actual es false, llama a altaLogica(int dni)
                                 try {
                                     mascotaD.altaLogica(codigo);
                                     setTitle("Mascota");
-                                    JOptionPane.showMessageDialog(FormularioMascotas.this, "La Mascota ha sido dado de alta");
+                                    JOptionPane.showMessageDialog(FormularioMascotasBuscar.this, "La Mascota ha sido dado de alta");
                                 } catch (Exception ex) {
-                                    Utilidades.mostrarError(ex, FormularioMascotas.this);
+                                    Utilidades.mostrarError(ex, FormularioMascotasBuscar.this);
                                 }
                             }
                         } catch (ClassNotFoundException ex) {
@@ -122,11 +122,11 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
         jDCFechaNac = new com.toedter.calendar.JDateChooser();
         JCSexo = new javax.swing.JComboBox<>();
         jCBClientes = new javax.swing.JComboBox<>();
-        jBGuardar = new javax.swing.JButton();
+        jBBuscar = new javax.swing.JButton();
         jRBEstado = new javax.swing.JRadioButton();
         jBSalir = new javax.swing.JButton();
 
-        setTitle("Cargar Mascota");
+        setTitle("Buscar Mascota");
 
         jLCodigo.setText("Codigo");
 
@@ -152,7 +152,7 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
 
         jCBClientes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        jBGuardar.setText("Guardar");
+        jBBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/search_find_lupa_21889.png"))); // NOI18N
 
         jRBEstado.setText("Estado");
 
@@ -174,7 +174,9 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
                             .addComponent(jTCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTAlias, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jBGuardar)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jBBuscar)
+                            .addComponent(jBSalir))
                         .addGap(96, 96, 96))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -201,9 +203,7 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
                                         .addComponent(jTColorDePelo, javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(JCSexo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jTRaza))
-                                    .addGap(129, 129, 129)
-                                    .addComponent(jBSalir)
-                                    .addGap(116, 116, 116)))
+                                    .addGap(293, 293, 293)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jDCFechaNac, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -231,8 +231,9 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLSexo)
-                            .addComponent(JCSexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(37, 37, 37)
+                            .addComponent(JCSexo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jBSalir))
+                        .addGap(20, 20, 20)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLColorDePelo)
                             .addComponent(jTColorDePelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -250,9 +251,7 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
                             .addComponent(jTPesoM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(21, 21, 21)
-                        .addComponent(jBGuardar)
-                        .addGap(32, 32, 32)
-                        .addComponent(jBSalir)
+                        .addComponent(jBBuscar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLPesoA)
@@ -330,7 +329,7 @@ private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> JCSexo;
-    private javax.swing.JButton jBGuardar;
+    private javax.swing.JButton jBBuscar;
     private javax.swing.JButton jBSalir;
     private javax.swing.JComboBox<String> jCBClientes;
     private com.toedter.calendar.JDateChooser jDCFechaNac;
