@@ -56,6 +56,7 @@ public class Menu extends javax.swing.JFrame {
         jBarClientes = new javax.swing.JMenu();
         jMIBuscar = new javax.swing.JMenuItem();
         jMINuevo = new javax.swing.JMenuItem();
+        jRadioButtonMenuItem1 = new javax.swing.JRadioButtonMenuItem();
         jBarMascotas = new javax.swing.JMenu();
         jMIBuscarMascotas = new javax.swing.JMenuItem();
         jMINuevaMasc = new javax.swing.JMenuItem();
@@ -93,6 +94,10 @@ public class Menu extends javax.swing.JFrame {
             }
         });
         jBarClientes.add(jMINuevo);
+
+        jRadioButtonMenuItem1.setSelected(true);
+        jRadioButtonMenuItem1.setText("jRadioButtonMenuItem1");
+        jBarClientes.add(jRadioButtonMenuItem1);
 
         jMenuBar1.add(jBarClientes);
 
@@ -310,6 +315,7 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMIVisitas;
     private javax.swing.JMenu jMbarAdm;
     private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JRadioButtonMenuItem jRadioButtonMenuItem1;
     // End of variables declaration//GEN-END:variables
 
 }
