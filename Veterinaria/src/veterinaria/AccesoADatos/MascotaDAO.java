@@ -77,7 +77,7 @@ public class MascotaDAO extends DAO {
         }
     }
 
-    public void eliminarLogico(int codigo) throws Exception {
+    public void bajaLogica(int codigo) throws Exception {
         String sql = "UPDATE mascotas SET estado=? WHERE idMascota=?";
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
@@ -93,7 +93,22 @@ public class MascotaDAO extends DAO {
             desconectarBase(); // Asegura que la desconexión se realice incluso en caso de excepción.
         }
     }
+   public void altaLogica(int codigo) throws Exception {
+        String sql = "UPDATE mascotas SET estado=? WHERE idMascota=?";
 
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setBoolean(1, true);
+            preparedStatement.setInt(2, codigo);
+
+            insertarModificarEliminar(preparedStatement);
+
+        } catch (SQLException ex) {
+            // Manejar la excepción si es necesario
+            throw ex;
+        } finally {
+            desconectarBase(); // Asegura que la desconexión se realice incluso en caso de excepción.
+        }
+    }
     public int contarTotalRegistros() throws Exception {
         //Cuenta la cantidad de registros y cuando devuelvo el entero necesito sumar 1
         String sql = "SELECT COUNT(*) FROM mascotas";

@@ -63,7 +63,7 @@ public class ClienteDAO extends DAO {
         }
     }
 
-    public void eliminarLogico(int dni) throws Exception {
+    public void bajaLogica(int dni) throws Exception {
         String sql = "UPDATE clientes SET estado=? WHERE dni=?";
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
@@ -77,7 +77,20 @@ public class ClienteDAO extends DAO {
             desconectarBase(); // Asegura que la desconexión se realice incluso en caso de excepción.
         }
     }
+    public void altaLogica(int dni) throws Exception {
+        String sql = "UPDATE clientes SET estado=? WHERE dni=?";
 
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setBoolean(1, true);
+            preparedStatement.setInt(2, dni);
+            insertarModificarEliminar(preparedStatement);
+        } catch (SQLException ex) {
+            // Manejar la excepción si es necesario
+            throw ex;
+        } finally {
+            desconectarBase(); // Asegura que la desconexión se realice incluso en caso de excepción.
+        }
+    }
     public Cliente buscarListaClientexDni(int dni) throws Exception {
         String sql = "SELECT * FROM clientes WHERE dni=?";
 
