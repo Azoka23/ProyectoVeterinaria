@@ -34,6 +34,7 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
         jTMascota = new javax.swing.JTextField();
 
         setClosable(true);
+        setTitle("Formulario visitas");
 
         jLDNI.setText("DNI Cliente");
 
