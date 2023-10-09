@@ -60,17 +60,35 @@ public class DAO {
         }
     }
 
-    protected void insertarModificarEliminar(PreparedStatement preparedStatement) throws ClassNotFoundException, SQLException {
-      //  try {
-      
+//    protected void insertarModificarEliminar(PreparedStatement preparedStatement) throws ClassNotFoundException, SQLException {
+//      //  try {
+//      
+//            conectarBase();
+//            // En su lugar, ejecuta la PreparedStatement que recibiste como argumento
+//            filasAfectadas = preparedStatement.executeUpdate();
+//
+////        } catch (SQLException ex) {
+////
+////            JOptionPane.showMessageDialog(null, "No se ejecuto");
+////        }
+//    }
+    protected int insertarModificarEliminar(PreparedStatement preparedStatement) throws SQLException, ClassNotFoundException {
+        int idGenerado = -1; // Valor predeterminado en caso de que no se genere ninguna clave
+
+        try {
             conectarBase();
-            // En su lugar, ejecuta la PreparedStatement que recibiste como argumento
+            // Ejecuta la PreparedStatement que recibiste como argumento y obtén las claves generadas
             filasAfectadas = preparedStatement.executeUpdate();
 
-//        } catch (SQLException ex) {
-//
-//            JOptionPane.showMessageDialog(null, "No se ejecuto");
-//        }
-    }
+            try (ResultSet generatedKeys = preparedStatement.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    idGenerado = generatedKeys.getInt(1); // Obtén el ID generado
+                }
+            }
+        } finally {
+            desconectarBase();
+        }
 
+        return idGenerado;
+    }
 }

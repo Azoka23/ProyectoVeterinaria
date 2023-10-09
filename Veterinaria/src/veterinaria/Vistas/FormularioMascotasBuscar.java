@@ -148,10 +148,6 @@ public class FormularioMascotasBuscar extends javax.swing.JInternalFrame {
 
         jLPesoA.setText("Peso Actual");
 
-        JCSexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jCBClientes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jBBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/search_find_lupa_21889.png"))); // NOI18N
 
         jRBEstado.setText("Estado");
@@ -328,10 +324,10 @@ private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> JCSexo;
+    private javax.swing.JComboBox<Sexo> JCSexo;
     private javax.swing.JButton jBBuscar;
     private javax.swing.JButton jBSalir;
-    private javax.swing.JComboBox<String> jCBClientes;
+    private javax.swing.JComboBox<Cliente> jCBClientes;
     private com.toedter.calendar.JDateChooser jDCFechaNac;
     private javax.swing.JLabel jLAlias;
     private javax.swing.JLabel jLClientes;

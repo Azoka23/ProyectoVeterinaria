@@ -1,7 +1,15 @@
 package veterinaria.Vistas;
 
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import veterinaria.AccesoADatos.ClienteDAO;
@@ -14,13 +22,18 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.table.DefaultTableModel;
 
 public class FormularioCliente extends javax.swing.JInternalFrame {
 
     //private JButton botonAnterior = null; // Variable para almacenar el botón anterior
     private Estado estado = Estado.NADA;
+    private DesktopPaneWithBackground desktopPane;
 
     private Cliente selectedCliente = null;
     private int idMascotas = 0;
@@ -37,63 +50,45 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
     /**
      * Creates new form InfoAlumno
      */
-    public FormularioCliente() {
+    //public FormularioCliente() {
+    public FormularioCliente(DesktopPaneWithBackground desktopPane) {
+        this.desktopPane = desktopPane;
         initComponents();
         setTitle("Cargar Cliente");
-        armarCabecera();
+        // armarCabecera();
         //jBBuscar.setVisible(false);
+        jRBEstado.setSelected(true);
         // Establecer el foco en jTDocumento
         jTDocumento.requestFocusInWindow();
 
-        jRBEstado.addActionListener(new ActionListener() {
+        // Agregar FocusListener al campo jTDocumento
+        jTDocumento.addFocusListener(new FocusAdapter() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                // Verifica si el cliente ya existe (es decir, está en modo edición)
-                if (estado.equals(Estado.BUSCAR)) {
-                    int option = JOptionPane.showConfirmDialog(
-                            FormularioCliente.this, // El componente padre para el cuadro de diálogo
-                            "¿Está seguro de cambiar el estado del cliente?", // El mensaje que se mostrará
-                            "Confirmar Cambio de Estado", // El título del cuadro de diálogo
-                            JOptionPane.YES_NO_OPTION); // Tipo de opciones (Sí o No)
+            public void focusLost(FocusEvent e) {
+                buscarClientePorDni();
 
-                    // Si el usuario selecciona "Sí" en el cuadro de diálogo
-                    if (option == JOptionPane.YES_OPTION) {
-                        try {
-                            int dni = Integer.parseInt(jTDocumento.getText());
-                            ClienteDAO clienteD = new ClienteDAO();
+            }
 
-                            // Si el estado actual es true, llama a bajaLogica(int dni)
-                            //if (jRBEstado.isSelected()) {
-                            if (estadoCliente) {
-                                try {
-                                    clienteD.bajaLogica(dni);
-                                    setTitle("Cliente -- DNI dado de Baja");
-                                    JOptionPane.showMessageDialog(FormularioCliente.this, "El cliente ha sido dado de baja");
-                                } catch (Exception ex) {
-                                    Utilidades.mostrarError(ex, FormularioCliente.this);
-                                }
-                            } else {
-                                // Si el estado actual es false, llama a altaLogica(int dni)
-                                try {
-                                    clienteD.altaLogica(dni);
-                                    setTitle("Cliente");
-                                    JOptionPane.showMessageDialog(FormularioCliente.this, "El cliente ha sido dado de alta");
-                                } catch (Exception ex) {
-                                    Utilidades.mostrarError(ex, FormularioCliente.this);
-                                }
-                            }
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (SQLException ex) {
-                            Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    } else {
-                        // Si el usuario selecciona "No", deshace el cambio en el estado del JRadioButton
-                        jRBEstado.setSelected(!jRBEstado.isSelected());
-                    }
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    buscarClientePorDni();
+
                 }
             }
         });
+
+        Utilidades.asociarEnterConCampo(jTDocumento, jTApellido);
+
+        Utilidades.asociarEnterConCampo(jTApellido, jTNombre);
+        Utilidades.asociarEnterConCampo(jTNombre, jTDireccion);
+        Utilidades.asociarEnterConCampo(jTDireccion, jTtelefono);
+        Utilidades.asociarEnterConCampo(jTtelefono, jTMail);
+        Utilidades.asociarEnterConCampo(jTMail, jTContNombre);
+        Utilidades.asociarEnterConCampo(jTContNombre, jTContactoTelefono);
+
+        Utilidades.asociarEnterConCampoaBoton(jTContactoTelefono, jBMascotas);
+        Utilidades.asociarEnterBotonABoton(jBMascotas, jBGuardar);
+        Utilidades.asociarEnterBotonABoton(jBGuardar, jBSalir);
 
     }
 
@@ -190,6 +185,11 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
         jBMascotas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBMascotasActionPerformed(evt);
+            }
+        });
+        jBMascotas.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jBMascotasKeyPressed(evt);
             }
         });
 
@@ -346,17 +346,16 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
             if (jTDocumento.getText().isEmpty() || jTApellido.getText().isEmpty() || jTNombre.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "No debe dejar algun dato vacio");
             } else {
-                if (estado.equals(Estado.NUEVO) || estado.equals(Estado.BUSCAR)) {
+//                if (estado.equals(Estado.NUEVO) || estado.equals(Estado.BUSCAR)) {
 
-                    guardar();
-                    limpiar();
+                guardar();
+                limpiar();
 
-                } else {
-
-                    JOptionPane.showMessageDialog(this, "Elija buscar o Nuevo DNI");
-                    limpiar();
-                }
-
+//                } else {
+//
+//                    JOptionPane.showMessageDialog(this, "Elija buscar o Nuevo DNI");
+//                    limpiar();
+//                }
             }
 
         } catch (Exception ex) {
@@ -368,43 +367,51 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jBGuardarActionPerformed
 
     private void jRBEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRBEstadoActionPerformed
-
-//
-//        // TODO add your handling code here:
-//        if (jRBEstado.isSelected() ) {
-//            jRBEstado.setText("Cliente dado de Alta");
-//        }else{
-//                   jRBEstado.setText("Cliente dado de Baja");
-//        }
+        jRBEstado.setSelected(true);
 
     }//GEN-LAST:event_jRBEstadoActionPerformed
 
     private void jBMascotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBMascotasActionPerformed
-        // Agregar formulario mascota
-        try {
-            jPanel1.removeAll();
-            jPanel1.repaint();
-            //jEscritorio.add(jLULP);
-            FormularioMascotas cargarMascotas = new FormularioMascotas();
+        if (jTDocumento.getText().isEmpty() || jTApellido.getText().isEmpty() || jTNombre.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No debe dejar algun dato vacio");
+        } else {
 
-            // Configurar el tamaño del JInternalFrame
+            try {
+                try {
+                    guardar();
+                } catch (Exception ex) {
+                    Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                FormularioMascotas cargarMascotas = new FormularioMascotas(idCliente);
+                cargarMascotas.setSize(600, 500);
+                cargarMascotas.pack();
+                int x = (desktopPane.getWidth() - cargarMascotas.getWidth()) / 2;
+                int y = (desktopPane.getHeight() - cargarMascotas.getHeight()) / 2;
+                cargarMascotas.setBounds(x, y, cargarMascotas.getWidth(), cargarMascotas.getHeight());
+                desktopPane.add(cargarMascotas);
+                cargarMascotas.setVisible(true);
+            } catch (Exception ex) {
+                Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jBMascotasActionPerformed
+
+    private void jBMascotasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jBMascotasKeyPressed
+
+        try {
+            FormularioMascotas cargarMascotas = new FormularioMascotas(idCliente);
             cargarMascotas.setSize(600, 500);
             cargarMascotas.pack();
-            // Calcular el centro del JDesktopPane
-            int x = (jPanel1.getWidth() - cargarMascotas.getWidth()) / 2;
-            int y = (jPanel1.getHeight() - cargarMascotas.getHeight()) / 2;
-
-            // Establecer la ubicación y agregar el JInternalFrame
+            int x = (desktopPane.getWidth() - cargarMascotas.getWidth()) / 2;
+            int y = (desktopPane.getHeight() - cargarMascotas.getHeight()) / 2;
             cargarMascotas.setBounds(x, y, cargarMascotas.getWidth(), cargarMascotas.getHeight());
-            jPanel1.add(cargarMascotas);
+            desktopPane.add(cargarMascotas);
             cargarMascotas.setVisible(true);
 
-            
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-    }//GEN-LAST:event_jBMascotasActionPerformed
+    }//GEN-LAST:event_jBMascotasKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -448,48 +455,33 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
         //botonAnterior = null;
 
     }
-//        jTApellido.setText(cliente.getApellido());
-//        jTNombre.setText(cliente.getNombre());
-//        jTDireccion.setText(cliente.getDireccion());
-//        jTtelefono.setText(cliente.getTelefono());
-//        jTMail.setText(cliente.getEmail());
-//
-//        if (cliente.isEstado()) {
-//            setTitle("Cargar Clientes");
-//        } else {
-//            setTitle("Cliente -- DNI dado de Baja");
-//        }
-//
-//        jRBEstado.setSelected(cliente.isEstado());
-//        jTContNombre.setText(cliente.getContactoNombre());
-//        jTContactoTelefono.setText(cliente.getContactoTelefono());
 
     private void limpiarBuscar() {
 
         Utilidades.limpiarSetText(jTApellido, jTNombre, jTDireccion, jTtelefono, jTMail, jTContNombre, jTContactoTelefono);
         modelo.setRowCount(0); // Limpiar la tabla antes de agregar nuevos datos
     }
+// Método para buscar cliente por DNI
 
-//    private void eliminadologico() {
-//        //if (botonAnterior == jBBuscar) {
-//        if (estado.equals(Estado.BUSCAR)) {
-//            try {
-//                int dni = Integer.parseInt(jTDocumento.getText());
-//                ClienteDAO clienteD = new ClienteDAO();
-//                clienteD.eliminarLogico(dni);
-//                JOptionPane.showMessageDialog(this, "El alumno fue dado de baja");
-//                limpiar();
-//            } catch (NumberFormatException ex) {
-//                JOptionPane.showMessageDialog(this, "Por favor, ingrese un número de documento válido.");
-//            } catch (Exception ex) {
-//                JOptionPane.showMessageDialog(this, "Se produjo un error al eliminar el alumno.");
-//                ex.printStackTrace();
-//            }
-//        } else {
-//            JOptionPane.showMessageDialog(this, "Por favor, ingrese un número de documento que exista.");
-//        }
-//    }
-    private void buscarxDni() throws ClassNotFoundException, SQLException {
+    private void buscarClientePorDni() {
+        String documento = jTDocumento.getText().trim();
+
+        if (documento.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debes escribir un documento");
+            return;
+        }
+
+        try {
+            // Llamar al método buscarxDni() aquí y realizar las operaciones necesarias
+            buscarxDni();
+        } catch (Exception ex) {
+            Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+//}
+
+    private void buscarxDni() throws ClassNotFoundException, SQLException, Exception {
 
         ClienteDAO clienteD = new ClienteDAO();
         int dni = 0;
@@ -500,20 +492,18 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
             return;
         }
 
-        try {
+        //     try {
+        Cliente cliente = clienteD.buscarListaClientexDni(dni);
+        if (cliente != null) {
 
-            Cliente cliente = clienteD.buscarListaClientexDni(dni);
-            if (cliente == null) {
-
-                estado = Estado.NUEVO;
-            }
-
-            mostrarClienteEnFormulario(cliente);
-            cargarTabla(cliente.getIdCliente());
-
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "No se encontro el DNI");
+            JOptionPane.showMessageDialog(this, "el Documento ya existe");
         }
+
+        //           mostrarClienteEnFormulario(cliente);
+//            cargarTabla(cliente.getIdCliente());
+//        } catch (Exception ex) {
+//            JOptionPane.showMessageDialog(this, "No se encontro el DNI");
+//        }
     }
 
     private void guardar() throws Exception {
@@ -527,8 +517,8 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
 
                 cliente = clienteD.buscarListaClientexDni(documento);
 
-                if (cliente != null && estado.equals(Estado.NUEVO)) {
-
+                //if (cliente != null && estado.equals(Estado.NUEVO)) {
+                if (cliente != null) {
                     JOptionPane.showMessageDialog(this, "El Documento ya existe, no puede darlo de Alta.");
                     return;
                 } else {
@@ -566,24 +556,19 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
 
             // Llamar al método para guardar el alumno en la base de datos
             //solo grabar si fue elegida la opcion Nuevo - boton 
-            //   if (botonAnterior == jBNuevo) {
-            if (estado.equals(Estado.NUEVO)) {
+//            if (estado.equals(Estado.NUEVO)) {
+            try {
+                cliente.setEstado(true);
+                idCliente = clienteD.guardarCliente(cliente);
+            } catch (Exception ex) {
 
-                try {
-                    cliente.setEstado(true);
-                    clienteD.guardarCliente(cliente);
-                } catch (Exception ex) {
-
-                    Utilidades.mostrarError(ex, this);
-                }
-
-            } else if (estado.equals(Estado.BUSCAR)) {
-//                    if (cliente.isEstado()) {
-//                        Utilidades.confirmarEstado(this);
-//                    }
-                clienteD.modificarCliente(cliente);
+                Utilidades.mostrarError(ex, this);
             }
 
+//            } else if (estado.equals(Estado.BUSCAR)) {
+//
+//                clienteD.modificarCliente(cliente);
+//            }
         } catch (NumberFormatException ex) {
             Utilidades.mostrarError(ex, this);
         }
@@ -604,33 +589,9 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
         }
 
         jRBEstado.setSelected(cliente.isEstado());
-        estadoCliente=cliente.isEstado();
+        estadoCliente = cliente.isEstado();
         jTContNombre.setText(cliente.getContactoNombre());
         jTContactoTelefono.setText(cliente.getContactoTelefono());
     }
 
-    private void armarCabecera() {
-        //TablaMaterias.addColumn(aColumn);
-        modelo.addColumn("Codigo");
-        modelo.addColumn("Alias");
-        modelo.addColumn("Peso");
-        //jTMascotas.setModel(modelo);
-    }
-
-    private void cargarTabla(int idCliente) throws Exception {
-
-        MascotaDAO cursadas = new MascotaDAO();
-        Collection<Mascota> listaMascota = new ArrayList<>(); // Inicialización predeterminada
-
-        listaMascota = cursadas.listarMascotasxIdCliente(idCliente);
-
-        for (Mascota tipo : listaMascota) {
-            if (tipo.isEstado()) {
-                modelo.addRow(new Object[]{tipo.getIdMascota(), tipo.getAlias(), tipo.getPesoActual()});
-
-            }
-
-        }
-
-    }
 }

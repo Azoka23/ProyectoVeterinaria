@@ -1,6 +1,5 @@
 package veterinaria.Vistas;
 
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import veterinaria.AccesoADatos.ClienteDAO;
@@ -37,7 +36,8 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
     /**
      * Creates new form InfoMateria
      */
-    public FormularioMascotas() throws ClassNotFoundException {
+    public FormularioMascotas(int idCliente) throws ClassNotFoundException {
+        this.idCliente = idCliente;
         initComponents();
         setTitle("Cargar Mascotas");
         try {
@@ -46,6 +46,16 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
         } catch (SQLException ex) {
             Logger.getLogger(FormularioMascotas.class.getName()).log(Level.SEVERE, null, ex);
         }
+        Utilidades.asociarEnterConCampo(jTCodigo, jTAlias);
+
+        Utilidades.asociarEnterCampoACombo(jTAlias, JCSexo);
+        Utilidades.asociarEnterComboACampo(JCSexo, jTColorDePelo);
+
+        Utilidades.asociarEnterConCampo(jTColorDePelo, jTEspecies);
+        Utilidades.asociarEnterConCampo(jTEspecies, jTRaza);
+        Utilidades.asociarEnterConCampo(jTRaza, jTPesoA);
+        Utilidades.asociarEnterCampoAFecha(jTPesoA, jDCFechaNac);
+        Utilidades.asociarEnterFechaABoton(jDCFechaNac, jBGuardar);
 
         jRBEstado.addActionListener(new ActionListener() {
             @Override
@@ -148,15 +158,26 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
 
         jLPesoA.setText("Peso Actual");
 
-        JCSexo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
-        jCBClientes.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-
         jBGuardar.setText("Guardar");
+        jBGuardar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBGuardarActionPerformed(evt);
+            }
+        });
 
         jRBEstado.setText("Estado");
+        jRBEstado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRBEstadoActionPerformed(evt);
+            }
+        });
 
         jBSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/home256_24783.png"))); // NOI18N
+        jBSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBSalirActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -285,8 +306,13 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {                                          
 
+    private void jBSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSalirActionPerformed
+        salirAplicacion();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jBSalirActionPerformed
+
+    private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuardarActionPerformed
         try {
             if (camposVacios()) {
                 JOptionPane.showMessageDialog(this, "No debe dejar algun dato vacio");
@@ -300,39 +326,40 @@ private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {
         } catch (Exception ex) {
             Utilidades.mostrarError(ex, this);
         }
-    }                                         
 
-    private void jBBuscarActionPerformed(java.awt.event.ActionEvent evt) {                                         
-        String codigo = jTCodigo.getText().trim();
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jBGuardarActionPerformed
 
-        if (codigo.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Debes escribir un Codigo");
-            return;
-        } else {
-            try {
-                limpiarBuscar();
-                estado = Estado.BUSCAR;
-                buscarxCodigo();
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(FormularioMascotas.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SQLException ex) {
-                Logger.getLogger(FormularioMascotas.class.getName()).log(Level.SEVERE, null, ex);
-            }
+    private void jRBEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRBEstadoActionPerformed
+        jRBEstado.setSelected(true);
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRBEstadoActionPerformed
 
-        }
-    }                                        
-
-    private void jBSalirActionPerformed(java.awt.event.ActionEvent evt) {                                        
-        salirAplicacion();
-    }                                       
-
-
+//    private void jBBuscarActionPerformed(java.awt.event.ActionEvent evt) {
+//        String codigo = jTCodigo.getText().trim();
+//
+//        if (codigo.isEmpty()) {
+//            JOptionPane.showMessageDialog(this, "Debes escribir un Codigo");
+//            return;
+//        } else {
+//            try {
+//                limpiarBuscar();
+//                estado = Estado.BUSCAR;
+//                buscarxCodigo();
+//            } catch (ClassNotFoundException ex) {
+//                Logger.getLogger(FormularioMascotas.class.getName()).log(Level.SEVERE, null, ex);
+//            } catch (SQLException ex) {
+//                Logger.getLogger(FormularioMascotas.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//
+//        }
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JComboBox<String> JCSexo;
+    private javax.swing.JComboBox<Sexo> JCSexo;
     private javax.swing.JButton jBGuardar;
     private javax.swing.JButton jBSalir;
-    private javax.swing.JComboBox<String> jCBClientes;
+    private javax.swing.JComboBox<Cliente> jCBClientes;
     private com.toedter.calendar.JDateChooser jDCFechaNac;
     private javax.swing.JLabel jLAlias;
     private javax.swing.JLabel jLClientes;
@@ -355,7 +382,7 @@ private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {
     private javax.swing.JTextField jTRaza;
     // End of variables declaration//GEN-END:variables
 
-private void limpiar() {
+    private void limpiar() {
         Utilidades.limpiarSetText(jTCodigo, jTAlias, jTColorDePelo, jTEspecies, jTRaza, jTColorDePelo, jTPesoM, jTPesoA);
         jRBEstado.setSelected(false);
         estado = Estado.NADA;
@@ -431,7 +458,8 @@ private void limpiar() {
 
                 mascota = mascotaD.obtenerMascotaPorId(codigo);
 
-                if (mascota != null && estado.equals(Estado.NUEVO)) {
+                //if (mascota != null && estado.equals(Estado.NUEVO)) {
+                if (mascota != null) {
 
                     JOptionPane.showMessageDialog(this, "El Codigo ya existe, no puede darlo de Alta.");
                     return;
@@ -451,8 +479,14 @@ private void limpiar() {
             LocalDate fechaNacimiento = jDCFechaNac.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();;
 //            double pesoM = Double.parseDouble(jTPesoM.getText());
 //            double pesoA = Double.parseDouble(jTPesoA.getText());
+//            double pesoM = 0.0;
+//            double pesoA = 0.0;
             double pesoM = 0.0;
-            double pesoA = 0.0;
+            double pesoA = Double.parseDouble(jTPesoA.getText());
+            if (pesoA != 0.0) {
+                pesoM = pesoA;
+
+            }
 
             estadoMascota = jRBEstado.isSelected();
 
@@ -478,20 +512,19 @@ private void limpiar() {
             mascota.setEstado(estadoMascota);
 
             //Mascota mascota = new Mascota(codigo, nombre, year, estadoMascota);
-            if (estado.equals(Estado.NUEVO)) {
-
-                try {
-                    mascota.setEstado(true);
-                    mascotaD.guardarMascota(mascota);
-                } catch (Exception ex) {
-                    Utilidades.mostrarError(ex, this);
-                }
-
-            } else if (estado.equals(Estado.BUSCAR)) {
-                // mascota.setEstado(true);
-
-                mascotaD.modificarMascota(mascota);
+            //if (estado.equals(Estado.NUEVO)) {
+            try {
+                mascota.setEstado(true);
+                mascotaD.guardarMascota(mascota);
+            } catch (Exception ex) {
+                Utilidades.mostrarError(ex, this);
             }
+
+//            } else if (estado.equals(Estado.BUSCAR)) {
+//                // mascota.setEstado(true);
+//
+//                mascotaD.modificarMascota(mascota);
+//            }
         } catch (NumberFormatException ex) {
             Utilidades.mostrarError(ex, this);
         }
@@ -528,7 +561,7 @@ private void limpiar() {
 
         // Llena el JComboBox con los valores tipo Alumno
         for (Cliente cliente : clientes) {
-            if (cliente.isEstado()) {
+            if (cliente.isEstado() && (idCliente == 0 || idCliente == cliente.getIdCliente())) {
                 jCBClientes.addItem(cliente);
             }
 
@@ -567,6 +600,3 @@ private void limpiar() {
 
     }
 }
-
-
-
