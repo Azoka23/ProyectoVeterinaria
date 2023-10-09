@@ -55,12 +55,7 @@
                               <Component id="jTCodigo" min="-2" pref="96" max="-2" attributes="0"/>
                               <Component id="jTAlias" min="-2" pref="96" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace max="32767" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jBBuscar" min="-2" max="-2" attributes="0"/>
-                              <Component id="jBSalir" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" pref="96" max="-2" attributes="0"/>
+                          <EmptySpace min="96" pref="254" max="32767" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
@@ -85,14 +80,18 @@
                                       <EmptySpace max="-2" attributes="0"/>
                                   </Group>
                                   <Group type="102" alignment="1" attributes="0">
-                                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                          <Component id="jTEspecies" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="jTColorDePelo" alignment="0" max="32767" attributes="0"/>
-                                          <Component id="JCSexo" max="32767" attributes="0"/>
-                                          <Component id="jTRaza" max="32767" attributes="0"/>
+                                      <Group type="103" groupAlignment="1" attributes="0">
+                                          <Component id="jBBuscar" min="-2" max="-2" attributes="0"/>
+                                          <Group type="102" attributes="0">
+                                              <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                                  <Component id="jTEspecies" alignment="0" max="32767" attributes="0"/>
+                                                  <Component id="jTColorDePelo" alignment="0" max="32767" attributes="0"/>
+                                                  <Component id="JCSexo" max="32767" attributes="0"/>
+                                                  <Component id="jTRaza" max="32767" attributes="0"/>
+                                              </Group>
+                                              <EmptySpace min="-2" pref="240" max="-2" attributes="0"/>
+                                          </Group>
                                       </Group>
-                                      <EmptySpace min="-2" pref="144" max="-2" attributes="0"/>
-                                      <Component id="jBGuardar" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
@@ -102,12 +101,23 @@
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="jTPesoM" min="-2" pref="88" max="-2" attributes="0"/>
                                           <EmptySpace min="-2" pref="69" max="-2" attributes="0"/>
-                                          <Component id="jLPesoA" min="-2" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
-                                          <Component id="jTPesoA" min="-2" pref="75" max="-2" attributes="0"/>
+                                          <Group type="103" groupAlignment="0" attributes="0">
+                                              <Group type="102" attributes="0">
+                                                  <Component id="jLPesoA" min="-2" max="-2" attributes="0"/>
+                                                  <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
+                                                  <Component id="jTPesoA" min="-2" pref="75" max="-2" attributes="0"/>
+                                              </Group>
+                                              <Group type="102" alignment="1" attributes="0">
+                                                  <Group type="103" groupAlignment="1" attributes="0">
+                                                      <Component id="jBSalir" min="-2" max="-2" attributes="0"/>
+                                                      <Component id="jBGuardar" min="-2" max="-2" attributes="0"/>
+                                                  </Group>
+                                                  <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
+                                              </Group>
+                                          </Group>
                                       </Group>
                                   </Group>
-                                  <EmptySpace max="32767" attributes="0"/>
+                                  <EmptySpace pref="8" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                       </Group>
@@ -118,9 +128,9 @@
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
+                  <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                      <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLCodigo" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jTCodigo" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -134,13 +144,11 @@
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLSexo" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="JCSexo" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jBSalir" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLColorDePelo" alignment="3" min="-2" max="-2" attributes="0"/>
                               <Component id="jTColorDePelo" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jBGuardar" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -158,9 +166,12 @@
                               <Component id="jTPesoM" alignment="3" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                      <Group type="102" attributes="0">
                           <Component id="jBBuscar" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jBGuardar" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jBSalir" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLPesoA" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -179,7 +190,7 @@
                       <Component id="jCBClientes" alignment="3" min="-2" max="-2" attributes="0"/>
                       <Component id="jRBEstado" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
-                  <EmptySpace pref="20" max="32767" attributes="0"/>
+                  <EmptySpace pref="16" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -292,7 +303,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="jBGuardar">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Guardar"/>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/veterinaria/Imagenes/Save_37110.png"/>
+            </Property>
           </Properties>
         </Component>
       </SubComponents>

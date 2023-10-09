@@ -44,20 +44,6 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jLAlias" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="jLCodigo" alignment="0" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jTCodigo" min="-2" pref="96" max="-2" attributes="0"/>
-                              <Component id="jTAlias" min="-2" pref="96" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace max="32767" attributes="0"/>
-                          <Component id="jBGuardar" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="96" max="-2" attributes="0"/>
-                      </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Component id="jLSexo" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -87,9 +73,9 @@
                                           <Component id="JCSexo" max="32767" attributes="0"/>
                                           <Component id="jTRaza" max="32767" attributes="0"/>
                                       </Group>
-                                      <EmptySpace min="-2" pref="129" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="204" max="-2" attributes="0"/>
                                       <Component id="jBSalir" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace min="-2" pref="116" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
                               <Group type="102" attributes="0">
@@ -103,9 +89,23 @@
                                           <Component id="jTPesoA" min="-2" pref="75" max="-2" attributes="0"/>
                                       </Group>
                                   </Group>
-                                  <EmptySpace max="32767" attributes="0"/>
+                                  <EmptySpace pref="12" max="32767" attributes="0"/>
                               </Group>
                           </Group>
+                      </Group>
+                      <Group type="102" alignment="0" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jLAlias" alignment="0" min="-2" max="-2" attributes="0"/>
+                              <Component id="jLCodigo" alignment="0" min="-2" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace min="-2" pref="65" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" attributes="0">
+                              <Component id="jTCodigo" min="-2" pref="96" max="-2" attributes="0"/>
+                              <Component id="jTAlias" min="-2" pref="96" max="-2" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Component id="jBGuardar" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="50" max="-2" attributes="0"/>
                       </Group>
                   </Group>
               </Group>
@@ -153,9 +153,9 @@
                           </Group>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
-                          <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
                           <Component id="jBGuardar" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
                           <Component id="jBSalir" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
@@ -269,7 +269,9 @@
         </Component>
         <Component class="javax.swing.JButton" name="jBGuardar">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Guardar"/>
+            <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
+              <Image iconType="3" name="/veterinaria/Imagenes/Save_37110.png"/>
+            </Property>
           </Properties>
           <Events>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBGuardarActionPerformed"/>

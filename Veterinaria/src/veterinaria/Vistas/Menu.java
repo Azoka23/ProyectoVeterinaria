@@ -232,7 +232,28 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMINuevaMascActionPerformed
 
     private void jMITratamActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMITratamActionPerformed
-        // TODO add your handling code here:
+        // Formulario tratamiento
+        try {
+            jEscritorio.removeAll();
+            jEscritorio.repaint();
+            //jEscritorio.add(jLULP);
+            // FormularioMascotas cargarMascotas = null;
+            
+            FormularioTratamiento tratamiento = new FormularioTratamiento();
+            
+            // Configurar el tamaño del JInternalFrame
+            tratamiento .setSize(600, 500);
+            tratamiento .pack();
+            // Calcular el centro del JDesktopPane
+            int x = (jEscritorio.getWidth() - tratamiento .getWidth()) / 2;
+            int y = (jEscritorio.getHeight() - tratamiento .getHeight()) / 2;
+            // Establecer la ubicación y agregar el JInternalFrame
+            tratamiento .setBounds(x, y, tratamiento .getWidth(), tratamiento .getHeight());
+            jEscritorio.add(tratamiento );
+            tratamiento .setVisible(true);
+        } catch (Exception ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jMITratamActionPerformed
 
     private void jMIOtrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMIOtrosActionPerformed
