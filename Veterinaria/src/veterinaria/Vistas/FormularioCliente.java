@@ -77,18 +77,18 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
             }
         });
 
-        Utilidades.asociarEnterConCampo(jTDocumento, jTApellido);
+        Utilidades.asociarEnterConComponente(jTDocumento, jTApellido);
 
-        Utilidades.asociarEnterConCampo(jTApellido, jTNombre);
-        Utilidades.asociarEnterConCampo(jTNombre, jTDireccion);
-        Utilidades.asociarEnterConCampo(jTDireccion, jTtelefono);
-        Utilidades.asociarEnterConCampo(jTtelefono, jTMail);
-        Utilidades.asociarEnterConCampo(jTMail, jTContNombre);
-        Utilidades.asociarEnterConCampo(jTContNombre, jTContactoTelefono);
+        Utilidades.asociarEnterConComponente(jTApellido, jTNombre);
+        Utilidades.asociarEnterConComponente(jTNombre, jTDireccion);
+        Utilidades.asociarEnterConComponente(jTDireccion, jTtelefono);
+        Utilidades.asociarEnterConComponente(jTtelefono, jTMail);
+        Utilidades.asociarEnterConComponente(jTMail, jTContNombre);
+        Utilidades.asociarEnterConComponente(jTContNombre, jTContactoTelefono);
 
-        Utilidades.asociarEnterConCampoaBoton(jTContactoTelefono, jBMascotas);
-        Utilidades.asociarEnterBotonABoton(jBMascotas, jBGuardar);
-        Utilidades.asociarEnterBotonABoton(jBGuardar, jBSalir);
+        Utilidades.asociarEnterConComponente(jTContactoTelefono, jBMascotas);
+        Utilidades.asociarEnterConComponente(jBMascotas, jBGuardar);
+        Utilidades.asociarEnterConComponente(jBGuardar, jBSalir);
 
     }
 

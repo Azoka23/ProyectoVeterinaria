@@ -39,7 +39,7 @@ public class FormularioMascotasBuscar extends javax.swing.JInternalFrame {
      */
     public FormularioMascotasBuscar() throws ClassNotFoundException {
         initComponents();
-        setTitle("Cargar Mascotas");
+        setTitle("Buscar Mascotas");
         try {
             cargarCombo();
             cargarComboSexo();
@@ -125,7 +125,9 @@ public class FormularioMascotasBuscar extends javax.swing.JInternalFrame {
         jBBuscar = new javax.swing.JButton();
         jRBEstado = new javax.swing.JRadioButton();
         jBSalir = new javax.swing.JButton();
+        jBGuardar = new javax.swing.JButton();
 
+        setClosable(true);
         setTitle("Buscar Mascota");
 
         jLCodigo.setText("Codigo");
@@ -153,6 +155,8 @@ public class FormularioMascotasBuscar extends javax.swing.JInternalFrame {
         jRBEstado.setText("Estado");
 
         jBSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/home256_24783.png"))); // NOI18N
+
+        jBGuardar.setText("Guardar");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -199,7 +203,9 @@ public class FormularioMascotasBuscar extends javax.swing.JInternalFrame {
                                         .addComponent(jTColorDePelo, javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(JCSexo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jTRaza))
-                                    .addGap(293, 293, 293)))
+                                    .addGap(144, 144, 144)
+                                    .addComponent(jBGuardar)
+                                    .addGap(52, 52, 52)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jDCFechaNac, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -232,7 +238,8 @@ public class FormularioMascotasBuscar extends javax.swing.JInternalFrame {
                         .addGap(20, 20, 20)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLColorDePelo)
-                            .addComponent(jTColorDePelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jTColorDePelo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jBGuardar))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLEspecie)
@@ -261,7 +268,7 @@ public class FormularioMascotasBuscar extends javax.swing.JInternalFrame {
                     .addComponent(jLClientes)
                     .addComponent(jCBClientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jRBEstado))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -326,6 +333,7 @@ private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<Sexo> JCSexo;
     private javax.swing.JButton jBBuscar;
+    private javax.swing.JButton jBGuardar;
     private javax.swing.JButton jBSalir;
     private javax.swing.JComboBox<Cliente> jCBClientes;
     private com.toedter.calendar.JDateChooser jDCFechaNac;

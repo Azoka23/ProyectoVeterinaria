@@ -46,16 +46,16 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
         } catch (SQLException ex) {
             Logger.getLogger(FormularioMascotas.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Utilidades.asociarEnterConCampo(jTCodigo, jTAlias);
+        Utilidades.asociarEnterConComponente(jTCodigo, jTAlias);
 
-        Utilidades.asociarEnterCampoACombo(jTAlias, JCSexo);
-        Utilidades.asociarEnterComboACampo(JCSexo, jTColorDePelo);
+        Utilidades.asociarEnterConComponente(jTAlias, JCSexo);
+        Utilidades.asociarEnterConComponente(JCSexo, jTColorDePelo);
 
-        Utilidades.asociarEnterConCampo(jTColorDePelo, jTEspecies);
-        Utilidades.asociarEnterConCampo(jTEspecies, jTRaza);
-        Utilidades.asociarEnterConCampo(jTRaza, jTPesoA);
-        Utilidades.asociarEnterCampoAFecha(jTPesoA, jDCFechaNac);
-        Utilidades.asociarEnterFechaABoton(jDCFechaNac, jBGuardar);
+        Utilidades.asociarEnterConComponente(jTColorDePelo, jTEspecies);
+        Utilidades.asociarEnterConComponente(jTEspecies, jTRaza);
+        Utilidades.asociarEnterConComponente(jTRaza, jTPesoA);
+        Utilidades.asociarEnterConComponente(jTPesoA, jDCFechaNac);
+        Utilidades.asociarEnterConComponente(jDCFechaNac, jBGuardar);
 
         jRBEstado.addActionListener(new ActionListener() {
             @Override

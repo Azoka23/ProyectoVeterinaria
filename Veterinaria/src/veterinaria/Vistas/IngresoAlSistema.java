@@ -1,6 +1,7 @@
 package veterinaria.Vistas;
 
 import javax.swing.JOptionPane;
+import veterinaria.Utilidades;
 
 public class IngresoAlSistema extends javax.swing.JFrame {
 
@@ -11,7 +12,8 @@ public class IngresoAlSistema extends javax.swing.JFrame {
      */
     public IngresoAlSistema() {
         initComponents();
-
+        Utilidades.asociarEnterConComponente(jTUsuario, jTPassword);
+        Utilidades.asociarEnterConComponente(jTPassword, jBIngresar);
     }
 
     /**
@@ -56,6 +58,11 @@ public class IngresoAlSistema extends javax.swing.JFrame {
         jBIngresar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBIngresarActionPerformed(evt);
+            }
+        });
+        jBIngresar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jBIngresarKeyPressed(evt);
             }
         });
 
@@ -152,6 +159,11 @@ public class IngresoAlSistema extends javax.swing.JFrame {
         // Invierte el estado
         passwordVisible = !passwordVisible;
     }//GEN-LAST:event_jLMostrarMouseClicked
+
+    private void jBIngresarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jBIngresarKeyPressed
+        // TODO add your handling code here:
+        ingresar();
+    }//GEN-LAST:event_jBIngresarKeyPressed
 
     /**
      * @param args the command line arguments
