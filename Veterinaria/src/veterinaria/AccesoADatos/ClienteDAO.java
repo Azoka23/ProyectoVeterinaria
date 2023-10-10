@@ -3,7 +3,7 @@ package veterinaria.AccesoADatos;
 //import java.beans.Statement;
 import veterinaria.Entidades.Cliente;
 import veterinaria.Entidades.Mascota;
-import veterinaria.Utilidades;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -58,6 +58,8 @@ public class ClienteDAO extends DAO {
             return insertarModificarEliminar(preparedStatement);
         }
     }
+    
+    
     public void modificarCliente(Cliente cliente) throws Exception {
         // Utilidades.validar(cliente);
         validarCliente(cliente);

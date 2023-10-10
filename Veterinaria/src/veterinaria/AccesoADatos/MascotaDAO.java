@@ -1,6 +1,6 @@
 package veterinaria.AccesoADatos;
 
-import veterinaria.Entidades.Cliente;
+
 import veterinaria.Entidades.Mascota;
 import veterinaria.Entidades.Sexo;
 
@@ -9,6 +9,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -25,8 +26,8 @@ public class MascotaDAO extends DAO {
         validarMascota(mascota);
         String sql = "INSERT INTO mascotas (alias, sexo, especie, raza, colorDePelo, fechaNac, pesoM,pesoA,idCliente, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
-
+        //try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, mascota.getAlias());
             preparedStatement.setString(2, mascota.getSexo().name());
             preparedStatement.setString(3, mascota.getEspecie());
@@ -37,14 +38,14 @@ public class MascotaDAO extends DAO {
             preparedStatement.setDouble(8, mascota.getPesoActual());
             preparedStatement.setInt(9, mascota.getIdCliente().getIdCliente());
             preparedStatement.setBoolean(10, mascota.isEstado());
-
+//JOptionPane.showMessageDialog(null, preparedStatement);
             insertarModificarEliminar(preparedStatement);
 
-        } catch (SQLException ex) {
-            // Manejar la excepción si es necesario
-            throw ex;
-        } finally {
-            desconectarBase(); // Asegura que la desconexión se realice incluso en caso de excepción.
+//        } catch (SQLException ex) {
+//            // Manejar la excepción si es necesario
+//            throw ex;
+//        } finally {
+//            desconectarBase(); // Asegura que la desconexión se realice incluso en caso de excepción.
         }
     }
 
@@ -66,8 +67,8 @@ public class MascotaDAO extends DAO {
             preparedStatement.setInt(9, mascota.getIdCliente().getIdCliente());
             preparedStatement.setBoolean(10, mascota.isEstado());
             preparedStatement.setInt(11, mascota.getIdMascota());
-            
- //JOptionPane.showMessageDialog(null, preparedStatement);
+
+            //JOptionPane.showMessageDialog(null, preparedStatement);
             insertarModificarEliminar(preparedStatement);
         } catch (SQLException ex) {
             // Manejar la excepción si es necesario
@@ -93,7 +94,8 @@ public class MascotaDAO extends DAO {
             desconectarBase(); // Asegura que la desconexión se realice incluso en caso de excepción.
         }
     }
-   public void altaLogica(int codigo) throws Exception {
+
+    public void altaLogica(int codigo) throws Exception {
         String sql = "UPDATE mascotas SET estado=? WHERE idMascota=?";
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
@@ -109,6 +111,7 @@ public class MascotaDAO extends DAO {
             desconectarBase(); // Asegura que la desconexión se realice incluso en caso de excepción.
         }
     }
+
     public int contarTotalRegistros() throws Exception {
         //Cuenta la cantidad de registros y cuando devuelvo el entero necesito sumar 1
         String sql = "SELECT COUNT(*) FROM mascotas";
@@ -146,7 +149,43 @@ public class MascotaDAO extends DAO {
 
         }
     }
+        public Mascota buscarListaMascotaxAliasIdCliente(String alias,int idCliente) throws Exception {
+        String sql = "SELECT * FROM `mascotas` WHERE alias=? AND idCliente=?";
 
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+           
+            preparedStatement.setString(1, alias);
+            preparedStatement.setInt(2, idCliente);
+//JOptionPane.showMessageDialog(null, preparedStatement);
+            resultado = consultarBase(preparedStatement);
+//JOptionPane.showMessageDialog(null, resultado);
+            Mascota mascota = null;
+
+            if (resultado.next()) {
+                mascota = obtenerMascotaDesdeResultado(resultado);
+            }
+            return mascota;
+
+        }
+    }
+    public Collection<Mascota> buscarListaMascotaxAlias(String alias) throws Exception {
+        String sql = "SELECT DISTINCT * FROM `mascotas` WHERE alias=?";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setString(1, alias);
+            resultado = consultarBase(preparedStatement);
+
+            Collection<Mascota> mascotas = new ArrayList();
+
+            while (resultado.next()) {
+                mascotas.add(obtenerMascotaDesdeResultado(resultado));
+            }
+
+            return mascotas;
+
+        }
+    }
+    
     public Mascota obtenerMascotaPorId(int idMascota) throws Exception {
         String sql = "SELECT * FROM `mascotas` WHERE idMascota=?";
 

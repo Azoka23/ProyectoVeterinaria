@@ -1,6 +1,6 @@
 package veterinaria.Vistas;
 
-import java.awt.event.ActionEvent;
+
 import java.awt.event.ActionListener;
 import veterinaria.AccesoADatos.ClienteDAO;
 import veterinaria.AccesoADatos.MascotaDAO;
@@ -21,6 +21,7 @@ import javax.swing.JOptionPane;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.SwingUtilities;
 
 public class FormularioMascotas extends javax.swing.JInternalFrame {
 
@@ -37,74 +38,84 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
      * Creates new form InfoMateria
      */
     public FormularioMascotas(int idCliente) throws ClassNotFoundException {
-        this.idCliente = idCliente;
-        initComponents();
-        setTitle("Cargar Mascotas");
         try {
-            cargarCombo();
-            cargarComboSexo();
-        } catch (SQLException ex) {
+            this.idCliente = idCliente;
+            initComponents();
+            setTitle("Cargar Mascotas");
+
+            try {
+                cargarCombo();
+                cargarComboSexo();
+            } catch (SQLException ex) {
+                Logger.getLogger(FormularioMascotas.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            //Utilidades.asociarEnterConComponente(jTCodigo, jTAlias);
+            Utilidades.asociarEnterConComponente(jTAlias, JCSexo);
+            Utilidades.asociarEnterConComponente(JCSexo, jTColorDePelo);
+            Utilidades.asociarEnterConComponente(jTColorDePelo, jTEspecies);
+            Utilidades.asociarEnterConComponente(jTEspecies, jTRaza);
+            Utilidades.asociarEnterConComponente(jTRaza, jTPesoA);
+            Utilidades.asociarEnterConComponente(jTPesoA, jDCFechaNac);
+            Utilidades.asociarEnterConComponente(jDCFechaNac, jBGuardar);
+            //        jRBEstado.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                // Verifica si el cliente ya existe (es decir, está en modo edición)
+//                if (estado.equals(Estado.BUSCAR)) {
+//                    int option = JOptionPane.showConfirmDialog(FormularioMascotas.this, // El componente padre para el cuadro de diálogo
+//                            "¿Está seguro de cambiar el estado de la Mascota?", // El mensaje que se mostrará
+//                            "Confirmar Cambio de Estado", // El título del cuadro de diálogo
+//                            JOptionPane.YES_NO_OPTION); // Tipo de opciones (Sí o No)
+//
+//                    // Si el usuario selecciona "Sí" en el cuadro de diálogo
+//                    if (option == JOptionPane.YES_OPTION) {
+//                        try {
+//                            int codigo = Integer.parseInt(jTCodigo.getText());
+//                            MascotaDAO mascotaD = new MascotaDAO();
+//
+//                            // Si el estado actual es true, llama a bajaLogica(int dni)
+//                            if (estadoMascota) {
+//                                try {
+//                                    mascotaD.bajaLogica(codigo);
+//                                    setTitle("Mascota -- Codigo dado de Baja");
+//                                    JOptionPane.showMessageDialog(FormularioMascotas.this, "La Mascota ha sido dado de baja");
+//                                } catch (Exception ex) {
+//                                    Utilidades.mostrarError(ex, FormularioMascotas.this);
+//                                }
+//                            } else {
+//                                // Si el estado actual es false, llama a altaLogica(int dni)
+//                                try {
+//                                    mascotaD.altaLogica(codigo);
+//                                    setTitle("Mascota");
+//                                    JOptionPane.showMessageDialog(FormularioMascotas.this, "La Mascota ha sido dado de alta");
+//                                } catch (Exception ex) {
+//                                    Utilidades.mostrarError(ex, FormularioMascotas.this);
+//                                }
+//                            }
+//                        } catch (ClassNotFoundException ex) {
+//                            Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
+//                        } catch (SQLException ex) {
+//                            Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
+//                        }
+//                    } else {
+//                        // Si el usuario selecciona "No", deshace el cambio en el estado del JRadioButton
+//                        jRBEstado.setSelected(!jRBEstado.isSelected());
+//                    }
+//                }
+//            }
+//        });
+            jRBEstado.setSelected(true);
+            jTCodigo.setText(ultimoRegistro() + "");
+            // Establecer el foco en jTAlias cuando el formulario se carga
+            SwingUtilities.invokeLater(() -> {
+                jTAlias.requestFocusInWindow();
+            });
+            jTPesoM.setEnabled(false);
+        } catch (Exception ex) {
             Logger.getLogger(FormularioMascotas.class.getName()).log(Level.SEVERE, null, ex);
         }
-        Utilidades.asociarEnterConComponente(jTCodigo, jTAlias);
-
-        Utilidades.asociarEnterConComponente(jTAlias, JCSexo);
-        Utilidades.asociarEnterConComponente(JCSexo, jTColorDePelo);
-
-        Utilidades.asociarEnterConComponente(jTColorDePelo, jTEspecies);
-        Utilidades.asociarEnterConComponente(jTEspecies, jTRaza);
-        Utilidades.asociarEnterConComponente(jTRaza, jTPesoA);
-        Utilidades.asociarEnterConComponente(jTPesoA, jDCFechaNac);
-        Utilidades.asociarEnterConComponente(jDCFechaNac, jBGuardar);
-
-        jRBEstado.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                // Verifica si el cliente ya existe (es decir, está en modo edición)
-                if (estado.equals(Estado.BUSCAR)) {
-                    int option = JOptionPane.showConfirmDialog(
-                            FormularioMascotas.this, // El componente padre para el cuadro de diálogo
-                            "¿Está seguro de cambiar el estado de la Mascota?", // El mensaje que se mostrará
-                            "Confirmar Cambio de Estado", // El título del cuadro de diálogo
-                            JOptionPane.YES_NO_OPTION); // Tipo de opciones (Sí o No)
-
-                    // Si el usuario selecciona "Sí" en el cuadro de diálogo
-                    if (option == JOptionPane.YES_OPTION) {
-                        try {
-                            int codigo = Integer.parseInt(jTCodigo.getText());
-                            MascotaDAO mascotaD = new MascotaDAO();
-
-                            // Si el estado actual es true, llama a bajaLogica(int dni)
-                            if (estadoMascota) {
-                                try {
-                                    mascotaD.bajaLogica(codigo);
-                                    setTitle("Mascota -- Codigo dado de Baja");
-                                    JOptionPane.showMessageDialog(FormularioMascotas.this, "La Mascota ha sido dado de baja");
-                                } catch (Exception ex) {
-                                    Utilidades.mostrarError(ex, FormularioMascotas.this);
-                                }
-                            } else {
-                                // Si el estado actual es false, llama a altaLogica(int dni)
-                                try {
-                                    mascotaD.altaLogica(codigo);
-                                    setTitle("Mascota");
-                                    JOptionPane.showMessageDialog(FormularioMascotas.this, "La Mascota ha sido dado de alta");
-                                } catch (Exception ex) {
-                                    Utilidades.mostrarError(ex, FormularioMascotas.this);
-                                }
-                            }
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (SQLException ex) {
-                            Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    } else {
-                        // Si el usuario selecciona "No", deshace el cambio en el estado del JRadioButton
-                        jRBEstado.setSelected(!jRBEstado.isSelected());
-                    }
-                }
-            }
-        });
+        //Utilidades.asociarEnterConComponente(jTCodigo, jTAlias);
+        //Utilidades.asociarEnterConComponente(jTCodigo, jTAlias);
     }
 
     @SuppressWarnings("unchecked")
@@ -158,7 +169,10 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
 
         jLPesoA.setText("Peso Actual");
 
-        jBGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/Save_37110.png"))); // NOI18N
+        jTCodigo.setEditable(false);
+        jTCodigo.setRequestFocusEnabled(false);
+
+        jBGuardar.setText("Guardar");
         jBGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBGuardarActionPerformed(evt);
@@ -186,6 +200,17 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(29, 29, 29)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLAlias)
+                            .addComponent(jLCodigo))
+                        .addGap(65, 65, 65)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTAlias, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jBGuardar)
+                        .addGap(96, 96, 96))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLSexo)
@@ -211,9 +236,9 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
                                         .addComponent(jTColorDePelo, javax.swing.GroupLayout.Alignment.LEADING)
                                         .addComponent(JCSexo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                         .addComponent(jTRaza))
-                                    .addGap(204, 204, 204)
+                                    .addGap(129, 129, 129)
                                     .addComponent(jBSalir)
-                                    .addGap(41, 41, 41)))
+                                    .addGap(116, 116, 116)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jDCFechaNac, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -223,18 +248,7 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
                                         .addComponent(jLPesoA)
                                         .addGap(37, 37, 37)
                                         .addComponent(jTPesoA, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addContainerGap(12, Short.MAX_VALUE))))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLAlias)
-                            .addComponent(jLCodigo))
-                        .addGap(65, 65, 65)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTAlias, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jBGuardar)
-                        .addGap(50, 50, 50))))
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -270,9 +284,9 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
                             .addComponent(jLPesoM)
                             .addComponent(jTPesoM, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
+                        .addGap(21, 21, 21)
                         .addComponent(jBGuardar)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(32, 32, 32)
                         .addComponent(jBSalir)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -320,6 +334,7 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
 
                 guardar();
                 limpiar();
+                jTCodigo.setText(ultimoRegistro() + "");
 
             }
 
@@ -480,13 +495,17 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
 //            double pesoM = Double.parseDouble(jTPesoM.getText());
 //            double pesoA = Double.parseDouble(jTPesoA.getText());
 //            double pesoM = 0.0;
-//            double pesoA = 0.0;
-            double pesoM = 0.0;
-            double pesoA = Double.parseDouble(jTPesoA.getText());
-            if (pesoA != 0.0) {
-                pesoM = pesoA;
-
+            double pesoA = 0.0;
+            try {
+                String pesoAString = jTPesoA.getText().trim();
+                if (!pesoAString.isEmpty()) {
+                    pesoA = Double.parseDouble(pesoAString);
+                }
+            } catch (NumberFormatException ex) {
+                Utilidades.mostrarError(ex, this);
             }
+
+            double pesoM = pesoA;
 
             estadoMascota = jRBEstado.isSelected();
 
@@ -543,7 +562,7 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
     }
 
     private boolean camposVacios() {
-        return jTCodigo.getText().isEmpty() || jTAlias.getText().isEmpty() || jTColorDePelo.getText().isEmpty();
+        return jTCodigo.getText().isEmpty() || jTAlias.getText().isEmpty() || jDCFechaNac.getDate() == null;
     }
 
     private void cargarCombo() throws ClassNotFoundException, SQLException {

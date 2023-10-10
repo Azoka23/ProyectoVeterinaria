@@ -2,6 +2,9 @@ package veterinaria.Vistas;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import veterinaria.AccesoADatos.ClienteDAO;
@@ -9,7 +12,7 @@ import veterinaria.AccesoADatos.MascotaDAO;
 import veterinaria.Entidades.Cliente;
 import veterinaria.Entidades.Mascota;
 import veterinaria.Utilidades;
-import java.sql.Date;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
@@ -21,7 +24,7 @@ public class FormularioClienteBuscar extends javax.swing.JInternalFrame {
 
     //private JButton botonAnterior = null; // Variable para almacenar el botón anterior
     private Estado estado = Estado.NADA;
-private DesktopPaneWithBackground desktopPane;
+    private DesktopPaneWithBackground desktopPane;
     private Cliente selectedCliente = null;
     private int idMascotas = 0;
     private int idCliente = 0;
@@ -38,14 +41,40 @@ private DesktopPaneWithBackground desktopPane;
      * Creates new form InfoAlumno
      */
     public FormularioClienteBuscar(DesktopPaneWithBackground desktopPane) {
-        this.desktopPane=desktopPane;
+        this.desktopPane = desktopPane;
         initComponents();
         setTitle("Buscar  Cliente");
         armarCabecera();
-        //jBMascotas.setVisible(false);
+        
         // Establecer el foco en jTDocumento
         jTDocumento.requestFocusInWindow();
+        // Agregar FocusListener al campo jTDocumento
+        jTDocumento.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusLost(FocusEvent e) {
+                buscarClientePorDni();
 
+            }
+
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    buscarClientePorDni();
+
+                }
+            }
+        });
+        Utilidades.asociarEnterConComponente(jTDocumento, jTApellido);
+
+        Utilidades.asociarEnterConComponente(jTApellido, jTNombre);
+        Utilidades.asociarEnterConComponente(jTNombre, jTDireccion);
+        Utilidades.asociarEnterConComponente(jTDireccion, jTtelefono);
+        Utilidades.asociarEnterConComponente(jTtelefono, jTMail);
+        Utilidades.asociarEnterConComponente(jTMail, jTContNombre);
+        Utilidades.asociarEnterConComponente(jTContNombre, jTContactoTelefono);
+
+        Utilidades.asociarEnterConComponente(jTContactoTelefono, jBMascotas);
+        Utilidades.asociarEnterConComponente(jBMascotas, jBGuardar);
+        Utilidades.asociarEnterConComponente(jBGuardar, jBSalir);
         jRBEstado.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -157,7 +186,7 @@ private DesktopPaneWithBackground desktopPane;
 
         jTDocumento.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
-        jBGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/Save_37110.png"))); // NOI18N
+        jBGuardar.setText("Guardar");
         jBGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBGuardarActionPerformed(evt);
@@ -251,6 +280,9 @@ private DesktopPaneWithBackground desktopPane;
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jLDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLApellido)
@@ -268,18 +300,16 @@ private DesktopPaneWithBackground desktopPane;
                                     .addComponent(jTMail))
                                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(42, 42, 42)
-                                        .addComponent(jBBuscar)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jBGuardar)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                        .addGap(51, 51, 51)
+                                        .addComponent(jBBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(50, 50, 50)
                                         .addComponent(jBSalir))
                                     .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addGap(60, 60, 60)
-                                        .addComponent(jBMascotas, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(0, 0, Short.MAX_VALUE)
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                        .addGap(81, 81, 81)
+                                        .addComponent(jBGuardar))
+                                    .addGroup(jPanel1Layout.createSequentialGroup()
+                                        .addGap(67, 67, 67)
+                                        .addComponent(jBMascotas, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                         .addGap(231, 231, 231))))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(275, 275, 275)
@@ -296,6 +326,16 @@ private DesktopPaneWithBackground desktopPane;
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jBBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
+                            .addComponent(jBSalir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jBGuardar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jBMascotas, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLDocumento, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -319,16 +359,7 @@ private DesktopPaneWithBackground desktopPane;
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTMail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jBSalir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jBBuscar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jBGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
-                        .addComponent(jBMascotas, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jTMail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -444,11 +475,11 @@ private DesktopPaneWithBackground desktopPane;
         } else {
 
             try {
-                try {
-                    guardar();
-                } catch (Exception ex) {
-                    Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
-                }
+//                try {
+//                    guardar();
+//                } catch (Exception ex) {
+//                    Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
+//                }
                 FormularioMascotas cargarMascotas = new FormularioMascotas(idCliente);
                 cargarMascotas.setSize(600, 500);
                 cargarMascotas.pack();
@@ -566,6 +597,22 @@ private DesktopPaneWithBackground desktopPane;
 //            JOptionPane.showMessageDialog(this, "Por favor, ingrese un número de documento que exista.");
 //        }
 //    }
+        private void buscarClientePorDni() {
+        String documento = jTDocumento.getText().trim();
+
+        if (documento.isEmpty()) {
+            JOptionPane.showMessageDialog(null, "Debes escribir un documento");
+            return;
+        }
+
+        try {
+            // Llamar al método buscarxDni() aquí y realizar las operaciones necesarias
+            buscarxDni();
+        } catch (Exception ex) {
+            Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
     private void buscarxDni() throws ClassNotFoundException, SQLException {
 
         ClienteDAO clienteD = new ClienteDAO();
@@ -586,6 +633,7 @@ private DesktopPaneWithBackground desktopPane;
             }
 
             mostrarClienteEnFormulario(cliente);
+            idCliente=cliente.getIdCliente();
             cargarTabla(cliente.getIdCliente());
 
         } catch (Exception ex) {
@@ -681,7 +729,7 @@ private DesktopPaneWithBackground desktopPane;
         }
 
         jRBEstado.setSelected(cliente.isEstado());
-        estadoCliente=cliente.isEstado();
+        estadoCliente = cliente.isEstado();
         jTContNombre.setText(cliente.getContactoNombre());
         jTContactoTelefono.setText(cliente.getContactoTelefono());
     }
