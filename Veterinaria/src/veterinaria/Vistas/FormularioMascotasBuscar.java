@@ -31,9 +31,9 @@ public class FormularioMascotasBuscar extends javax.swing.JInternalFrame {
     private Estado estado;
 
     private Cliente selectedCliente = null;
-    private int idMascotas = 0;
+    //private int idMascotas = 0;
     private int idCliente = 0;
-    private Cliente cliente=null;
+    private Cliente cliente = null;
     private boolean estadoMascota;
     private String alias;
 
@@ -105,12 +105,13 @@ public class FormularioMascotasBuscar extends javax.swing.JInternalFrame {
                     }
                 }
             });
-            Utilidades.asociarEnterConComponente(jTAlias, JCSexo);
-            Utilidades.asociarEnterConComponente(JCSexo, jTColorDePelo);
+            Utilidades.asociarEnterConComponente(jTAlias, jTColorDePelo);
+           // Utilidades.asociarEnterConComponente(JCSexo, jTColorDePelo);
             Utilidades.asociarEnterConComponente(jTColorDePelo, jTEspecies);
             Utilidades.asociarEnterConComponente(jTEspecies, jTRaza);
-            Utilidades.asociarEnterConComponente(jTRaza, jTPesoA);
-            Utilidades.asociarEnterConComponente(jTPesoA, jDCFechaNac);
+            Utilidades.asociarEnterConComponente(jTRaza, JCSexo);
+            Utilidades.asociarEnterConComponente(JCSexo, jTColorDePelo);
+            Utilidades.asociarEnterConComponente(jTPesoA, jTPesoA);
             Utilidades.asociarEnterConComponente(jDCFechaNac, jBGuardar);
 
             jRBEstado.addActionListener(new ActionListener() {
@@ -250,6 +251,11 @@ public class FormularioMascotasBuscar extends javax.swing.JInternalFrame {
         });
 
         jBSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/home256_24783.png"))); // NOI18N
+        jBSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBSalirActionPerformed(evt);
+            }
+        });
 
         jBGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/Save_37110.png"))); // NOI18N
         jBGuardar.addActionListener(new java.awt.event.ActionListener() {
@@ -459,9 +465,9 @@ public class FormularioMascotasBuscar extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jBBuscarKeyPressed
 
-    private void jBSalirActionPerformed(java.awt.event.ActionEvent evt) {
+    private void jBSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSalirActionPerformed
         salirAplicacion();
-    }
+    }//GEN-LAST:event_jBSalirActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -582,43 +588,51 @@ public class FormularioMascotasBuscar extends javax.swing.JInternalFrame {
             mascotas = new ArrayList<>();
             //ascota mascota = mascotaD.buscarListaMascotaxDni(codigo);
             mascotas = mascotaD.buscarListaMascotaxAlias(alias);
-            JComboBox<Cliente> jCBClientesDialogo = new JComboBox<>();
 
-            // Itera sobre las mascotas encontradas y carga los clientes en el JComboBox
-            for (Mascota mascota : mascotas) {
-                cliente = mascota.getIdCliente();
-                if (cliente != null && cliente.isEstado()) {
-                    // jCBClientes.addItem(cliente);
-                    jCBClientesDialogo.addItem(cliente);
+            if (!mascotas.isEmpty()) {
+
+                JComboBox<Cliente> jCBClientesDialogo = new JComboBox<>();
+
+                // Itera sobre las mascotas encontradas y carga los clientes en el JComboBox
+                for (Mascota mascota : mascotas) {
+                    cliente = mascota.getIdCliente();
+                    if (cliente != null && cliente.isEstado()) {
+                        // jCBClientes.addItem(cliente);
+                        jCBClientesDialogo.addItem(cliente);
+                    }
                 }
+
+                // Mostrar un cuadro de diálogo con el JComboBox de clientes
+                int option = JOptionPane.showOptionDialog(
+                        this,
+                        jCBClientesDialogo,
+                        "Seleccione un Cliente",
+                        JOptionPane.OK_CANCEL_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        null,
+                        null);
+                // Verificar si el usuario seleccionó un cliente y configurar el foco
+                if (option == JOptionPane.OK_OPTION && jCBClientesDialogo.getSelectedItem() != null) {
+                    // Realizar operaciones con el cliente seleccionado
+                    Cliente clienteSeleccionado = (Cliente) jCBClientesDialogo.getSelectedItem();
+                    // ...
+                    //JOptionPane.showMessageDialog(this, alias+"  "+clienteSeleccionado.getIdCliente());
+                    // Por ejemplo: jLClienteSeleccionado.setText("Cliente seleccionado: " + clienteSeleccionado.getNombre());
+                    //jCBClientes.setSelectedItem(clienteSeleccionado);
+                    idCliente = clienteSeleccionado.getIdCliente();
+                    cliente = clienteSeleccionado;
+                    Mascota mascota = mascotaD.buscarListaMascotaxAliasIdCliente(alias, idCliente);
+                    //JOptionPane.showMessageDialog(this, mascota);
+                    mostrarMascotaseEnFormulario(mascota);
+                    // Establecer el foco en el JComboBox
+                    //jCBClientes.requestFocus();
+                }
+            }else{
+                JOptionPane.showMessageDialog(this, "El Alia no se encontro, elija otro");
+                Utilidades.limpiarSetText(jTAlias);
             }
 
-            // Mostrar un cuadro de diálogo con el JComboBox de clientes
-            int option = JOptionPane.showOptionDialog(
-                    this,
-                    jCBClientesDialogo,
-                    "Seleccione un Cliente",
-                    JOptionPane.OK_CANCEL_OPTION,
-                    JOptionPane.QUESTION_MESSAGE,
-                    null,
-                    null,
-                    null);
-            // Verificar si el usuario seleccionó un cliente y configurar el foco
-            if (option == JOptionPane.OK_OPTION && jCBClientesDialogo.getSelectedItem() != null) {
-                // Realizar operaciones con el cliente seleccionado
-                Cliente clienteSeleccionado = (Cliente) jCBClientesDialogo.getSelectedItem();
-                // ...
-                //JOptionPane.showMessageDialog(this, alias+"  "+clienteSeleccionado.getIdCliente());
-                // Por ejemplo: jLClienteSeleccionado.setText("Cliente seleccionado: " + clienteSeleccionado.getNombre());
-                //jCBClientes.setSelectedItem(clienteSeleccionado);
-                idCliente = clienteSeleccionado.getIdCliente();
-                cliente=clienteSeleccionado;
-                Mascota mascota = mascotaD.buscarListaMascotaxAliasIdCliente(alias, idCliente);
-                //JOptionPane.showMessageDialog(this, mascota);
-                mostrarMascotaseEnFormulario(mascota);
-                // Establecer el foco en el JComboBox
-                //jCBClientes.requestFocus();
-            }
         } catch (NumberFormatException e) {
             JOptionPane.showMessageDialog(this, "Error: El código debe ser un número valido.");
         } catch (Exception ex) {
@@ -691,7 +705,7 @@ public class FormularioMascotasBuscar extends javax.swing.JInternalFrame {
             mascota.setIdCliente(cliente);
 
             //mascota.setIdCliente(idCliente);
-            JOptionPane.showMessageDialog(this, mascota);
+            //JOptionPane.showMessageDialog(this, mascota);
 
             mascota.setEstado(estadoMascota);
 

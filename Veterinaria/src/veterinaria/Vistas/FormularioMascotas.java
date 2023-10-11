@@ -1,6 +1,5 @@
 package veterinaria.Vistas;
 
-
 import java.awt.event.ActionListener;
 import veterinaria.AccesoADatos.ClienteDAO;
 import veterinaria.AccesoADatos.MascotaDAO;
@@ -28,7 +27,7 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
     //private JButton botonAnterior = null; // Variable para almacenar el botón anterior
     //private JButton botonAnterior = null; // Variable para almacenar el botón anterior
     private Estado estado;
-
+    private MascotaFormListener listener;
     private Cliente selectedCliente = null;
     private int idMascotas = 0;
     private int idCliente = 0;
@@ -114,6 +113,12 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
         } catch (Exception ex) {
             Logger.getLogger(FormularioMascotas.class.getName()).log(Level.SEVERE, null, ex);
         }
+        //Utilidades.asociarEnterConComponente(jTCodigo, jTAlias);
+        //Utilidades.asociarEnterConComponente(jTCodigo, jTAlias);
+        //Utilidades.asociarEnterConComponente(jTCodigo, jTAlias);
+        //Utilidades.asociarEnterConComponente(jTCodigo, jTAlias);
+        //Utilidades.asociarEnterConComponente(jTCodigo, jTAlias);
+        //Utilidades.asociarEnterConComponente(jTCodigo, jTAlias);
         //Utilidades.asociarEnterConComponente(jTCodigo, jTAlias);
         //Utilidades.asociarEnterConComponente(jTCodigo, jTAlias);
     }
@@ -323,6 +328,7 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSalirActionPerformed
+
         salirAplicacion();
         // TODO add your handling code here:
     }//GEN-LAST:event_jBSalirActionPerformed
@@ -558,6 +564,10 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
 
     private void salirAplicacion() {
         if (Utilidades.confirmarSalida(this)) {
+
+            if (listener != null) {
+                listener.onMascotaFormClosed();
+            }
             dispose();
         }
     }
@@ -618,5 +628,9 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
         estadoMascota = mascota.isEstado();
         jCBClientes.setSelectedItem(mascota.getIdCliente());
 
+    }
+
+    public void setMascotaFormListener(MascotaFormListener listener) {
+        this.listener = listener;
     }
 }

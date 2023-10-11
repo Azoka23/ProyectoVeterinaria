@@ -3,7 +3,7 @@ package veterinaria.AccesoADatos;
 //import java.beans.Statement;
 import veterinaria.Entidades.Cliente;
 import veterinaria.Entidades.Mascota;
-
+import veterinaria.Utilidades;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -60,12 +60,12 @@ public class ClienteDAO extends DAO {
     }
     
     
-    public void modificarCliente(Cliente cliente) throws Exception {
+    public int modificarCliente(Cliente cliente) throws Exception {
         // Utilidades.validar(cliente);
         validarCliente(cliente);
         String sql = "UPDATE clientes SET apellido=?, nombre=?, direccion=?, telefono=?, contactoN=?,contactoTel=?,estado=?, correoElectronico=? WHERE dni=?";
 
-        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, cliente.getApellido());
             preparedStatement.setString(2, cliente.getNombre());
             preparedStatement.setString(3, cliente.getDireccion());
@@ -76,7 +76,7 @@ public class ClienteDAO extends DAO {
             preparedStatement.setString(8, cliente.getEmail());
             preparedStatement.setInt(9, cliente.getDni());
 
-            insertarModificarEliminar(preparedStatement);
+            return insertarModificarEliminar(preparedStatement);
         } catch (SQLException ex) {
             // Manejar la excepción si es necesario
             throw ex;
@@ -88,7 +88,7 @@ public class ClienteDAO extends DAO {
     public void bajaLogica(int dni) throws Exception {
         String sql = "UPDATE clientes SET estado=? WHERE dni=?";
 
-        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setBoolean(1, false);
             preparedStatement.setInt(2, dni);
             insertarModificarEliminar(preparedStatement);
@@ -103,7 +103,7 @@ public class ClienteDAO extends DAO {
     public void altaLogica(int dni) throws Exception {
         String sql = "UPDATE clientes SET estado=? WHERE dni=?";
 
-        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setBoolean(1, true);
             preparedStatement.setInt(2, dni);
             insertarModificarEliminar(preparedStatement);

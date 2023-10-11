@@ -216,6 +216,9 @@
               <Image iconType="3" name="/veterinaria/Imagenes/search_find_lupa_21889.png"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBBuscarActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>

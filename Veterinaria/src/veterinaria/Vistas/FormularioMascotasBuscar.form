@@ -294,6 +294,9 @@
               <Image iconType="3" name="/veterinaria/Imagenes/home256_24783.png"/>
             </Property>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBSalirActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jBGuardar">
           <Properties>

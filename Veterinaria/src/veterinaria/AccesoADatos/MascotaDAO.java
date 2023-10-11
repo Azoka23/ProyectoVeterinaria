@@ -1,6 +1,6 @@
 package veterinaria.AccesoADatos;
 
-
+import veterinaria.Entidades.Cliente;
 import veterinaria.Entidades.Mascota;
 import veterinaria.Entidades.Sexo;
 
@@ -49,12 +49,12 @@ public class MascotaDAO extends DAO {
         }
     }
 
-    public void modificarMascota(Mascota mascota) throws Exception {
+    public int modificarMascota(Mascota mascota) throws Exception {
         // Utilidades.validar(mascota);
         validarMascota(mascota);
         String sql = "UPDATE mascotas SET alias=?, sexo=?, especie=?, raza=?, colorDePelo=?, fechaNac=?, pesoM=?,pesoA=?,idCliente=?, estado=? WHERE idMascota=?";
 
-        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
             preparedStatement.setString(1, mascota.getAlias());
             preparedStatement.setString(2, mascota.getSexo().name());
@@ -69,7 +69,7 @@ public class MascotaDAO extends DAO {
             preparedStatement.setInt(11, mascota.getIdMascota());
 
             //JOptionPane.showMessageDialog(null, preparedStatement);
-            insertarModificarEliminar(preparedStatement);
+            return insertarModificarEliminar(preparedStatement);
         } catch (SQLException ex) {
             // Manejar la excepción si es necesario
             throw ex;
@@ -81,7 +81,7 @@ public class MascotaDAO extends DAO {
     public void bajaLogica(int codigo) throws Exception {
         String sql = "UPDATE mascotas SET estado=? WHERE idMascota=?";
 
-        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setBoolean(1, false);
             preparedStatement.setInt(2, codigo);
 
@@ -98,7 +98,7 @@ public class MascotaDAO extends DAO {
     public void altaLogica(int codigo) throws Exception {
         String sql = "UPDATE mascotas SET estado=? WHERE idMascota=?";
 
-        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setBoolean(1, true);
             preparedStatement.setInt(2, codigo);
 
