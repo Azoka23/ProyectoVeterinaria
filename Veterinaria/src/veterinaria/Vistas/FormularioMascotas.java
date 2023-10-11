@@ -152,30 +152,59 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
         jRBEstado = new javax.swing.JRadioButton();
         jBSalir = new javax.swing.JButton();
 
+        setClosable(true);
         setTitle("Cargar Mascota");
+        setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
 
+        jLCodigo.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLCodigo.setText("Codigo");
 
+        jLAlias.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLAlias.setText("Alias");
 
+        jLSexo.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLSexo.setText("Sexo");
 
+        jLColorDePelo.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLColorDePelo.setText("Color de pelo");
 
+        jLEspecie.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLEspecie.setText("Especie");
 
+        jLRaza.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLRaza.setText("Raza");
 
+        jLPesoM.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLPesoM.setText("Peso Promedio");
 
+        jLFechaNac.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLFechaNac.setText("Fecha de Nac");
 
+        jLClientes.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLClientes.setText("Cliente");
 
+        jLPesoA.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLPesoA.setText("Peso Actual");
 
         jTCodigo.setEditable(false);
+        jTCodigo.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jTCodigo.setRequestFocusEnabled(false);
+
+        jTAlias.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+
+        jTColorDePelo.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+
+        jTEspecies.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+
+        jTRaza.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+
+        jTPesoM.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+
+        jTPesoA.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+
+        JCSexo.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+
+        jCBClientes.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
 
         jBGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/Save_37110.png"))); // NOI18N
         jBGuardar.addActionListener(new java.awt.event.ActionListener() {
@@ -184,6 +213,7 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
             }
         });
 
+        jRBEstado.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jRBEstado.setText("Estado");
         jRBEstado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -213,7 +243,7 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jTCodigo, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTAlias, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(96, 255, Short.MAX_VALUE))
+                        .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLSexo)
@@ -238,11 +268,11 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
                                         .addComponent(jBGuardar)
                                         .addGroup(jPanel1Layout.createSequentialGroup()
                                             .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                .addComponent(jTEspecies, javax.swing.GroupLayout.Alignment.LEADING)
+                                                .addComponent(jTEspecies, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
                                                 .addComponent(jTColorDePelo, javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(JCSexo, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                                .addComponent(jTRaza))
-                                            .addGap(177, 177, 177)))
+                                                .addComponent(jTRaza)
+                                                .addComponent(JCSexo, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                            .addGap(136, 136, 136)))
                                     .addGap(18, 18, 18)
                                     .addComponent(jBSalir)
                                     .addGap(50, 50, 50)))
@@ -255,7 +285,7 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
                                         .addComponent(jLPesoA)
                                         .addGap(37, 37, 37)
                                         .addComponent(jTPesoA, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
+                                .addContainerGap(8, Short.MAX_VALUE))))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -307,7 +337,7 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
                     .addComponent(jLClientes)
                     .addComponent(jCBClientes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jRBEstado))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
