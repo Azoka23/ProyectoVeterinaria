@@ -77,7 +77,27 @@ public class MascotaDAO extends DAO {
             desconectarBase(); // Asegura que la desconexión se realice incluso en caso de excepción.
         }
     }
+    public int modificarMascotaPeso(Mascota mascota) throws Exception {
+        // Utilidades.validar(mascota);
+        validarMascota(mascota);
+        String sql = "UPDATE mascotas SET pesoA=? WHERE idMascota=?";
 
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+
+            preparedStatement.setDouble(1, mascota.getPesoActual());
+
+            preparedStatement.setInt(2, mascota.getIdMascota());
+
+            //JOptionPane.showMessageDialog(null, preparedStatement);
+            return insertarModificarEliminar(preparedStatement);
+        } catch (SQLException ex) {
+            // Manejar la excepción si es necesario
+            throw ex;
+//        } finally {
+//            desconectarBase(); // Asegura que la desconexión se realice incluso en caso de excepción.
+        }
+    }
     public void bajaLogica(int codigo) throws Exception {
         String sql = "UPDATE mascotas SET estado=? WHERE idMascota=?";
 

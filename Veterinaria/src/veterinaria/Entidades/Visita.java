@@ -1,34 +1,32 @@
-
 package veterinaria.Entidades;
 
 import java.time.LocalDate;
 
 public class Visita {
+
     private int idVisita;
-    private Mascota idMascota;
-    private Tratamiento idTratamiento;
+  
     private LocalDate fechaVisita;
     private String detallesSintoma;
     private double pesoActual;
+    private double importeVisita;
 
     public Visita() {
     }
 
-    public Visita(int idVisitas, Mascota idMascotas, Tratamiento idTratamientos, LocalDate fechaVisita, String detallesSintomas, double pesoActual) {
-        this.idVisita = idVisitas;
-        this.idMascota = idMascotas;
-        this.idTratamiento = idTratamientos;
+    public Visita(int idVisita, LocalDate fechaVisita, String detallesSintoma, double pesoActual, double importeVisita) {
+        this.idVisita = idVisita;
         this.fechaVisita = fechaVisita;
-        this.detallesSintoma = detallesSintomas;
+        this.detallesSintoma = detallesSintoma;
         this.pesoActual = pesoActual;
+        this.importeVisita = importeVisita;
     }
 
-    public Visita(Mascota idMascotas, Tratamiento idTratamientos, LocalDate fechaVisita, String detallesSintomas, double pesoActual) {
-        this.idMascota = idMascotas;
-        this.idTratamiento = idTratamientos;
+    public Visita(LocalDate fechaVisita, String detallesSintoma, double pesoActual, double importeVisita) {
         this.fechaVisita = fechaVisita;
-        this.detallesSintoma = detallesSintomas;
+        this.detallesSintoma = detallesSintoma;
         this.pesoActual = pesoActual;
+        this.importeVisita = importeVisita;
     }
 
     public int getIdVisita() {
@@ -37,22 +35,6 @@ public class Visita {
 
     public void setIdVisita(int idVisita) {
         this.idVisita = idVisita;
-    }
-
-    public Mascota getIdMascota() {
-        return idMascota;
-    }
-
-    public void setIdMascota(Mascota idMascota) {
-        this.idMascota = idMascota;
-    }
-
-    public Tratamiento getIdTratamiento() {
-        return idTratamiento;
-    }
-
-    public void setIdTratamiento(Tratamiento idTratamiento) {
-        this.idTratamiento = idTratamiento;
     }
 
     public LocalDate getFechaVisita() {
@@ -79,13 +61,17 @@ public class Visita {
         this.pesoActual = pesoActual;
     }
 
-    @Override
-    public String toString() {
-        return "Visita{" + "idVisitas=" + idVisita + ", idMascotas=" + idMascota + ", idTratamientos=" + idTratamiento + ", fechaVisita=" + fechaVisita + ", detallesSintomas=" + detallesSintoma + ", pesoActual=" + pesoActual + '}';
+    public double getImporteVisita() {
+        return importeVisita;
     }
 
+    public void setImporteVisita(double importeVisita) {
+        this.importeVisita = importeVisita;
+    }
 
-    
-
+    @Override
+    public String toString() {
+        return "Visita{" + "idVisita=" + idVisita + ", fechaVisita=" + fechaVisita + ", detallesSintoma=" + detallesSintoma + ", pesoActual=" + pesoActual + ", importeVisita=" + importeVisita + '}';
+    }
 
 }

@@ -7,5 +7,7 @@ public enum Estado {
     BAJA,
     EDITAR,
     BUSCAR,
+    GUARDADO,
+    NO_GUARDADO,
     NADA;
 }

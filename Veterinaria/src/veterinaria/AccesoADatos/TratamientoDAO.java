@@ -111,9 +111,9 @@ public class TratamientoDAO extends DAO {
 
     public List<Tratamiento> obtenerTratamientos() throws ClassNotFoundException, SQLException {
         List<Tratamiento> tratamientos = new ArrayList<>();
-        String query = "SELECT * FROM tratamientos";
+        String sql = "SELECT * FROM tratamientos";
 
-        PreparedStatement preparedStatement = conexion.prepareStatement(query);
+        PreparedStatement preparedStatement = conexion.prepareStatement(sql);
         resultado = consultarBase(preparedStatement);
         if (resultado != null) {
             while (resultado.next()) {
@@ -174,20 +174,6 @@ public class TratamientoDAO extends DAO {
         }
     }
 
-    public List<Tratamiento> obtenerTratamiento() throws ClassNotFoundException, SQLException {
-        List<Tratamiento> tratamientos = new ArrayList<>();
-        String sql = "SELECT * FROM clientes";
-        PreparedStatement preparedStatement = conexion.prepareStatement(sql);
-        resultado = consultarBase(preparedStatement);
-        if (resultado != null) {
-            while (resultado.next()) {
-
-                tratamientos.add(obtenerTratamientoDesdeResultado(resultado));
-            }
-            resultado.close();
-        }
-        return tratamientos;
-    }
 
     private Tratamiento obtenerTratamientoDesdeResultado(ResultSet result) throws SQLException {
         Tratamiento tratamiento = new Tratamiento();

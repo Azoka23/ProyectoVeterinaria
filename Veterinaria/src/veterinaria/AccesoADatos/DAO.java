@@ -85,8 +85,11 @@ public class DAO {
                     idGenerado = generatedKeys.getInt(1); // Obtén el ID generado
                 }
             }
-        } finally {
-            desconectarBase();
+//        } finally {
+//            desconectarBase();
+        } catch (SQLException ex) {
+
+            JOptionPane.showMessageDialog(null, "No se ejecuto");
         }
 
         return idGenerado;
