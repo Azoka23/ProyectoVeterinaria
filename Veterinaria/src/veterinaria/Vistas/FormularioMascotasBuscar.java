@@ -207,29 +207,56 @@ public class FormularioMascotasBuscar extends javax.swing.JInternalFrame {
         jTCliente = new javax.swing.JTextField();
 
         setClosable(true);
+        setForeground(new java.awt.Color(0, 204, 204));
         setTitle("Buscar Mascota");
+        setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
 
+        jLCodigo.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLCodigo.setText("Codigo");
 
+        jLAlias.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLAlias.setText("Alias");
 
+        jLSexo.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLSexo.setText("Sexo");
 
+        jLColorDePelo.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLColorDePelo.setText("Color de pelo");
 
+        jLEspecie.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLEspecie.setText("Especie");
 
+        jLRaza.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLRaza.setText("Raza");
 
+        jLPesoM.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLPesoM.setText("Peso Promedio");
 
+        jLFechaNac.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLFechaNac.setText("Fecha de Nac");
 
+        jLClientes.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLClientes.setText("Cliente");
 
+        jLPesoA.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLPesoA.setText("Peso Actual");
 
+        jTCodigo.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jTCodigo.setForeground(new java.awt.Color(255, 255, 255));
+
+        jTAlias.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+
+        jTColorDePelo.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+
+        jTEspecies.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+
+        jTRaza.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+
+        jTPesoM.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+
+        jTPesoA.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+
+        JCSexo.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
 
         jBBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/search_find_lupa_21889.png"))); // NOI18N
         jBBuscar.addActionListener(new java.awt.event.ActionListener() {
@@ -243,6 +270,7 @@ public class FormularioMascotasBuscar extends javax.swing.JInternalFrame {
             }
         });
 
+        jRBEstado.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jRBEstado.setText("Estado");
         jRBEstado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -263,6 +291,8 @@ public class FormularioMascotasBuscar extends javax.swing.JInternalFrame {
                 jBGuardarActionPerformed(evt);
             }
         });
+
+        jTCliente.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -295,7 +325,7 @@ public class FormularioMascotasBuscar extends javax.swing.JInternalFrame {
                                                 .addGap(18, 18, 18)
                                                 .addComponent(jTPesoA, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addComponent(jDCFechaNac, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(0, 5, Short.MAX_VALUE)))
+                                        .addGap(0, 4, Short.MAX_VALUE)))
                                 .addGap(123, 123, 123))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(JCSexo, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)

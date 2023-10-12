@@ -159,33 +159,45 @@ public class FormularioClienteBuscar extends javax.swing.JInternalFrame implemen
         setTitle("Buscar Cliente");
         setVisible(false);
 
-        jLDocumento.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jPanel1.setForeground(new java.awt.Color(0, 204, 204));
+        jPanel1.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+
+        jLDocumento.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLDocumento.setText("Documento");
 
-        jLApellido.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLApellido.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLApellido.setText("Apellido");
 
-        jLNombre.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLNombre.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLNombre.setText("Nombre");
 
-        jLDireccion.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLDireccion.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLDireccion.setText("Direccion");
 
-        jLTelefono.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLTelefono.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLTelefono.setText("Telefono");
 
-        jLEmail.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLEmail.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLEmail.setText("E-Mail");
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLabel3.setText("Contacto extra");
 
+        jTDocumento.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jTDocumento.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jTDocumento.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 jTDocumentoKeyPressed(evt);
             }
         });
+
+        jTApellido.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+
+        jTNombre.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+
+        jTDireccion.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+
+        jTtelefono.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
 
         jBGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/Save_37110.png"))); // NOI18N
         jBGuardar.addActionListener(new java.awt.event.ActionListener() {
@@ -216,7 +228,9 @@ public class FormularioClienteBuscar extends javax.swing.JInternalFrame implemen
             }
         });
 
-        jTContactoTelefono.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTContactoTelefono.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+
+        jTMail.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
 
         jBSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/home256_24783.png"))); // NOI18N
         jBSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -225,8 +239,9 @@ public class FormularioClienteBuscar extends javax.swing.JInternalFrame implemen
             }
         });
 
-        jTContNombre.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTContNombre.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
 
+        jRBEstado.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jRBEstado.setText("Estado");
         jRBEstado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -234,10 +249,10 @@ public class FormularioClienteBuscar extends javax.swing.JInternalFrame implemen
             }
         });
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLabel4.setText("Apellido, Nombre");
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLabel5.setText("Telefono");
 
         jTMascotas.setModel(new javax.swing.table.DefaultTableModel(
@@ -309,22 +324,19 @@ public class FormularioClienteBuscar extends javax.swing.JInternalFrame implemen
                             .addComponent(jTDireccion)
                             .addComponent(jTtelefono)
                             .addComponent(jTMail))
-                        .addGap(28, 28, 28)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addComponent(jBBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jBGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jBSalir))
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGap(24, 24, 24)
-                                    .addComponent(jBMascotas, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(51, 51, 51)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(13, 13, 13)))
-                        .addGap(231, 231, 231))))
+                                .addComponent(jBBuscar, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jBGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jBSalir))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(24, 24, 24)
+                                .addComponent(jBMascotas, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(221, 221, 221))))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(275, 275, 275)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 502, javax.swing.GroupLayout.PREFERRED_SIZE)

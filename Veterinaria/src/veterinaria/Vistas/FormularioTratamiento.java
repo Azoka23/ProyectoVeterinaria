@@ -171,7 +171,11 @@ public class FormularioTratamiento extends javax.swing.JInternalFrame {
         jBBuscar = new javax.swing.JButton();
 
         setClosable(true);
+        setForeground(new java.awt.Color(0, 204, 204));
         setTitle("Formulario Tratamiento");
+        setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+
+        jPanel1.setForeground(null);
 
         jLcodigo.setText("Codigo");
 

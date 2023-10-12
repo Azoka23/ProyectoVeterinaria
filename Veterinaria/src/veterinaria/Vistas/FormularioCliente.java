@@ -123,31 +123,42 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
 
         setBackground(new java.awt.Color(204, 204, 204));
         setClosable(true);
+        setForeground(new java.awt.Color(0, 204, 204));
         setTitle(" Cargar Cliente Nuevo");
+        setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         setVisible(false);
 
-        jLDocumento.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLDocumento.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLDocumento.setText("Documento");
 
-        jLApellido.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLApellido.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLApellido.setText("Apellido");
 
-        jLNombre.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLNombre.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLNombre.setText("Nombre");
 
-        jLDireccion.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLDireccion.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLDireccion.setText("Direccion");
 
-        jLTelefono.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLTelefono.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLTelefono.setText("Telefono");
 
-        jLEmail.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLEmail.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLEmail.setText("E-Mail");
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel3.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLabel3.setText("Contacto extra");
 
+        jTDocumento.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jTDocumento.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        jTApellido.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+
+        jTNombre.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+
+        jTDireccion.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+
+        jTtelefono.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
 
         jBGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/Save_37110.png"))); // NOI18N
         jBGuardar.addActionListener(new java.awt.event.ActionListener() {
@@ -156,7 +167,9 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
             }
         });
 
-        jTContactoTelefono.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTContactoTelefono.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+
+        jTMail.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
 
         jBSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/home256_24783.png"))); // NOI18N
         jBSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -165,8 +178,9 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
             }
         });
 
-        jTContNombre.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jTContNombre.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
 
+        jRBEstado.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jRBEstado.setText("Estado");
         jRBEstado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -174,10 +188,10 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel4.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLabel4.setText("Apellido, Nombre");
 
-        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel5.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLabel5.setText("Telefono");
 
         jBMascotas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/77_85219.png"))); // NOI18N
