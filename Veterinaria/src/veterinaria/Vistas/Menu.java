@@ -252,7 +252,21 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMITratamActionPerformed
 
     private void jMIOtrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMIOtrosActionPerformed
-        // TODO add your handling code here:
+        // Historial
+        jEscritorio.removeAll();
+        jEscritorio.repaint();
+        //jEscritorio.add(jLULP);
+        Historial historial = new Historial();
+        // Configurar el tamaño del JInternalFrame
+        historial.setSize(600, 500);
+        historial.pack();
+        // Calcular el centro del JDesktopPane
+        int x = (jEscritorio.getWidth() - historial.getWidth()) / 2;
+        int y = (jEscritorio.getHeight() - historial.getHeight()) / 2;
+        // Establecer la ubicación y agregar el JInternalFrame
+        historial.setBounds(x, y, historial.getWidth(),historial.getHeight());
+        jEscritorio.add(historial);
+       historial.setVisible(true);
     }//GEN-LAST:event_jMIOtrosActionPerformed
 
     private void jMINuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMINuevoActionPerformed
