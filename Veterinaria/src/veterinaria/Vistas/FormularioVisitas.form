@@ -63,7 +63,7 @@
                           </Group>
                           <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jTDNI" min="-2" pref="138" max="-2" attributes="0"/>
+                              <Component id="jTDni" min="-2" pref="138" max="-2" attributes="0"/>
                               <Component id="jTApellido" min="-2" pref="138" max="-2" attributes="0"/>
                               <Component id="jTNombre" min="-2" pref="138" max="-2" attributes="0"/>
                           </Group>
@@ -143,8 +143,8 @@
                                   <Component id="jLNombre" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <Group type="102" attributes="0">
-                                  <Component id="jTDNI" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
+                                  <Component id="jTDni" min="-2" max="-2" attributes="0"/>
+                                  <EmptySpace min="-2" pref="12" max="-2" attributes="0"/>
                                   <Component id="jTApellido" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="12" pref="12" max="-2" attributes="0"/>
                                   <Component id="jTNombre" min="-2" max="-2" attributes="0"/>
@@ -244,7 +244,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBBuscarActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JTextField" name="jTDNI">
+        <Component class="javax.swing.JTextField" name="jTDni">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Roboto" size="14" style="0"/>

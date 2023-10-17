@@ -2,10 +2,8 @@ package veterinaria.Vistas;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import veterinaria.AccesoADatos.ClienteDAO;
 import veterinaria.AccesoADatos.MascotaDAO;
@@ -17,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JButton;
 import javax.swing.table.DefaultTableModel;
 
 public class FormularioClienteBuscar extends javax.swing.JInternalFrame implements MascotaFormListener {
@@ -42,20 +39,12 @@ public class FormularioClienteBuscar extends javax.swing.JInternalFrame implemen
         setTitle("Buscar  Cliente");
         armarCabecera();
 
-        // Establecer el foco en jTDocumento
-        jTDocumento.requestFocusInWindow();
-        // Agregar FocusListener al campo jTDocumento
-        jTDocumento.addFocusListener(new FocusAdapter() {
+        // Agregar KeyListener al campo jTDocumento
+        jTDocumento.addKeyListener(new KeyAdapter() {
             @Override
-            public void focusLost(FocusEvent e) {
-                buscarClientePorDni();
-
-            }
-
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     buscarClientePorDni();
-
                 }
             }
         });
@@ -71,6 +60,7 @@ public class FormularioClienteBuscar extends javax.swing.JInternalFrame implemen
         Utilidades.asociarEnterConComponente(jTContactoTelefono, jBMascotas);
         Utilidades.asociarEnterConComponente(jBMascotas, jBGuardar);
         Utilidades.asociarEnterConComponente(jBGuardar, jBSalir);
+
         jRBEstado.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -83,34 +73,28 @@ public class FormularioClienteBuscar extends javax.swing.JInternalFrame implemen
 
                     // Si el usuario selecciona "Sí" en el cuadro de diálogo
                     if (option == JOptionPane.YES_OPTION) {
-                        try {
-                            int dni = Integer.parseInt(jTDocumento.getText());
-                            ClienteDAO clienteD = new ClienteDAO();
-
-                            // Si el estado actual es true, llama a bajaLogica(int dni)
-                            //if (jRBEstado.isSelected()) {
-                            if (estadoCliente) {
-                                try {
-                                    clienteD.bajaLogica(dni);
-                                    setTitle("Cliente -- DNI dado de Baja");
-                                    JOptionPane.showMessageDialog(FormularioClienteBuscar.this, "El cliente ha sido dado de baja");
-                                } catch (Exception ex) {
-                                    Utilidades.mostrarError(ex, FormularioClienteBuscar.this);
-                                }
-                            } else {
-                                // Si el estado actual es false, llama a altaLogica(int dni)
-                                try {
-                                    clienteD.altaLogica(dni);
-                                    setTitle("Cliente");
-                                    JOptionPane.showMessageDialog(FormularioClienteBuscar.this, "El cliente ha sido dado de alta");
-                                } catch (Exception ex) {
-                                    Utilidades.mostrarError(ex, FormularioClienteBuscar.this);
-                                }
+                        int dni = Integer.parseInt(jTDocumento.getText());
+                        ClienteDAO clienteD = ClienteDAO.obtenerInstancia();
+                        // Si el estado actual es true, llama a bajaLogica(int dni)
+                        //if (jRBEstado.isSelected()) {
+                        //JOptionPane.showMessageDialog(null, estadoCliente);
+                        if (estadoCliente) {
+                            try {
+                                clienteD.bajaLogica(dni);
+                                setTitle("Cliente -- DNI dado de Baja");
+                                JOptionPane.showMessageDialog(FormularioClienteBuscar.this, "El cliente ha sido dado de baja");
+                            } catch (Exception ex) {
+                                Utilidades.mostrarError(ex, FormularioClienteBuscar.this);
                             }
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(FormularioClienteBuscar.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (SQLException ex) {
-                            Logger.getLogger(FormularioClienteBuscar.class.getName()).log(Level.SEVERE, null, ex);
+                        } else {
+                            // Si el estado actual es false, llama a altaLogica(int dni)
+                            try {
+                                clienteD.altaLogica(dni);
+                                setTitle("Cliente");
+                                JOptionPane.showMessageDialog(FormularioClienteBuscar.this, "El cliente ha sido dado de alta");
+                            } catch (Exception ex) {
+                                Utilidades.mostrarError(ex, FormularioClienteBuscar.this);
+                            }
                         }
                     } else {
                         // Si el usuario selecciona "No", deshace el cambio en el estado del JRadioButton
@@ -433,7 +417,7 @@ public class FormularioClienteBuscar extends javax.swing.JInternalFrame implemen
     }//GEN-LAST:event_jBSalirActionPerformed
 
     private void jBBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBBuscarActionPerformed
-        buscarBotonCliente();
+        buscarClientePorDni();
 
 
     }//GEN-LAST:event_jBBuscarActionPerformed
@@ -477,7 +461,7 @@ public class FormularioClienteBuscar extends javax.swing.JInternalFrame implemen
     }//GEN-LAST:event_jBGuardarKeyPressed
 
     private void jBBuscarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jBBuscarKeyPressed
-        buscarBotonCliente();
+        buscarClientePorDni();
     }//GEN-LAST:event_jBBuscarKeyPressed
 
     private void jTDocumentoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTDocumentoKeyPressed
@@ -526,46 +510,29 @@ public class FormularioClienteBuscar extends javax.swing.JInternalFrame implemen
         Utilidades.limpiarSetText(jTDocumento, jTApellido, jTNombre, jTDireccion, jTtelefono, jTMail, jTContNombre, jTContactoTelefono);
         estado = Estado.NADA;
         jRBEstado.setSelected(true);
+        modelo.setRowCount(0); // Limpia la tabla de tratamientos antes de agregar nuevos datos
 
-    }
-
-    private void limpiarBuscar() {
-
-        Utilidades.limpiarSetText(jTApellido, jTNombre, jTDireccion, jTtelefono, jTMail, jTContNombre, jTContactoTelefono);
-        modelo.setRowCount(0); // Limpiar la tabla antes de agregar nuevos datos
     }
 
     private void buscarClientePorDni() {
-        String documento = jTDocumento.getText().trim();
+        // Obtiene el documento ingresado en el campo de texto
+        String documento = Utilidades.obtenerTextoDesdeCampo(jTDocumento);
 
+        // Verifica si el campo de documento está vacío y muestra un mensaje de advertencia
         if (documento.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Debes escribir un documento");
             return;
         }
 
         try {
-            // Llamar al método buscarxDni() aquí y realizar las operaciones necesarias
-            buscarxDni();
-        } catch (Exception ex) {
-            Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            // Obtiene el DNI como entero
+            int dni = Utilidades.obtenerEnteroDesdeCampo(jTDocumento);
 
-    }
-
-    private void buscarxDni() throws ClassNotFoundException, SQLException {
-
-        ClienteDAO clienteD = new ClienteDAO();
-        int dni = 0;
-        try {
-            dni = Integer.parseInt(jTDocumento.getText());
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error: Debes ingresar un número de documento válido.");
-            return;
-        }
-
-        try {
-
+            // Intenta buscar un cliente con el DNI ingresado en la base de datos
+            ClienteDAO clienteD = ClienteDAO.obtenerInstancia();
             Cliente cliente = clienteD.buscarListaClientexDni(dni);
+
+            estado = Estado.BUSCAR;
             if (cliente == null) {
 
                 estado = Estado.NUEVO;
@@ -573,82 +540,54 @@ public class FormularioClienteBuscar extends javax.swing.JInternalFrame implemen
 
             mostrarClienteEnFormulario(cliente);
             idCliente = cliente.getIdCliente();
+
             cargarTabla(cliente.getIdCliente());
 
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Error: Debes ingresar un número de documento válido.");
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "No se encontro el DNI");
+            Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    private void guardar() throws Exception {
-        ClienteDAO clienteD = new ClienteDAO();
-        Cliente cliente = new Cliente();
-        int documento;
+    private void guardarCliente() {
         try {
-            try {
 
-                documento = Integer.parseInt(jTDocumento.getText());
-
-                cliente = clienteD.buscarListaClientexDni(documento);
-
-                if (cliente != null && estado.equals(Estado.NUEVO)) {
-
-                    JOptionPane.showMessageDialog(this, "El Documento ya existe, no puede darlo de Alta.");
-                    return;
-                } else {
-                    cliente = new Cliente();
-                }
-
-            } catch (Exception e) {
+            // Obtiene los datos del cliente desde los campos de texto
+            int documento = Utilidades.obtenerEnteroDesdeCampo(jTDocumento);
+            if (documento <= 0) {
                 JOptionPane.showMessageDialog(this, "Error: Debes ingresar un número de documento válido.");
                 return;
             }
+            // Obtiene los datos del cliente desde los campos de texto
+            ClienteDAO clienteD = ClienteDAO.obtenerInstancia();
 
-            String apellido = jTApellido.getText();
-            String nombre = jTNombre.getText();
-            String direccion = jTDireccion.getText();
-            String telefono = jTtelefono.getText();
-            String email = jTMail.getText();
-            //boolean estadoCliente = jRBEstado.isSelected();
-            estadoCliente = jRBEstado.isSelected();
-            String contactoNombre = jTContNombre.getText();
-            String contactoTel = jTContactoTelefono.getText();
+            //se fija si existe el cliente
+            Cliente cliente = clienteD.buscarListaClientexDni(documento);
 
-            // Asignar los valores al objeto Cliente
-            cliente.setDni(documento);
-            cliente.setApellido(apellido);
-            cliente.setNombre(nombre);
+            if (cliente != null && estado.equals(Estado.NUEVO)) {
+                JOptionPane.showMessageDialog(this, "El Documento ya existe, no puede darlo de Alta.");
+                return;
+            }
 
-            cliente.setDireccion(direccion);
-            cliente.setTelefono(telefono);
-            cliente.setContactoNombre(contactoNombre);
-            cliente.setContactoTelefono(contactoTel);
-            cliente.setEstado(estadoCliente);
-            cliente.setEmail(email);
+            cliente = new Cliente(
+                    documento,
+                    Utilidades.obtenerTextoDesdeCampo(jTApellido),
+                    Utilidades.obtenerTextoDesdeCampo(jTNombre),
+                    Utilidades.obtenerTextoDesdeCampo(jTDireccion),
+                    Utilidades.obtenerTextoDesdeCampo(jTtelefono),
+                    Utilidades.obtenerTextoDesdeCampo(jTContNombre),
+                    Utilidades.obtenerTextoDesdeCampo(jTContactoTelefono),
+                    jRBEstado.isSelected(),
+                    Utilidades.obtenerTextoDesdeCampo(jTMail)
+            );
 
-            cliente.setEstado(estadoCliente);
-
-            // Llamar al método para guardar el alumno en la base de datos
-            //solo grabar si fue elegida la opcion Nuevo - boton 
-            //   if (botonAnterior == jBNuevo) {
-            if (estado.equals(Estado.NUEVO)) {
-
-                try {
-                    cliente.setEstado(true);
-                    clienteD.guardarCliente(cliente);
-                } catch (Exception ex) {
-
-                    Utilidades.mostrarError(ex, this);
-                }
-
-            } else if (estado.equals(Estado.BUSCAR)) {
-//                    if (cliente.isEstado()) {
-//                        Utilidades.confirmarEstado(this);
-//                    }
+            if (estado.equals(Estado.BUSCAR)) {
                 idCliente = clienteD.modificarCliente(cliente);
             }
 
-        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Cliente modificado correctamente!");
+        } catch (Exception ex) {
             Utilidades.mostrarError(ex, this);
         }
     }
@@ -683,11 +622,11 @@ public class FormularioClienteBuscar extends javax.swing.JInternalFrame implemen
 
     private void cargarTabla(int idCliente) throws Exception {
 
-        MascotaDAO cursadas = new MascotaDAO();
+        MascotaDAO cursadas = MascotaDAO.obtenerInstancia();
         Collection<Mascota> listaMascota = new ArrayList<>(); // Inicialización predeterminada
 
         listaMascota = cursadas.listarMascotasxIdCliente(idCliente);
-
+        modelo.setRowCount(0); // Limpia la tabla de tratamientos antes de agregar nuevos datos
         for (Mascota tipo : listaMascota) {
             if (tipo.isEstado()) {
                 modelo.addRow(new Object[]{tipo.getIdMascota(), tipo.getAlias(), tipo.getPesoActual()});
@@ -699,6 +638,7 @@ public class FormularioClienteBuscar extends javax.swing.JInternalFrame implemen
     }
 
     private void cargarFormularioMascotas() {
+
         try {
             FormularioMascotas cargarMascotas = new FormularioMascotas(idCliente);
             cargarMascotas.setMascotaFormListener(this); // Donde `this` es el objeto que implementa el interfaz
@@ -719,38 +659,14 @@ public class FormularioClienteBuscar extends javax.swing.JInternalFrame implemen
             if (jTDocumento.getText().isEmpty() || jTApellido.getText().isEmpty() || jTNombre.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "No debe dejar ningún dato vacío");
             } else {
-                if (estado.equals(Estado.NUEVO) || estado.equals(Estado.BUSCAR)) {
-                    guardar();
-                    limpiar();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Elija buscar o Nuevo DNI");
+                if (estado.equals(Estado.BUSCAR)) {
+                    guardarCliente();
                     limpiar();
                 }
+
             }
         } catch (Exception ex) {
             Utilidades.mostrarError(ex, this);
-        }
-    }
-
-    private void buscarBotonCliente() {
-        String documento = jTDocumento.getText().trim();
-
-        if (documento.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Debes escribir un documento");
-            return;
-        } else {
-            limpiarBuscar();
-            ///botonAnterior = jBBuscar;
-            estado = Estado.BUSCAR;
-            //JOptionPane.showMessageDialog(null, "pasooo");
-            try {
-                buscarxDni();
-            } catch (ClassNotFoundException ex) {
-                Utilidades.mostrarError(ex, this);
-            } catch (SQLException ex) {
-                Utilidades.mostrarError(ex, this);
-            }
-
         }
     }
 
@@ -760,8 +676,8 @@ public class FormularioClienteBuscar extends javax.swing.JInternalFrame implemen
             // Refrescar la tabla aquí
             modelo.setRowCount(0); // Limpiar la tabla antes de agregar nuevos datos
             // Luego, vuelve a cargar los datos en el modelo y actualiza la tabla
-            //JOptionPane.showMessageDialog(this, idCliente);
-            cargarTabla(idCliente); // Supongamos que tienes un método para cargar datos en la tabla  
+
+            cargarTabla(idCliente);
         } catch (Exception ex) {
             Logger.getLogger(FormularioClienteBuscar.class.getName()).log(Level.SEVERE, null, ex);
         }

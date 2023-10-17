@@ -1,17 +1,29 @@
 
 package veterinaria.Entidades;
 
-
+// Clase que representa la entidad TratamientoRealizado en el sistema
 public class TratamientoRealizado {
-    private int idTratamientoRealizado;
-    private Visita idVisita;
-    private Mascota idMascota;
-    private Tratamiento idTratamiento;
-    private double importe;
+    
+    // Atributos privados que representan las propiedades de un tratamiento realizado
+    private int idTratamientoRealizado; // Identificador único del tratamiento realizado
+    private Visita idVisita; // Visita asociada al tratamiento realizado
+    private Mascota idMascota; // Mascota asociada al tratamiento realizado
+    private Tratamiento idTratamiento; // Tratamiento asociado al tratamiento realizado
+    private double importe; // Importe del tratamiento realizado
 
+    // Constructor vacío de la clase TratamientoRealizado
     public TratamientoRealizado() {
     }
 
+    // Constructor que inicializa todos los atributos de la clase TratamientoRealizado excepto el idTratamientoRealizado
+    public TratamientoRealizado(Visita idVisita, Mascota idMascota, Tratamiento idTratamiento, double importe) {
+        this.idVisita = idVisita;
+        this.idMascota = idMascota;
+        this.idTratamiento = idTratamiento;
+        this.importe = importe;
+    }
+
+    // Constructor que inicializa todos los atributos de la clase TratamientoRealizado
     public TratamientoRealizado(int idTratamientoRealizado, Visita idVisita, Mascota idMascota, Tratamiento idTratamiento, double importe) {
         this.idTratamientoRealizado = idTratamientoRealizado;
         this.idVisita = idVisita;
@@ -20,12 +32,7 @@ public class TratamientoRealizado {
         this.importe = importe;
     }
 
-    public TratamientoRealizado(Visita idVisita, Mascota idMascota, Tratamiento idTratamiento, double importe) {
-        this.idVisita = idVisita;
-        this.idMascota = idMascota;
-        this.idTratamiento = idTratamiento;
-        this.importe = importe;
-    }
+    // Métodos getters y setters para acceder a los atributos privados
 
     public int getIdTratamientoRealizado() {
         return idTratamientoRealizado;
@@ -67,6 +74,7 @@ public class TratamientoRealizado {
         this.importe = importe;
     }
 
+    // Método toString que devuelve una representación en cadena del objeto TratamientoRealizado
     @Override
     public String toString() {
         return "TratamientoRealizado{" + "idTratamientoRealizado=" + idTratamientoRealizado + ", idVisita=" + idVisita + ", idMascota=" + idMascota + ", idTratamiento=" + idTratamiento + ", importe=" + importe + '}';

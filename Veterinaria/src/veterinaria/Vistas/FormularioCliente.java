@@ -1,94 +1,56 @@
 package veterinaria.Vistas;
 
 
-import java.awt.Component;
-import java.awt.Dimension;
-import java.awt.KeyboardFocusManager;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import veterinaria.AccesoADatos.ClienteDAO;
 import veterinaria.AccesoADatos.MascotaDAO;
 import veterinaria.Entidades.Cliente;
 import veterinaria.Entidades.Mascota;
 import veterinaria.Utilidades;
-import java.sql.Date;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.AbstractAction;
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 
-public class FormularioCliente extends javax.swing.JInternalFrame {
+// Clase FormularioCliente que extiende JInternalFrame e implementa la interfaz MascotaFormListener
+public class FormularioCliente extends javax.swing.JInternalFrame implements MascotaFormListener {
 
-    //private JButton botonAnterior = null; // Variable para almacenar el botón anterior
+    // Variables de instancia
     private Estado estado = Estado.NADA;
     private DesktopPaneWithBackground desktopPane;
-
     private Cliente selectedCliente = null;
-    private int idMascotas = 0;
     private int idCliente = 0;
     private boolean estadoCliente;
 
+    // Modelo de tabla para mostrar datos
     private DefaultTableModel modelo = new DefaultTableModel() {
-
         public boolean isCellEditable(int fila, int columna) {
             return false;
         }
     };
 
-    /**
-     * Creates new form InfoAlumno
-     */
-    //public FormularioCliente() {
     public FormularioCliente(DesktopPaneWithBackground desktopPane) {
+
         this.desktopPane = desktopPane;
         initComponents();
         setTitle("Cargar Cliente");
-        // armarCabecera();
-        //jBBuscar.setVisible(false);
+        armarCabecera();
+
         jRBEstado.setSelected(true);
-        // Establecer el foco en jTDocumento
-        jTDocumento.requestFocusInWindow();
 
-        // Agregar FocusListener al campo jTDocumento
-        jTDocumento.addFocusListener(new FocusAdapter() {
+        // Agregar KeyListener al campo jTDocumento
+        jTDocumento.addKeyListener(new KeyAdapter() {
             @Override
-            public void focusLost(FocusEvent e) {
-                buscarClientePorDni();
-
-            }
-
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
                     buscarClientePorDni();
-
                 }
             }
         });
-
-        Utilidades.asociarEnterConComponente(jTDocumento, jTApellido);
-
-        Utilidades.asociarEnterConComponente(jTApellido, jTNombre);
-        Utilidades.asociarEnterConComponente(jTNombre, jTDireccion);
-        Utilidades.asociarEnterConComponente(jTDireccion, jTtelefono);
-        Utilidades.asociarEnterConComponente(jTtelefono, jTMail);
-        Utilidades.asociarEnterConComponente(jTMail, jTContNombre);
-        Utilidades.asociarEnterConComponente(jTContNombre, jTContactoTelefono);
-
-        Utilidades.asociarEnterConComponente(jTContactoTelefono, jBMascotas);
-        Utilidades.asociarEnterConComponente(jBMascotas, jBGuardar);
-        Utilidades.asociarEnterConComponente(jBGuardar, jBSalir);
+        asociarEnterConComponentes();
 
     }
 
@@ -120,6 +82,8 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
         jBMascotas = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTMascotas = new javax.swing.JTable();
 
         setBackground(new java.awt.Color(204, 204, 204));
         setClosable(true);
@@ -166,6 +130,11 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
                 jBGuardarActionPerformed(evt);
             }
         });
+        jBGuardar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jBGuardarKeyPressed(evt);
+            }
+        });
 
         jTContactoTelefono.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
 
@@ -207,6 +176,19 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
             }
         });
 
+        jTMascotas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTMascotas);
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -236,8 +218,9 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
                                 .addComponent(jBGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(jBSalir))
-                            .addComponent(jBMascotas, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(257, 257, 257))
+                            .addComponent(jBMascotas, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(210, 210, 210))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -288,22 +271,24 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jTDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTtelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTMail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(6, 6, 6)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jBSalir, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
                             .addComponent(jBGuardar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jBMascotas, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTtelefono, javax.swing.GroupLayout.PREFERRED_SIZE, 26, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTMail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jBMascotas, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.TRAILING)
@@ -352,27 +337,7 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jBSalirActionPerformed
 
     private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuardarActionPerformed
-        try {
-            if (jTDocumento.getText().isEmpty() || jTApellido.getText().isEmpty() || jTNombre.getText().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "No debe dejar algun dato vacio");
-            } else {
-//                if (estado.equals(Estado.NUEVO) || estado.equals(Estado.BUSCAR)) {
-
-                guardar();
-                limpiar();
-
-//                } else {
-//
-//                    JOptionPane.showMessageDialog(this, "Elija buscar o Nuevo DNI");
-//                    limpiar();
-//                }
-            }
-
-        } catch (Exception ex) {
-            Utilidades.mostrarError(ex, this);
-            //  JOptionPane.showMessageDialog(this, "exception " + ex);
-        }
-
+        guardarxBotones();
 
     }//GEN-LAST:event_jBGuardarActionPerformed
 
@@ -382,46 +347,17 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jRBEstadoActionPerformed
 
     private void jBMascotasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBMascotasActionPerformed
-        if (jTDocumento.getText().isEmpty() || jTApellido.getText().isEmpty() || jTNombre.getText().isEmpty()) {
-            JOptionPane.showMessageDialog(this, "No debe dejar algun dato vacio");
-        } else {
-
-            try {
-                try {
-                    guardar();
-                } catch (Exception ex) {
-                    Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                FormularioMascotas cargarMascotas = new FormularioMascotas(idCliente);
-                cargarMascotas.setSize(600, 500);
-                cargarMascotas.pack();
-                int x = (desktopPane.getWidth() - cargarMascotas.getWidth()) / 2;
-                int y = (desktopPane.getHeight() - cargarMascotas.getHeight()) / 2;
-                cargarMascotas.setBounds(x, y, cargarMascotas.getWidth(), cargarMascotas.getHeight());
-                desktopPane.add(cargarMascotas);
-                cargarMascotas.setVisible(true);
-            } catch (Exception ex) {
-                Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+        cargarFormularioMascotas();
     }//GEN-LAST:event_jBMascotasActionPerformed
 
     private void jBMascotasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jBMascotasKeyPressed
 
-        try {
-            FormularioMascotas cargarMascotas = new FormularioMascotas(idCliente);
-            cargarMascotas.setSize(600, 500);
-            cargarMascotas.pack();
-            int x = (desktopPane.getWidth() - cargarMascotas.getWidth()) / 2;
-            int y = (desktopPane.getHeight() - cargarMascotas.getHeight()) / 2;
-            cargarMascotas.setBounds(x, y, cargarMascotas.getWidth(), cargarMascotas.getHeight());
-            desktopPane.add(cargarMascotas);
-            cargarMascotas.setVisible(true);
-
-        } catch (Exception ex) {
-            Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        cargarFormularioMascotas();
     }//GEN-LAST:event_jBMascotasKeyPressed
+
+    private void jBGuardarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jBGuardarKeyPressed
+        guardarxBotones();
+    }//GEN-LAST:event_jBGuardarKeyPressed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -439,6 +375,7 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JRadioButton jRBEstado;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTextField jTApellido;
@@ -447,161 +384,238 @@ public class FormularioCliente extends javax.swing.JInternalFrame {
     private javax.swing.JTextField jTDireccion;
     private javax.swing.JTextField jTDocumento;
     private javax.swing.JTextField jTMail;
+    private javax.swing.JTable jTMascotas;
     private javax.swing.JTextField jTNombre;
     private javax.swing.JTextField jTtelefono;
     // End of variables declaration//GEN-END:variables
 
+// Método para salir de la aplicación
     private void salirAplicacion() {
+        // Verifica si el usuario confirma la salida y cierra la ventana si es así
         if (Utilidades.confirmarSalida(this)) {
             dispose();
         }
     }
 
+// Método para limpiar los campos del formulario
     private void limpiar() {
-
+        // Limpia los campos de texto y establece el estado a NADA
         Utilidades.limpiarSetText(jTDocumento, jTApellido, jTNombre, jTDireccion, jTtelefono, jTMail, jTContNombre, jTContactoTelefono);
         estado = Estado.NADA;
         jRBEstado.setSelected(true);
-        //botonAnterior = null;
-
+        modelo.setRowCount(0); // Limpia la tabla de tratamientos antes de agregar nuevos datos
     }
 
+// Método para limpiar los campos de búsqueda
     private void limpiarBuscar() {
-
+        // Limpia los campos de búsqueda y la tabla de mascotas antes de agregar nuevos datos
         Utilidades.limpiarSetText(jTApellido, jTNombre, jTDireccion, jTtelefono, jTMail, jTContNombre, jTContactoTelefono);
-        modelo.setRowCount(0); // Limpiar la tabla antes de agregar nuevos datos
+        modelo.setRowCount(0);
     }
+
 // Método para buscar cliente por DNI
-
     private void buscarClientePorDni() {
-        String documento = jTDocumento.getText().trim();
+        // Obtiene el documento ingresado en el campo de texto
+        String documento = Utilidades.obtenerTextoDesdeCampo(jTDocumento);
 
+        // Verifica si el campo de documento está vacío y muestra un mensaje de advertencia
         if (documento.isEmpty()) {
             JOptionPane.showMessageDialog(null, "Debes escribir un documento");
             return;
         }
 
         try {
-            // Llamar al método buscarxDni() aquí y realizar las operaciones necesarias
-            buscarxDni();
+            // Obtiene el DNI como entero
+            int dni = Utilidades.obtenerEnteroDesdeCampo(jTDocumento);
+
+            // Intenta buscar un cliente con el DNI ingresado en la base de datos
+            ClienteDAO clienteD = ClienteDAO.obtenerInstancia();
+            Cliente cliente = clienteD.buscarListaClientexDni(dni);
+
+            // Establece el estado como NUEVO y muestra un mensaje si el cliente ya existe
+            estado = Estado.NUEVO;
+            if (cliente != null) {
+                JOptionPane.showMessageDialog(this, "El Documento ya existe");
+                estado = Estado.NADA;
+                SwingUtilities.invokeLater(() -> {
+                    jTDocumento.requestFocusInWindow();
+                });
+                mostrarClienteEnFormulario(cliente);
+            }
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(this, "Error: Debes ingresar un número de documento válido.");
         } catch (Exception ex) {
             Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-    }
-//}
-
-    private void buscarxDni() throws ClassNotFoundException, SQLException, Exception {
-
-        ClienteDAO clienteD = new ClienteDAO();
-        int dni = 0;
-        try {
-            dni = Integer.parseInt(jTDocumento.getText());
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error: Debes ingresar un número de documento válido.");
-            return;
-        }
-
-        //     try {
-        Cliente cliente = clienteD.buscarListaClientexDni(dni);
-        if (cliente != null) {
-
-            JOptionPane.showMessageDialog(this, "el Documento ya existe");
-        }
-
-        //           mostrarClienteEnFormulario(cliente);
-//            cargarTabla(cliente.getIdCliente());
-//        } catch (Exception ex) {
-//            JOptionPane.showMessageDialog(this, "No se encontro el DNI");
-//        }
     }
 
-    private void guardar() throws Exception {
-        ClienteDAO clienteD = new ClienteDAO();
-        Cliente cliente = new Cliente();
-        int documento;
+// Método para guardar el cliente en la base de datos
+    private void guardarCliente() {
         try {
-            try {
 
-                documento = Integer.parseInt(jTDocumento.getText());
-
-                cliente = clienteD.buscarListaClientexDni(documento);
-
-                //if (cliente != null && estado.equals(Estado.NUEVO)) {
-                if (cliente != null) {
-                    JOptionPane.showMessageDialog(this, "El Documento ya existe, no puede darlo de Alta.");
-                    return;
-                } else {
-                    cliente = new Cliente();
-                }
-
-            } catch (Exception e) {
+            // Obtiene los datos del cliente desde los campos de texto
+            int documento = Utilidades.obtenerEnteroDesdeCampo(jTDocumento);
+            if (documento <= 0) {
                 JOptionPane.showMessageDialog(this, "Error: Debes ingresar un número de documento válido.");
                 return;
             }
 
-            String apellido = jTApellido.getText();
-            String nombre = jTNombre.getText();
-            String direccion = jTDireccion.getText();
-            String telefono = jTtelefono.getText();
-            String email = jTMail.getText();
-            //boolean estadoCliente = jRBEstado.isSelected();
-            estadoCliente = jRBEstado.isSelected();
-            String contactoNombre = jTContNombre.getText();
-            String contactoTel = jTContactoTelefono.getText();
+            // Obtiene los datos del cliente desde los campos de texto
+            ClienteDAO clienteD = ClienteDAO.obtenerInstancia();
+            //se fija si existe el cliente
+            Cliente cliente = clienteD.buscarListaClientexDni(documento);
 
-            // Asignar los valores al objeto Cliente
-            cliente.setDni(documento);
-            cliente.setApellido(apellido);
-            cliente.setNombre(nombre);
-
-            cliente.setDireccion(direccion);
-            cliente.setTelefono(telefono);
-            cliente.setContactoNombre(contactoNombre);
-            cliente.setContactoTelefono(contactoTel);
-            cliente.setEstado(estadoCliente);
-            cliente.setEmail(email);
-
-            cliente.setEstado(estadoCliente);
-
-            // Llamar al método para guardar el alumno en la base de datos
-            //solo grabar si fue elegida la opcion Nuevo - boton 
-//            if (estado.equals(Estado.NUEVO)) {
-            try {
-                cliente.setEstado(true);
-                idCliente = clienteD.guardarCliente(cliente);
-            } catch (Exception ex) {
-
-                Utilidades.mostrarError(ex, this);
+            if (cliente != null && estado.equals(Estado.NUEVO)) {
+                JOptionPane.showMessageDialog(this, "El Documento ya existe, no puede darlo de Alta.");
+                return;
             }
 
-//            } else if (estado.equals(Estado.BUSCAR)) {
-//
-//                clienteD.modificarCliente(cliente);
-//            }
-        } catch (NumberFormatException ex) {
+            // Obtiene los datos de los campos de texto
+            cliente = new Cliente(
+                    documento,
+                    Utilidades.obtenerTextoDesdeCampo(jTApellido),
+                    Utilidades.obtenerTextoDesdeCampo(jTNombre),
+                    Utilidades.obtenerTextoDesdeCampo(jTDireccion),
+                    Utilidades.obtenerTextoDesdeCampo(jTtelefono),
+                    Utilidades.obtenerTextoDesdeCampo(jTContNombre),
+                    Utilidades.obtenerTextoDesdeCampo(jTContactoTelefono),
+                    jRBEstado.isSelected(),
+                    Utilidades.obtenerTextoDesdeCampo(jTMail)
+            );
+
+            // Llama al método para guardar el cliente en la base de datos
+            cliente.setEstado(true);
+            if (estado.equals(Estado.NUEVO)) {
+                idCliente = clienteD.guardarCliente(cliente);
+            }
+            JOptionPane.showMessageDialog(this, "Cliente dado de Alta correctamente!");
+        } catch (Exception ex) {
+            // Muestra un mensaje de error si ocurre una excepción al guardar el cliente
             Utilidades.mostrarError(ex, this);
         }
     }
 
+// Método para mostrar los datos del cliente en el formulario
     private void mostrarClienteEnFormulario(Cliente cliente) {
-        //JOptionPane.showMessageDialog(null, cliente);
+        // Establece los datos del cliente en los campos de texto y otros componentes
         jTApellido.setText(cliente.getApellido());
         jTNombre.setText(cliente.getNombre());
         jTDireccion.setText(cliente.getDireccion());
         jTtelefono.setText(cliente.getTelefono());
         jTMail.setText(cliente.getEmail());
 
+        // Establece el título de la ventana según el estado del cliente (activo o inactivo)
         if (cliente.isEstado()) {
             setTitle("Cargar Clientes");
         } else {
             setTitle("Cliente -- DNI dado de Baja");
         }
 
+        // Establece el estado del cliente y otros campos del formulario
         jRBEstado.setSelected(cliente.isEstado());
         estadoCliente = cliente.isEstado();
         jTContNombre.setText(cliente.getContactoNombre());
         jTContactoTelefono.setText(cliente.getContactoTelefono());
     }
 
+// Método para armar la cabecera de la tabla de mascotas
+    private void armarCabecera() {
+        // Define la cabecera de la tabla de mascotas
+        modelo.addColumn("Codigo");
+        modelo.addColumn("Alias");
+        modelo.addColumn("Peso");
+        jTMascotas.setModel(modelo);
+    }
+
+// Método para guardar datos del cliente a través de los botones de la interfaz
+    private void guardarxBotones() {
+        try {
+            // Verifica que los campos obligatorios no estén vacíos antes de guardar el cliente
+            if (jTDocumento.getText().isEmpty() || jTApellido.getText().isEmpty() || jTNombre.getText().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "No debe dejar ningún dato vacío");
+            } else {
+                // Guarda el cliente y limpia los campos del formulario
+                guardarCliente();
+                limpiar();
+            }
+        } catch (Exception ex) {
+            // Muestra un mensaje de error si ocurre una excepción al guardar el cliente
+            Utilidades.mostrarError(ex, this);
+        }
+    }
+
+// Método para cargar el formulario de mascotas asociado a un cliente
+    private void cargarFormularioMascotas() {
+        if (jTDocumento.getText().isEmpty() || jTApellido.getText().isEmpty() || jTNombre.getText().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No debe dejar ningún dato vacío");
+        } else if (estado.equals(Estado.NADA)) {
+            JOptionPane.showMessageDialog(this, "El cliente ya existe. Utilice el formulario Buscar Cliente.");
+        } else {
+            try {
+                // Guarda el cliente antes de cargar el formulario de mascotas
+                guardarCliente();
+
+                // Crea una instancia del formulario de mascotas con el ID del cliente actual
+                FormularioMascotas cargarMascotas = new FormularioMascotas(idCliente);
+                // Asocia el evento de cierre del formulario de mascotas con este formulario
+                cargarMascotas.setMascotaFormListener(this);
+                // Establece el tamaño y la posición del formulario de mascotas en el escritorio
+                cargarMascotas.setSize(600, 500);
+                cargarMascotas.pack();
+                int x = (desktopPane.getWidth() - cargarMascotas.getWidth()) / 2;
+                int y = (desktopPane.getHeight() - cargarMascotas.getHeight()) / 2;
+                cargarMascotas.setBounds(x, y, cargarMascotas.getWidth(), cargarMascotas.getHeight());
+                // Agrega el formulario de mascotas al escritorio
+                desktopPane.add(cargarMascotas);
+                // Hace visible el formulario de mascotas
+                cargarMascotas.setVisible(true);
+            } catch (Exception ex) {
+                // Muestra un mensaje de error si ocurre una excepción al cargar el formulario de mascotas
+                Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    // Método para cargar la tabla de mascotas asociadas al cliente actual
+    private void cargarTabla(int idCliente) throws Exception {
+        // Obtiene la lista de mascotas del cliente con el ID proporcionado
+        MascotaDAO mascotaDAO = MascotaDAO.obtenerInstancia();
+        Collection<Mascota> listaMascotas = mascotaDAO.listarMascotasxIdCliente(idCliente);
+
+        // Limpia la tabla antes de agregar nuevos datos
+        modelo.setRowCount(0);
+
+        // Agrega las mascotas del cliente a la tabla
+        for (Mascota mascota : listaMascotas) {
+            if (mascota.isEstado()) {
+                modelo.addRow(new Object[]{mascota.getIdMascota(), mascota.getAlias(), mascota.getPesoActual()});
+            }
+        }
+    }
+
+    // Método del evento de cierre del formulario de mascotas
+    @Override
+    public void onMascotaFormClosed() {
+        try {
+            // Refresca la tabla de mascotas del cliente al cerrarse el formulario de mascotas
+            modelo.setRowCount(0); // Limpia la tabla antes de agregar nuevos datos
+            cargarTabla(idCliente); // Recarga las mascotas del cliente en la tabla
+        } catch (Exception ex) {
+            Logger.getLogger(FormularioClienteBuscar.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    // Método para asociar eventos Enter a los campos del formulario para navegar entre ellos
+    private void asociarEnterConComponentes() {
+        Utilidades.asociarEnterConComponente(jTDocumento, jTApellido);
+        Utilidades.asociarEnterConComponente(jTApellido, jTNombre);
+        Utilidades.asociarEnterConComponente(jTNombre, jTDireccion);
+        Utilidades.asociarEnterConComponente(jTDireccion, jTtelefono);
+        Utilidades.asociarEnterConComponente(jTtelefono, jTMail);
+        Utilidades.asociarEnterConComponente(jTMail, jTContNombre);
+        Utilidades.asociarEnterConComponente(jTContNombre, jTContactoTelefono);
+        Utilidades.asociarEnterConComponente(jTContactoTelefono, jBMascotas);
+        Utilidades.asociarEnterConComponente(jBMascotas, jBGuardar);
+        Utilidades.asociarEnterConComponente(jBGuardar, jBSalir);
+    }
 }

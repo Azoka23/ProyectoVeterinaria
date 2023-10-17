@@ -1,5 +1,7 @@
 package veterinaria.Vistas;
 
+// Importación de librerías necesarias
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import veterinaria.AccesoADatos.ClienteDAO;
 import veterinaria.AccesoADatos.MascotaDAO;
@@ -8,7 +10,6 @@ import veterinaria.Entidades.Mascota;
 import veterinaria.Entidades.Sexo;
 import veterinaria.Utilidades;
 import java.sql.Date;
-
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -17,15 +18,14 @@ import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-
-import javax.swing.JButton;
-import javax.swing.JComboBox;
+import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
+import javax.swing.text.AbstractDocument;
 
+// Definición de la clase del formulario de mascotas
 public class FormularioMascotas extends javax.swing.JInternalFrame {
 
-    //private JButton botonAnterior = null; // Variable para almacenar el botón anterior
-    //private JButton botonAnterior = null; // Variable para almacenar el botón anterior
+    // Variables miembro
     private Estado estado;
     private MascotaFormListener listener;
     private Cliente selectedCliente = null;
@@ -33,94 +33,39 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
     private int idCliente = 0;
     private boolean estadoMascota;
 
-    /**
-     * Creates new form InfoMateria
-     */
-    public FormularioMascotas(int idCliente) throws ClassNotFoundException {
+    // Constructor de la clase, recibe el ID del cliente como parámetro
+    public FormularioMascotas(int idCliente) {
         try {
+            // Inicialización de componentes del formulario
             this.idCliente = idCliente;
             initComponents();
             setTitle("Cargar Mascotas");
 
-            try {
-                cargarCombo();
-                cargarComboSexo();
-            } catch (SQLException ex) {
-                Logger.getLogger(FormularioMascotas.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            //Utilidades.asociarEnterConComponente(jTCodigo, jTAlias);
-            Utilidades.asociarEnterConComponente(jTAlias, JCSexo);
-            Utilidades.asociarEnterConComponente(JCSexo, jTColorDePelo);
-            Utilidades.asociarEnterConComponente(jTColorDePelo, jTEspecies);
-            Utilidades.asociarEnterConComponente(jTEspecies, jTRaza);
-            Utilidades.asociarEnterConComponente(jTRaza, jTPesoA);
-            Utilidades.asociarEnterConComponente(jTPesoA, jDCFechaNac);
-            Utilidades.asociarEnterConComponente(jDCFechaNac, jBGuardar);
-            //        jRBEstado.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                // Verifica si el cliente ya existe (es decir, está en modo edición)
-//                if (estado.equals(Estado.BUSCAR)) {
-//                    int option = JOptionPane.showConfirmDialog(FormularioMascotas.this, // El componente padre para el cuadro de diálogo
-//                            "¿Está seguro de cambiar el estado de la Mascota?", // El mensaje que se mostrará
-//                            "Confirmar Cambio de Estado", // El título del cuadro de diálogo
-//                            JOptionPane.YES_NO_OPTION); // Tipo de opciones (Sí o No)
-//
-//                    // Si el usuario selecciona "Sí" en el cuadro de diálogo
-//                    if (option == JOptionPane.YES_OPTION) {
-//                        try {
-//                            int codigo = Integer.parseInt(jTCodigo.getText());
-//                            MascotaDAO mascotaD = new MascotaDAO();
-//
-//                            // Si el estado actual es true, llama a bajaLogica(int dni)
-//                            if (estadoMascota) {
-//                                try {
-//                                    mascotaD.bajaLogica(codigo);
-//                                    setTitle("Mascota -- Codigo dado de Baja");
-//                                    JOptionPane.showMessageDialog(FormularioMascotas.this, "La Mascota ha sido dado de baja");
-//                                } catch (Exception ex) {
-//                                    Utilidades.mostrarError(ex, FormularioMascotas.this);
-//                                }
-//                            } else {
-//                                // Si el estado actual es false, llama a altaLogica(int dni)
-//                                try {
-//                                    mascotaD.altaLogica(codigo);
-//                                    setTitle("Mascota");
-//                                    JOptionPane.showMessageDialog(FormularioMascotas.this, "La Mascota ha sido dado de alta");
-//                                } catch (Exception ex) {
-//                                    Utilidades.mostrarError(ex, FormularioMascotas.this);
-//                                }
-//                            }
-//                        } catch (ClassNotFoundException ex) {
-//                            Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
-//                        } catch (SQLException ex) {
-//                            Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//                    } else {
-//                        // Si el usuario selecciona "No", deshace el cambio en el estado del JRadioButton
-//                        jRBEstado.setSelected(!jRBEstado.isSelected());
-//                    }
-//                }
-//            }
-//        });
+            // Configuración y carga de datos en los combos y campos de texto
+            cargarCombo();
+            cargarComboSexo();
+
+            // Configuración del filtro para el campo de peso actual (reemplazar comas por puntos)
+            AbstractDocument doc = (AbstractDocument) jTPesoA.getDocument();
+            doc.setDocumentFilter(new DecimalDocumentFilter());
+
+            // Asociación de eventos y establecimiento del foco en el campo de alias
+            asociarCamposConEnter();
+            SwingUtilities.invokeLater(() -> {
+                jTAlias.requestFocusInWindow();
+            });
+
+            // Configuración del estado inicial de algunos campos y del radio button de estado
             jRBEstado.setSelected(true);
             jTCodigo.setText(ultimoRegistro() + "");
-            // Establecer el foco en jTAlias cuando el formulario se carga
             SwingUtilities.invokeLater(() -> {
                 jTAlias.requestFocusInWindow();
             });
             jTPesoM.setEnabled(false);
+
         } catch (Exception ex) {
             Logger.getLogger(FormularioMascotas.class.getName()).log(Level.SEVERE, null, ex);
         }
-        //Utilidades.asociarEnterConComponente(jTCodigo, jTAlias);
-        //Utilidades.asociarEnterConComponente(jTCodigo, jTAlias);
-        //Utilidades.asociarEnterConComponente(jTCodigo, jTAlias);
-        //Utilidades.asociarEnterConComponente(jTCodigo, jTAlias);
-        //Utilidades.asociarEnterConComponente(jTCodigo, jTAlias);
-        //Utilidades.asociarEnterConComponente(jTCodigo, jTAlias);
-        //Utilidades.asociarEnterConComponente(jTCodigo, jTAlias);
-        //Utilidades.asociarEnterConComponente(jTCodigo, jTAlias);
     }
 
     @SuppressWarnings("unchecked")
@@ -359,22 +304,18 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jBSalirActionPerformed
 
     private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuardarActionPerformed
+
         try {
+            // Validación de campos y llamada al método de guardado si los campos no están vacíos
             if (camposVacios()) {
                 JOptionPane.showMessageDialog(this, "No debe dejar algun dato vacio");
             } else {
-
-                guardar();
+                guardarMascota();
                 limpiar();
-                jTCodigo.setText(ultimoRegistro() + "");
-
             }
-
         } catch (Exception ex) {
             Utilidades.mostrarError(ex, this);
         }
-
-        // TODO add your handling code here:
     }//GEN-LAST:event_jBGuardarActionPerformed
 
     private void jRBEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRBEstadoActionPerformed
@@ -382,25 +323,6 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jRBEstadoActionPerformed
 
-//    private void jBBuscarActionPerformed(java.awt.event.ActionEvent evt) {
-//        String codigo = jTCodigo.getText().trim();
-//
-//        if (codigo.isEmpty()) {
-//            JOptionPane.showMessageDialog(this, "Debes escribir un Codigo");
-//            return;
-//        } else {
-//            try {
-//                limpiarBuscar();
-//                estado = Estado.BUSCAR;
-//                buscarxCodigo();
-//            } catch (ClassNotFoundException ex) {
-//                Logger.getLogger(FormularioMascotas.class.getName()).log(Level.SEVERE, null, ex);
-//            } catch (SQLException ex) {
-//                Logger.getLogger(FormularioMascotas.class.getName()).log(Level.SEVERE, null, ex);
-//            }
-//
-//        }
-//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<Sexo> JCSexo;
@@ -429,163 +351,117 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
     private javax.swing.JTextField jTRaza;
     // End of variables declaration//GEN-END:variables
 
+    // Método para limpiar todos los campos del formulario
     private void limpiar() {
         Utilidades.limpiarSetText(jTCodigo, jTAlias, jTColorDePelo, jTEspecies, jTRaza, jTColorDePelo, jTPesoM, jTPesoA);
         jRBEstado.setSelected(false);
         estado = Estado.NADA;
         // Para limpiar el formulario y deseleccionar los JComboBox
         JCSexo.setSelectedIndex(-1); // Desselecciona el elemento en el JComboBox
-        //jCBClientes.setSelectedIndex(-1); // Desselecciona el elemento en el JComboBox
 
     }
 
+    // Método para limpiar los campos de búsqueda
     private void limpiarBuscar() {
         Utilidades.limpiarSetText(jTAlias, jTColorDePelo, jTEspecies, jTRaza, jTColorDePelo, jTPesoM, jTPesoA);
         // Para limpiar el formulario y deseleccionar los JComboBox
         JCSexo.setSelectedIndex(-1); // Desselecciona el elemento en el JComboBox
-        //jCBClientes.setSelectedIndex(-1); // Desselecciona el elemento en el JComboBox
+
     }
 
-//    private void eliminadologico() throws ClassNotFoundException, SQLException {
-//        if (botonAnterior == jBBuscar) {
-//            MateriaDAO materiaD = new MateriaDAO();
+//// Método para buscar una mascota por su código
+//    private void buscarxCodigo() {
+//        MascotaDAO mascotaD = MascotaDAO.obtenerInstancia();
+//        int codigo = Utilidades.obtenerEnteroDesdeCampo(jTCodigo);
 //
-//            int codigo = Integer.parseInt(jTCodigo.getText());
+//        try {
+//            // Intentar obtener la mascota desde la base de datos
+//            Mascota mascota = mascotaD.obtenerMascotaPorId(codigo);
 //
-//            try {
-//                materiaD.eliminarLogico(codigo);
-//                JOptionPane.showMessageDialog(this, "la materia fue dada de baja");
-//                limpiar();
-//            } catch (Exception ex) {
-//                Utilidades.mostrarError(ex, this);
+//            // Si se encontró la mascota, mostrarla en el formulario
+//            if (mascota != null) {
+//                setTitle("Cargar Mascota" + (mascota.isEstado() ? "" : " -- Codigo dado de Baja"));
+//                jRBEstado.setSelected(mascota.isEstado());
+//                mostrarMascotaseEnFormulario(mascota);
+//            } else {
+//                // Si no se encontró la mascota, mostrar un mensaje y establecer el estado como NUEVO
+//                estado = Estado.NUEVO;
+//                JOptionPane.showMessageDialog(this, "No se encontró el código, el código disponible es " + ultimoRegistro());
+//                jTCodigo.setText(ultimoRegistro() + "");
 //            }
-//        } else {
-//            JOptionPane.showMessageDialog(this, "Por favor, ingrese un número de codigo que exista.");
+//        } catch (NumberFormatException e) {
+//            // Manejar excepción si el código no es un número válido
+//            JOptionPane.showMessageDialog(this, "Error: El código debe ser un número válido.");
+//        } catch (Exception ex) {
+//            // Mostrar cualquier otra excepción que pueda ocurrir
+//            Utilidades.mostrarError(ex, this);
 //        }
 //    }
-    private void buscarxCodigo() throws ClassNotFoundException, SQLException {
 
-        MascotaDAO mascotaD = new MascotaDAO();
-        int codigo = 0;
-
+// Método para guardar una nueva mascota o actualizar una existente
+    private void guardarMascota() {
         try {
-            codigo = Integer.parseInt(jTCodigo.getText());
+            // Obtener el código de la mascota desde el campo de texto
+            int codigo = Utilidades.obtenerEnteroDesdeCampo(jTCodigo);
 
-            Mascota mascota = mascotaD.buscarListaMascotaxDni(codigo);
-
-//            if (mascota == null) {
-//                estado = Estado.NUEVO;
-//            }
-//            
-            if (mascota != null) {
-                setTitle("Cargar Mascota" + (mascota.isEstado() ? "" : " -- Codigo dado de Baja"));
-                jRBEstado.setSelected(mascota.isEstado());
-
-                mostrarMascotaseEnFormulario(mascota);
-            } else {
-                estado = Estado.NUEVO;
-                JOptionPane.showMessageDialog(this, "No se encontró el codigo,el codigo disponible es " + ultimoRegistro());
-                jTCodigo.setText(ultimoRegistro() + "");
+            // Validar que el código sea válido
+            if (codigo == -1) {
+                JOptionPane.showMessageDialog(this, "Debes ingresar un número de código válido.");
+                return;
             }
-        } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Error: El código debe ser un número valido.");
+
+            MascotaDAO mascotaD = MascotaDAO.obtenerInstancia();
+            Mascota mascota = mascotaD.obtenerMascotaPorId(codigo);
+
+            // Si la mascota ya existe en la base de datos, mostrar un mensaje y salir
+            if (mascota != null && estado.equals(Estado.NUEVO)) {
+                JOptionPane.showMessageDialog(this, "El Código ya existe, no puede darlo de Alta.");
+                return;
+            }
+
+            // Obtener los valores de los campos del formulario
+            //String alias = Utilidades.obtenerTextoDesdeCampo(jTAlias);
+            Sexo sexo = (Sexo) JCSexo.getSelectedItem();
+            //String especie = Utilidades.obtenerTextoDesdeCampo(jTEspecies);
+            //String raza = Utilidades.obtenerTextoDesdeCampo(jTRaza);
+            //String colorDePelo = Utilidades.obtenerTextoDesdeCampo(jTColorDePelo);
+            LocalDate fechaNacimiento = jDCFechaNac.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+            //double pesoActual = obtenerPeso(jTPesoA);
+            //double pesoMedia = pesoActual;
+
+            //boolean estadoMascota = jRBEstado.isSelected();
+            Cliente idCliente = (Cliente) jCBClientes.getSelectedItem();
+            // Crear un objeto de mascota con los valores obtenidos y guardarlo en la base de datos
+
+            mascota = new Mascota(
+                    codigo,
+                    Utilidades.obtenerTextoDesdeCampo(jTAlias),
+                    sexo,
+                    Utilidades.obtenerTextoDesdeCampo(jTEspecies),
+                    Utilidades.obtenerTextoDesdeCampo(jTRaza),
+                    Utilidades.obtenerTextoDesdeCampo(jTColorDePelo),
+                    fechaNacimiento,
+                    obtenerPeso(jTPesoA),
+                    obtenerPeso(jTPesoA),
+                    idCliente,
+                    jRBEstado.isSelected()
+            );
+
+            mascota.setEstado(true);
+            mascotaD.guardarMascota(mascota);
+            JOptionPane.showMessageDialog(this, "Mascota guardada correctamente ");
         } catch (Exception ex) {
             Utilidades.mostrarError(ex, this);
         }
     }
-
-    private void guardar() throws Exception {
-        MascotaDAO mascotaD = new MascotaDAO();
-        Mascota mascota = new Mascota();
-        int codigo = 0;
-        // int year = 0;
-        try {
-            try {
-                codigo = Integer.parseInt(jTCodigo.getText());
-
-                mascota = mascotaD.obtenerMascotaPorId(codigo);
-
-                //if (mascota != null && estado.equals(Estado.NUEVO)) {
-                if (mascota != null) {
-
-                    JOptionPane.showMessageDialog(this, "El Codigo ya existe, no puede darlo de Alta.");
-                    return;
-                } else {
-                    mascota = new Mascota();
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error: Debes ingresar un número de documento válido.");
-                return;
-            }
-
-            String alias = jTAlias.getText();
-            Sexo sexo = (Sexo) JCSexo.getSelectedItem();
-            String especie = jTEspecies.getText();
-            String raza = jTRaza.getText();
-            String colorDePelo = jTColorDePelo.getText();
-            LocalDate fechaNacimiento = jDCFechaNac.getDate().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();;
-//            double pesoM = Double.parseDouble(jTPesoM.getText());
-//            double pesoA = Double.parseDouble(jTPesoA.getText());
-//            double pesoM = 0.0;
-            double pesoA = 0.0;
-            try {
-                String pesoAString = jTPesoA.getText().trim();
-                if (!pesoAString.isEmpty()) {
-                    pesoA = Double.parseDouble(pesoAString);
-                }
-            } catch (NumberFormatException ex) {
-                Utilidades.mostrarError(ex, this);
-            }
-
-            double pesoM = pesoA;
-
-            estadoMascota = jRBEstado.isSelected();
-
-            Cliente idCliente = (Cliente) jCBClientes.getSelectedItem();
-            //Cliente idCliente = jTContNombre.getText();
-            //String contactoTel = jTContactoTelefono.getText();
-
-            //String nombre = jTAlias.getText();
-            // year = Integer.parseInt(jTColorDePelo.getText());
-            //estadoMascota = jRBEstado.isSelected();
-            // Asignar los valores al objeto Mascota
-            mascota.setIdMascota(codigo);
-            mascota.setAlias(alias);
-            mascota.setSexo(sexo);
-            mascota.setEspecie(especie);
-            mascota.setRaza(raza);
-            mascota.setColorDePelo(colorDePelo);
-            mascota.setFechaNacimiento(fechaNacimiento);
-            mascota.setPesoMedia(pesoM);
-            mascota.setPesoActual(pesoA);
-            mascota.setIdCliente(idCliente);
-
-            mascota.setEstado(estadoMascota);
-
-            //Mascota mascota = new Mascota(codigo, nombre, year, estadoMascota);
-            //if (estado.equals(Estado.NUEVO)) {
-            try {
-                mascota.setEstado(true);
-                mascotaD.guardarMascota(mascota);
-            } catch (Exception ex) {
-                Utilidades.mostrarError(ex, this);
-            }
-
-//            } else if (estado.equals(Estado.BUSCAR)) {
-//                // mascota.setEstado(true);
-//
-//                mascotaD.modificarMascota(mascota);
-//            }
-        } catch (NumberFormatException ex) {
-            Utilidades.mostrarError(ex, this);
-        }
-    }
+// Método para obtener el último registro de mascotas
 
     private int ultimoRegistro() throws ClassNotFoundException, SQLException, Exception {
-        MascotaDAO mascotaD = new MascotaDAO();
+        MascotaDAO mascotaD = MascotaDAO.obtenerInstancia();
         return mascotaD.contarTotalRegistros();
 
     }
+// Método para cerrar la aplicación
 
     private void salirAplicacion() {
         if (Utilidades.confirmarSalida(this)) {
@@ -596,14 +472,15 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
             dispose();
         }
     }
+// Método para validar si hay campos vacíos en el formulario
 
     private boolean camposVacios() {
         return jTCodigo.getText().isEmpty() || jTAlias.getText().isEmpty() || jDCFechaNac.getDate() == null;
     }
 
-    private void cargarCombo() throws ClassNotFoundException, SQLException {
+    private void cargarCombo() {
 
-        ClienteDAO clienteD = new ClienteDAO();
+        ClienteDAO clienteD = ClienteDAO.obtenerInstancia();
 
         Collection<Cliente> clientes;
         clientes = new ArrayList<>();
@@ -614,7 +491,6 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
             Utilidades.mostrarError(ex, this);
         }
 
-        // Llena el JComboBox con los valores tipo Alumno
         for (Cliente cliente : clientes) {
             if (cliente.isEstado() && (idCliente == 0 || idCliente == cliente.getIdCliente())) {
                 jCBClientes.addItem(cliente);
@@ -630,32 +506,91 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
         }
     }
 
-    private void mostrarMascotaseEnFormulario(Mascota mascota) {
-        //JOptionPane.showMessageDialog(null, cliente);
-        jTAlias.setText(mascota.getAlias());
+//    // Método para mostrar los datos de una mascota en el formulario
+//    private void mostrarMascotaseEnFormulario(Mascota mascota) {
+//        jTAlias.setText(mascota.getAlias());
+//        JCSexo.setSelectedItem(mascota.getSexo());
+//        jTEspecies.setText(mascota.getEspecie());
+//        jTRaza.setText(mascota.getRaza());
+//        jTColorDePelo.setText(mascota.getColorDePelo());
+//        jDCFechaNac.setDate(Date.valueOf(mascota.getFechaNacimiento()));
+//        jTPesoM.setText(mascota.getPesoMedia() + "");
+//        jTPesoA.setText(mascota.getPesoMedia() + "");
+//
+//        if (mascota.isEstado()) {
+//            setTitle("Cargar Mascotas");
+//        } else {
+//            setTitle("Mascota -- Codigo dado de Baja");
+//        }
+//
+//        jRBEstado.setSelected(mascota.isEstado());
+//        estadoMascota = mascota.isEstado();
+//        jCBClientes.setSelectedItem(mascota.getIdCliente());
+//    }
 
-        JCSexo.setSelectedItem(mascota.getSexo());
-
-        jTEspecies.setText(mascota.getEspecie());
-        jTRaza.setText(mascota.getRaza());
-        jTColorDePelo.setText(mascota.getColorDePelo());
-        jDCFechaNac.setDate(Date.valueOf(mascota.getFechaNacimiento()));
-        jTPesoM.setText(mascota.getPesoMedia() + "");
-        jTPesoA.setText(mascota.getPesoMedia() + "");
-
-        if (mascota.isEstado()) {
-            setTitle("Cargar Mascotas");
-        } else {
-            setTitle("Mascota -- Codigo dado de Baja");
-        }
-
-        jRBEstado.setSelected(mascota.isEstado());
-        estadoMascota = mascota.isEstado();
-        jCBClientes.setSelectedItem(mascota.getIdCliente());
-
-    }
-
+    // Método para establecer el listener para el formulario de mascotas
     public void setMascotaFormListener(MascotaFormListener listener) {
         this.listener = listener;
     }
+
+    // Método para obtener el peso desde un campo de texto
+    private double obtenerPeso(JTextField textField) {
+        try {
+
+            String pesoString = textField.getText().trim();
+            return pesoString.isEmpty() ? 0.0 : Double.parseDouble(pesoString);
+        } catch (NumberFormatException e) {
+            return 0.0;
+        }
+    }
+// Método para asociar el evento Enter con los componentes del formulario
+
+    private void asociarCamposConEnter() {
+        Utilidades.asociarEnterConComponente(jTAlias, JCSexo);
+        Utilidades.asociarEnterConComponente(JCSexo, jTColorDePelo);
+        Utilidades.asociarEnterConComponente(jTColorDePelo, jTEspecies);
+        Utilidades.asociarEnterConComponente(jTEspecies, jTRaza);
+        Utilidades.asociarEnterConComponente(jTRaza, jTPesoA);
+        Utilidades.asociarEnterConComponente(jTPesoA, jDCFechaNac);
+        Utilidades.asociarEnterConComponente(jDCFechaNac, jBGuardar);
+    }
+
+//    // Método para configurar el estado de la mascota (dado de alta o baja)
+//    private void configurarEstadoMascota() {
+//        jRBEstado.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(ActionEvent e) {
+//                if (estado.equals(Estado.BUSCAR)) {
+//                    confirmarCambioEstadoMascota();
+//                }
+//            }
+//        });
+//    }
+
+//    // Método para confirmar el cambio de estado de la mascota
+//    private void confirmarCambioEstadoMascota() {
+//        int option = JOptionPane.showConfirmDialog(this, "¿Está seguro de cambiar el estado de la Mascota?",
+//                "Confirmar Cambio de Estado", JOptionPane.YES_NO_OPTION);
+//        if (option == JOptionPane.YES_OPTION) {
+//            try {
+//                int codigo = Integer.parseInt(jTCodigo.getText());
+//                MascotaDAO mascotaD = MascotaDAO.obtenerInstancia();
+//
+//                if (estadoMascota) {
+//                    mascotaD.bajaLogica(codigo);
+//                    setTitle("Mascota -- Codigo dado de Baja");
+//                    JOptionPane.showMessageDialog(this, "La Mascota ha sido dado de baja");
+//                } else {
+//                    mascotaD.altaLogica(codigo);
+//                    setTitle("Mascota");
+//                    JOptionPane.showMessageDialog(this, "La Mascota ha sido dado de alta");
+//                }
+//            } catch (Exception ex) {
+//                Utilidades.mostrarError(ex, this);
+//            }
+//        } else {
+//            jRBEstado.setSelected(!jRBEstado.isSelected());
+//        }
+//    }
+
 }

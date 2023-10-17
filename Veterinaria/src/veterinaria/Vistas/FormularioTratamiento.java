@@ -2,23 +2,12 @@ package veterinaria.Vistas;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.KeyEvent;
-import java.sql.Date;
+
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import veterinaria.AccesoADatos.ClienteDAO;
-import veterinaria.AccesoADatos.MascotaDAO;
+import javax.swing.text.AbstractDocument;
 import veterinaria.AccesoADatos.TratamientoDAO;
 import veterinaria.Entidades.Cliente;
-import veterinaria.Entidades.Mascota;
 import veterinaria.Entidades.Tratamiento;
 import veterinaria.Utilidades;
 
@@ -39,111 +28,32 @@ public class FormularioTratamiento extends javax.swing.JInternalFrame {
         initComponents();
         setTitle("Cargar Tratamientos");
 
-        // Agregar FocusListener al campo jTDocumento
-        jTCodigo.addFocusListener(new FocusAdapter() {
-            @Override
-            public void focusLost(FocusEvent e) {
-                //String codigo = jTCodigo.getText().trim();
-                codigo = jTCodigo.getText().trim();
-                if (codigo.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Debes escribir el Codigo");
-                    return;
-                } else {
-                    try {
-                        limpiarBuscar();
-                        estado = Estado.BUSCAR;
-                        buscarxCodigo();
-//                            limpiarMostrar();
-//                            buscarxAlias();
-                    } catch (ClassNotFoundException ex) {
-                        Logger.getLogger(FormularioMascotasBuscar.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(FormularioMascotasBuscar.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+        // Obtener el Document asociado al campo de texto jTPesoA
+        AbstractDocument doc = (AbstractDocument) jTImporte.getDocument();
 
-                }
+        // Aplicar el DocumentFilter para reemplazar comas por puntos
+        doc.setDocumentFilter(new DecimalDocumentFilter());
 
-            }
-
-            public void keyPressed(KeyEvent e) {
-                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    //String codigo = jTCodigo.getText().trim();
-                    codigo = jTCodigo.getText().trim();
-                    if (codigo.isEmpty()) {
-                        JOptionPane.showMessageDialog(null, "Debes escribir el Codigo");
-                        return;
-                    } else {
-                        try {
-                            limpiarBuscar();
-                            estado = Estado.BUSCAR;
-                            buscarxCodigo();
-//                                limpiarMostrar();
-//                                buscarxAlias();
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(FormularioMascotasBuscar.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (SQLException ex) {
-                            Logger.getLogger(FormularioMascotasBuscar.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-
-                    }
-
-                }
-            }
-        });
-
-        Utilidades.asociarEnterConComponente(jTCodigo, jTTipo);
-        Utilidades.asociarEnterConComponente(jTTipo, jTADescripcion);
-        Utilidades.asociarEnterConComponente(jTADescripcion, jTImporte);
-        Utilidades.asociarEnterConComponente(jTImporte, jBBuscar);
-        //    Utilidades.asociarEnterConComponente(jBBuscar, jBBuscar);
-        jRBEstado.addActionListener(new ActionListener() {
+        // Agregar ActionListener al campo jTDocumento
+        jTCodigo.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Verifica si el cliente ya existe (es decir, está en modo edición)
-                if (estado.equals(Estado.BUSCAR)) {
-                    int option = JOptionPane.showConfirmDialog(
-                            FormularioTratamiento.this, // El componente padre para el cuadro de diálogo
-                            "¿Está seguro de cambiar el estado del Tratamiento?", // El mensaje que se mostrará
-                            "Confirmar Cambio de Estado", // El título del cuadro de diálogo
-                            JOptionPane.YES_NO_OPTION); // Tipo de opciones (Sí o No)
-
-                    // Si el usuario selecciona "Sí" en el cuadro de diálogo
-                    if (option == JOptionPane.YES_OPTION) {
-                        try {
-                            int codigo = Integer.parseInt(jTCodigo.getText());
-                            TratamientoDAO tratamientoD = new TratamientoDAO();
-
-                            // Si el estado actual es true, llama a bajaLogica(int dni)
-                            if (estadoTratamiento) {
-                                try {
-                                    tratamientoD.bajaLogica(codigo);
-                                    setTitle("Tratamiento -- Codigo dado de Baja");
-                                    JOptionPane.showMessageDialog(FormularioTratamiento.this, "El tratamiento ha sido dado de baja");
-                                } catch (Exception ex) {
-                                    Utilidades.mostrarError(ex, FormularioTratamiento.this);
-                                }
-                            } else {
-                                // Si el estado actual es false, llama a altaLogica(int dni)
-                                try {
-                                    tratamientoD.altaLogica(codigo);
-                                    setTitle("Mascota");
-                                    JOptionPane.showMessageDialog(FormularioTratamiento.this, "El tratamiento ha sido dado de alta");
-                                } catch (Exception ex) {
-                                    Utilidades.mostrarError(ex, FormularioTratamiento.this);
-                                }
-                            }
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (SQLException ex) {
-                            Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                    } else {
-                        // Si el usuario selecciona "No", deshace el cambio en el estado del JRadioButton
-                        jRBEstado.setSelected(!jRBEstado.isSelected());
-                    }
+                // Método para procesar el código
+                codigo = Utilidades.obtenerTextoDesdeCampo(jTCodigo).trim();
+                if (codigo.isEmpty()) {
+                    JOptionPane.showMessageDialog(null, "Debes escribir el Codigo");
+                } else {
+                    limpiarBuscar();
+                    estado = Estado.BUSCAR;
+                    buscarxCodigo();
                 }
             }
         });
+        // Asociar tecla "Enter" con componentes
+        asociarCamposConEnter();
+
+        // Configurar ActionListener para el botón de estado
+        configurarEstadoTratamiento();
     }
 
     /**
@@ -175,21 +85,29 @@ public class FormularioTratamiento extends javax.swing.JInternalFrame {
         setTitle("Formulario Tratamiento");
         setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
 
-        jPanel1.setForeground(null);
-
+        jLcodigo.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLcodigo.setText("Codigo");
 
+        jLTipo.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLTipo.setText("Tipo");
 
+        jLDescripcion.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLDescripcion.setText("Descripcion");
 
         jTADescripcion.setColumns(20);
         jTADescripcion.setRows(5);
         jScrollPane1.setViewportView(jTADescripcion);
 
+        jLImporte.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLImporte.setText("Importe");
 
+        jRBEstado.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jRBEstado.setText("Estado");
+        jRBEstado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRBEstadoActionPerformed(evt);
+            }
+        });
 
         jBSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/home256_24783.png"))); // NOI18N
         jBSalir.addActionListener(new java.awt.event.ActionListener() {
@@ -274,7 +192,7 @@ public class FormularioTratamiento extends javax.swing.JInternalFrame {
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLDescripcion)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLImporte)
                             .addComponent(jTImporte, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -336,18 +254,22 @@ public class FormularioTratamiento extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, "Debes escribir un Codigo");
             return;
         } else {
-            try {
-                limpiarBuscar();
-                estado = Estado.BUSCAR;
-                buscarxCodigo();
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(FormularioMascotas.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SQLException ex) {
-                Logger.getLogger(FormularioMascotas.class.getName()).log(Level.SEVERE, null, ex);
-            }
+//            try {
+            limpiarBuscar();
+            estado = Estado.BUSCAR;
+            buscarxCodigo();
+//            } catch (ClassNotFoundException ex) {
+//                Logger.getLogger(FormularioMascotas.class.getName()).log(Level.SEVERE, null, ex);
+//            } catch (SQLException ex) {
+//                Logger.getLogger(FormularioMascotas.class.getName()).log(Level.SEVERE, null, ex);
+//            }
 
         }       // TODO add your handling code here:
     }//GEN-LAST:event_jBBuscarActionPerformed
+
+    private void jRBEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRBEstadoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jRBEstadoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -395,9 +317,9 @@ private void salirAplicacion() {
         //jCBClientes.setSelectedIndex(-1); // Desselecciona el elemento en el JComboBox
     }
 
-    private void buscarxCodigo() throws ClassNotFoundException, SQLException {
+    private void buscarxCodigo() {
 
-        TratamientoDAO tratamientoD = new TratamientoDAO();
+        TratamientoDAO tratamientoD = TratamientoDAO.obtenerInstancia();
         int codigo = 0;
 
         try {
@@ -423,7 +345,7 @@ private void salirAplicacion() {
     }
 
     private void guardar() throws Exception {
-        TratamientoDAO tratamientoD = new TratamientoDAO();
+        TratamientoDAO tratamientoD = TratamientoDAO.obtenerInstancia();
         Tratamiento tratamiento = new Tratamiento();
         int codigo = 0;
 
@@ -482,32 +404,11 @@ private void salirAplicacion() {
     }
 
     private int ultimoRegistro() throws ClassNotFoundException, SQLException, Exception {
-        TratamientoDAO tratamientoD = new TratamientoDAO();
+        TratamientoDAO tratamientoD = TratamientoDAO.obtenerInstancia();
         return tratamientoD.contarTotalRegistros();
 
     }
 
-//    private void cargarCombo() throws ClassNotFoundException, SQLException {
-//
-//        ClienteDAO clienteD = new ClienteDAO();
-//
-//        Collection<Cliente> clientes;
-//        clientes = new ArrayList<>();
-//
-//        try {
-//            clientes = clienteD.listarCliente();
-//        } catch (Exception ex) {
-//            Utilidades.mostrarError(ex, this);
-//        }
-//
-//        // Llena el JComboBox con los valores tipo Alumno
-//        for (Cliente cliente : clientes) {
-//            if (cliente.isEstado()) {
-//                jCBClientes.addItem(cliente);
-//            }
-//
-//        }
-//    }
     private void mostrarTratamientoEnFormulario(Tratamiento tratamiento) {
 
         jTTipo.setText(tratamiento.getTipo());
@@ -523,6 +424,61 @@ private void salirAplicacion() {
         }
 
         jRBEstado.setSelected(tratamiento.isEstado());
+        estadoTratamiento = tratamiento.isEstado();
 
+    }
+
+    // Método para asociar la tecla Enter con componentes específicos
+    private void asociarCamposConEnter() {
+        // Utilidades.asociarEnterConComponente asocia la tecla Enter con el componente proporcionado como argumento  
+        Utilidades.asociarEnterConComponente(jTCodigo, jTTipo);
+        Utilidades.asociarEnterConComponente(jTTipo, jTADescripcion);
+        Utilidades.asociarEnterConComponente(jTADescripcion, jTImporte);
+        Utilidades.asociarEnterConComponente(jTImporte, jBBuscar);
+    }
+
+    // Método para configurar el cambio de estado de la mascota
+    private void configurarEstadoTratamiento() {
+        // Configura un ActionListener para el cambio de estado de la mascota 
+        jRBEstado.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (estado.equals(Estado.BUSCAR)) {
+                    confirmarCambioEstadoTratamiento();
+                }
+            }
+        });
+    }
+
+    // Método para confirmar el cambio de estado del tratamiento
+    private void confirmarCambioEstadoTratamiento() {
+        //if (estado.equals(Estado.BUSCAR)) {
+        int option = JOptionPane.showConfirmDialog(
+                FormularioTratamiento.this,
+                "¿Está seguro de cambiar el estado del Tratamiento?",
+                "Confirmar Cambio de Estado",
+                JOptionPane.YES_NO_OPTION);
+
+        if (option == JOptionPane.YES_OPTION) {
+            int codigo = Integer.parseInt(jTCodigo.getText());
+            TratamientoDAO tratamientoD = TratamientoDAO.obtenerInstancia();
+
+            try {
+                if (estadoTratamiento) {
+                    tratamientoD.bajaLogica(codigo);
+                    setTitle("Tratamiento -- Codigo dado de Baja");
+                    JOptionPane.showMessageDialog(FormularioTratamiento.this, "El tratamiento ha sido dado de baja");
+                } else {
+                    tratamientoD.altaLogica(codigo);
+                    setTitle("Mascota");
+                    JOptionPane.showMessageDialog(FormularioTratamiento.this, "El tratamiento ha sido dado de alta");
+                }
+            } catch (Exception ex) {
+                Utilidades.mostrarError(ex, FormularioTratamiento.this);
+            }
+        } else {
+            jRBEstado.setSelected(!jRBEstado.isSelected());
+        }
+        // }
     }
 }

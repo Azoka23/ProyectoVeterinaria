@@ -1,9 +1,9 @@
 package veterinaria.Vistas;
 
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
+// Importación de paquetes y librerías necesarias para la clase
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.sql.SQLException;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -11,11 +11,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultListModel;
+
 import javax.swing.JOptionPane;
+import javax.swing.JTextField;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.AbstractDocument;
 import veterinaria.AccesoADatos.ClienteDAO;
 import veterinaria.AccesoADatos.MascotaDAO;
 import veterinaria.AccesoADatos.TratamientoDAO;
@@ -28,163 +30,92 @@ import veterinaria.Entidades.TratamientoRealizado;
 import veterinaria.Entidades.Visita;
 import veterinaria.Utilidades;
 
+//Declaración de la clase FormularioVisitas
 public class FormularioVisitas extends javax.swing.JInternalFrame {
 
-    private Estado estado;
-    private Estado estadoGuardado;
-    private String alias;
-    private Cliente selectedCliente = null;
+    // Declaración de variables de instancia y atributos para la clase
+    private Estado estado; // Variable para controlar el estado del formulario
+    private Estado estadoGuardado; // Variable para controlar el estado de guardado del formulario
+    private String alias; // Variable para almacenar el alias de la mascota seleccionada
+    private Cliente selectedCliente = null; // Cliente seleccionado para la visita
+    private Tratamiento tratamiento; // Objeto para almacenar información sobre el tratamiento
+    private int idMascotas = 0; // Identificador de la mascota seleccionada
+    private int idCliente = 0; // Identificador del cliente de la mascota
+    private int idTratamiento = 0; // Identificador del tratamiento seleccionado
+    private boolean estadoTratamiento; // Estado del tratamiento (activo o inactivo)
+    private DesktopPaneWithBackground desktopPane; // Referencia al panel de escritorio
+    private String dni; // Número de documento del cliente
+    private Map<Integer, Tratamiento> tratamientosSeleccionados = new HashMap<>(); // Mapa para almacenar tratamientos seleccionados
 
-    private Tratamiento tratamiento;
-    //private Mascota mascota;
-
-    private int idMascotas = 0;
-    private int idCliente = 0;
-    private int idTratamiento = 0;
-    private boolean estadoTratamiento;
-    private String dni;
-    private Map<Integer, Tratamiento> tratamientosSeleccionados = new HashMap<>();
+    // Modelos de tabla para mascotas y tratamientos
     private DefaultTableModel modeloMascota = new DefaultTableModel() {
-
         public boolean isCellEditable(int fila, int columna) {
             return false;
         }
     };
     private DefaultTableModel modeloTratamiento = new DefaultTableModel() {
-
         public boolean isCellEditable(int fila, int columna) {
             return false;
         }
     };
 
-    public FormularioVisitas() {
-
+    // Constructor de la clase
+    public FormularioVisitas(DesktopPaneWithBackground desktopPane) {
+        // Inicialización del formulario y componentes
+        this.desktopPane = desktopPane;
         initComponents();
         setTitle("Cargar la Visita");
+        // Configuración de campos y eventos
         armarCabecera();
         armarCabeceraTratamiento();
-        //cargarTratamientos();
         limpiar();
-        //            // Agregar FocusListener al campo jTDocumento
-//            jTDNI.addFocusListener(new FocusAdapter() {
-//                @Override
-//                public void focusLost(FocusEvent e) {
-//                    //String codigo = jTCodigo.getText().trim();
-//                    dni = jTDNI.getText().trim();
-//                    if (dni.isEmpty()) {
-//                        JOptionPane.showMessageDialog(null, "Debes escribir el DNI");
-//                        return;
-//                    } else {
-//                        try {
-//                            limpiarBuscar();
-//                            estado = Estado.BUSCAR;
-//                            buscarxCodigo();
-////                            limpiarMostrar();
-////                                buscarxAlias();
-//                        } catch (ClassNotFoundException ex) {
-//                            Logger.getLogger(FormularioMascotasBuscar.class.getName()).log(Level.SEVERE, null, ex);
-//                        } catch (SQLException ex) {
-//                            Logger.getLogger(FormularioMascotasBuscar.class.getName()).log(Level.SEVERE, null, ex);
-//                        }
-//
-//                    }
-//
-//                }
-//
-//                public void keyPressed(KeyEvent e) {
-//                    if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-//                        //String codigo = jTCodigo.getText().trim();
-//                        dni = jTDNI.getText().trim();
-//                        if (dni.isEmpty()) {
-//                            JOptionPane.showMessageDialog(null, "Debes escribir el Codigo");
-//                            return;
-//                        } else {
-//                            try {
-//                                limpiarBuscar();
-//                                estado = Estado.BUSCAR;
-//                                buscarxCodigo();
-////                                limpiarMostrar();
-////                                buscarxAlias();
-//                            } catch (ClassNotFoundException ex) {
-//                                Logger.getLogger(FormularioMascotasBuscar.class.getName()).log(Level.SEVERE, null, ex);
-//                            } catch (SQLException ex) {
-//                                Logger.getLogger(FormularioMascotasBuscar.class.getName()).log(Level.SEVERE, null, ex);
-//                            }
-//
-//                        }
-//
-//                    }
-//                }
-//            });
-// Agregar el ListSelectionListener aquí------- // Agrega un oyente de eventos de mouse a la tabla dando 1 Click
-//o 2 click --- resulto que funcionaba pero solia fallar -- depende como uno hace el clic -- ahora
-//pruebo el ListSelectionListener (osea cuando se encuentra seleccionada) parece que funciona bien
+        // Obtener el Document asociado al campo de texto jTPesoA
+        AbstractDocument doc = (AbstractDocument) jTPesoA.getDocument();
+        // Aplicar el DocumentFilter para reemplazar comas por puntos
+        doc.setDocumentFilter(new DecimalDocumentFilter());
+        // Agregar KeyListener al campo jTDni
+        jTDni.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    buscarPorDni();
+                }
+            }
+        });
+
+// Listener para la tabla de mascotas
         jTMascotas.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 // Verifica si la selección está cambiada y no está en modo de ajuste
                 if (!e.getValueIsAdjusting()) {
-
-//                        // Si los datos de la visita no están guardados, muestra una advertencia
-//                        if (estadoGuardado.equals(Estado.NO_GUARDADO)) {
-//                            try {
-//                                int respuesta = JOptionPane.showInternalConfirmDialog(
-//                                        FormularioVisitas.this,
-//                                        "¿Desea guardar los datos de la visita actual antes de cambiar la mascota?",
-//                                        "Advertencia",
-//                                        JOptionPane.YES_NO_OPTION
-//                                );
-//
-//                                // Si el usuario elige "No", no cambia la selección de la mascota
-//                                if (respuesta == JOptionPane.NO_OPTION) {
-//                                    // Aquí puedes poner el código para mantener la selección actual en la tabla de mascotas
-//                                    // ...
-//                                    //limpiarBuscar();
-//                                    guardar();
-//                                    return;
-//                                }
-//                                limpiarVisita();
-//                                // Si el usuario elige "Sí", guarda los datos de la visita actual y continúa cambiando la mascota
-//                                // Guarda los datos aquí ...
-//                            } catch (Exception ex) {
-//                                Logger.getLogger(FormularioVisitas.class.getName()).log(Level.SEVERE, null, ex);
-//                            }
-//                        }
                     // Obtiene la fila seleccionada
                     int selectedRow = jTMascotas.getSelectedRow();
                     // Verifica si hay una fila seleccionada
                     if (selectedRow != -1) {
-                        try {
-                            // Obtén el valor de todas las columnas en la fila seleccionada
-                            idMascotas = (Integer) jTMascotas.getValueAt(selectedRow, 0);
-                            alias = (String) jTMascotas.getValueAt(selectedRow, 1);
-
-                            limpiarVisita();
-                            cargarTratamientos();
-                            jTTratamiento.setEnabled(true);
-                            jTPesoA.setEditable(true);
-                            jLMascota1.setText("Mascota: " + alias);
-                            jTADescripcion.setEditable(true);
-                            estadoGuardado = Estado.NO_GUARDADO;
-
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(FormularioVisitas.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (SQLException ex) {
-                            Logger.getLogger(FormularioVisitas.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-
+                        // Obtén el valor de todas las columnas en la fila seleccionada
+                        idMascotas = (Integer) jTMascotas.getValueAt(selectedRow, 0);
+                        alias = (String) jTMascotas.getValueAt(selectedRow, 1);
+                        // Limpia los campos de visita y carga los tratamientos
+                        limpiarVisita();
+                        cargarTratamientos();
+                        // Habilita la edición y muestra información de la mascota seleccionada
+                        jTTratamiento.setEnabled(true);
+                        jTPesoA.setEditable(true);
+                        jLMascota1.setText("Mascota: " + alias);
+                        jTADescripcion.setEditable(true);
+                        estadoGuardado = Estado.NO_GUARDADO;
                     }
                 }
             }
         });
+
+// Listener para la tabla de tratamientos
         jTTratamiento.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 // Verifica si la selección está cambiada y no está en modo de ajuste
                 if (!e.getValueIsAdjusting()) {
-//                        // Obtiene la fila seleccionada
-//                        int selectedRow = jTTratamiento.getSelectedRow();
-
                     // Obtiene las filas seleccionadas
                     int[] selectedRows = jTTratamiento.getSelectedRows();
                     double sumaImportes = 0.0;
@@ -192,55 +123,33 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
                     // Crea un nuevo mapa para almacenar los tratamientos seleccionados
                     Map<Integer, Tratamiento> tratamientosSeleccionadosTemp = new HashMap<>();
 
-                    // Tratamiento tratamiento = new Tratamiento();
-                    // Suma los importes de las filas seleccionadas
+                    // Suma los importes de las filas seleccionadas y crea el mapa de tratamientos seleccionados
                     for (int selectedRow : selectedRows) {
-
                         idTratamiento = (Integer) jTTratamiento.getValueAt(selectedRow, 0);
                         String tipo = (String) jTTratamiento.getValueAt(selectedRow, 1);
                         String descripcion = (String) jTTratamiento.getValueAt(selectedRow, 2);
                         double importe = (Double) jTTratamiento.getValueAt(selectedRow, 3);
 
-                        //JOptionPane.showMessageDialog(null, idTratamiento);
+                        // Crea un nuevo objeto Tratamiento y lo agrega al mapa de tratamientos seleccionados
                         tratamiento = new Tratamiento(idTratamiento, tipo, descripcion, importe, true);
-
-//                        tratamiento.setIdTratamiento(idTratamiento);
-//                        tratamiento.setTipo(tipo);
-//                        tratamiento.setDescripcion(descripcion);
-//                        tratamiento.setImporte(importe);
-//                        tratamiento.setEstado(true);
-//
                         tratamientosSeleccionadosTemp.put(idTratamiento, tratamiento);
+
+                        // Suma los importes
                         sumaImportes += importe;
                     }
+
                     // Actualiza el mapa tratamientosSeleccionados solo después de procesar todas las selecciones
                     tratamientosSeleccionados.clear();
                     tratamientosSeleccionados.putAll(tratamientosSeleccionadosTemp);
 
                     // Muestra la suma en jTImporteTotal
                     jTImporteTotal.setText(String.valueOf(sumaImportes));
-
-//                        // Verifica si hay una fila seleccionada
-//                        if (selectedRow != -1) {
-//                            // Obtén el valor de la columna de importe en la fila seleccionada
-//                            double importeTotal = (Double) jTTratamiento.getValueAt(selectedRow, 1);
-//                            // alias = (String) jTMascotas.getValueAt(selectedRow, 1);
-//                            //jTTratamiento.setEnabled(true);
-////                            jTPesoA.setEditable(true);
-////                            jLMascota1.setText("Mascota: " + alias);
-////                            jTADescripcion.setEditable(true);
-//                            jTImporteTotal.setText(importeTotal + "");
-//                        }
                 }
             }
         });
+
     }
 
-    /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
-     */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -251,7 +160,7 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
         jLNombre = new javax.swing.JLabel();
         jLMascota = new javax.swing.JLabel();
         jBBuscar = new javax.swing.JButton();
-        jTDNI = new javax.swing.JTextField();
+        jTDni = new javax.swing.JTextField();
         jTApellido = new javax.swing.JTextField();
         jTNombre = new javax.swing.JTextField();
         jBSalir = new javax.swing.JButton();
@@ -297,7 +206,7 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
             }
         });
 
-        jTDNI.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        jTDni.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
 
         jTApellido.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
 
@@ -377,7 +286,7 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
                             .addComponent(jLNombre))
                         .addGap(12, 12, 12)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTDNI, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTDni, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jTNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(12, 12, 12)
@@ -436,7 +345,7 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
                                 .addGap(17, 17, 17)
                                 .addComponent(jLNombre))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jTDNI, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jTDni, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(12, 12, 12)
                                 .addComponent(jTApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(12, 12, 12)
@@ -486,12 +395,12 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 742, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(20, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 12, Short.MAX_VALUE)
+                .addGap(0, 0, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 566, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -500,46 +409,47 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
 
     private void jBSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSalirActionPerformed
         salirAplicacion();
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_jBSalirActionPerformed
 
     private void jBBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBBuscarActionPerformed
-        String dni = jTDNI.getText().trim();
+        // Obtiene el DNI ingresado en el campo de texto
+        String dni = jTDni.getText().trim();
 
+        // Verifica si el campo está vacío
         if (dni.isEmpty()) {
+            // Muestra un mensaje de advertencia si el DNI está vacío
             JOptionPane.showMessageDialog(this, "Debes escribir un DNI");
             return;
         } else {
-            try {
-                limpiarBuscar();
-                estado = Estado.BUSCAR;
-                buscarxCodigo();
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(FormularioMascotas.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SQLException ex) {
-                Logger.getLogger(FormularioMascotas.class.getName()).log(Level.SEVERE, null, ex);
-            }
+            // Limpia los campos y establece el estado del formulario a buscar
+            limpiarBuscar();
+            estado = Estado.BUSCAR;
 
-        }        // TODO add your handling code here:
+            // Llama al método para buscar el cliente por el DNI ingresado
+            buscarPorDni();
+        }
     }//GEN-LAST:event_jBBuscarActionPerformed
 
     private void jBbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBbuscarActionPerformed
         try {
+            // Verifica si hay campos vacíos en el formulario
             if (camposVacios()) {
-                JOptionPane.showMessageDialog(this, "No debe dejar algun dato vacio");
+                // Muestra un mensaje de advertencia si hay campos vacíos
+                JOptionPane.showMessageDialog(this, "No debe dejar algún dato vacío");
             } else {
+                // Llama al método para guardar la visita
+                guardarVisita();
 
-                guardar();
-
+                // Limpia los campos después de guardar la visita y marca el estado como GUARDADO
                 limpiarVisita();
                 estadoGuardado = Estado.GUARDADO;
-
             }
-
         } catch (Exception ex) {
+            // Muestra cualquier excepción ocurrida durante el proceso de guardar la visita
             Utilidades.mostrarError(ex, this);
         }
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_jBbuscarActionPerformed
 
 
@@ -564,7 +474,7 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTextArea jTADescripcion;
     private javax.swing.JTextField jTApellido;
-    private javax.swing.JTextField jTDNI;
+    private javax.swing.JTextField jTDni;
     private javax.swing.JTextField jTImporteTotal;
     private javax.swing.JTable jTMascotas;
     private javax.swing.JTextField jTNombre;
@@ -572,187 +482,145 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
     private javax.swing.JTable jTTratamiento;
     // End of variables declaration//GEN-END:variables
 
+// Método para salir de la aplicación
     private void salirAplicacion() {
         if (Utilidades.confirmarSalida(this)) {
             dispose();
         }
     }
 
+// Método para verificar campos vacíos en el formulario principal
     private boolean camposVacios() {
-        //return jTDNI.getText().isEmpty() || jTCodigo.getText().isEmpty() || jTImporte.getText().isEmpty() || jTADescripcion.getText().trim().isEmpty();
-        return jTDNI.getText().isEmpty();
+        return jTDni.getText().isEmpty();
     }
 
+// Método para limpiar los campos del formulario principal
     private void limpiar() {
-        Utilidades.limpiarSetText(jTDNI, jTApellido, jTNombre);
-//        jRBEstado.setSelected(false);
-//        jTADescripcion.setText("");
-        estado = Estado.NADA;
-        // Para limpiar el formulario y deseleccionar los JComboBox
-        //JCSexo.setSelectedIndex(-1); // Desselecciona el elemento en el JComboBox
-        //jCBClientes.setSelectedIndex(-1); // Desselecciona el elemento en el JComboBox
-        // jLTrat.setEnabled(false);
+        // Limpia los campos de texto y deshabilita la edición de ciertos campos y controles
+        Utilidades.limpiarSetText(jTDni, jTApellido, jTNombre);
         jTPesoA.setEditable(false);
         jTADescripcion.setEditable(false);
         jTTratamiento.setEnabled(false);
         jTImporteTotal.setEditable(false);
         estadoGuardado = Estado.NO_GUARDADO;
-
     }
 
+// Método para limpiar los campos de búsqueda
     private void limpiarBuscar() {
+        // Limpia los campos de búsqueda y deshabilita la edición de ciertos campos y controles
         Utilidades.limpiarSetText(jTApellido, jTNombre);
-        //jTADescripcion.setText("");
-        // Para limpiar el formulario y deseleccionar los JComboBox
-        // JCSexo.setSelectedIndex(-1); // Desselecciona el elemento en el JComboBox
-        //jCBClientes.setSelectedIndex(-1); // Desselecciona el elemento en el JComboBox
-        //  jLTrat.setEnabled(false);
         jTPesoA.setEditable(false);
         jTADescripcion.setEditable(false);
         jTTratamiento.setEnabled(false);
         jTImporteTotal.setEditable(false);
         estadoGuardado = Estado.NADA;
-
     }
 
+// Método para limpiar los campos relacionados con la visita
     private void limpiarVisita() {
+        // Limpia los campos relacionados con la visita y deshabilita la edición de ciertos campos y controles
         Utilidades.limpiarSetText(jTPesoA, jTImporteTotal);
-        //jTADescripcion.setText("");
-        // Para limpiar el formulario y deseleccionar los JComboBox
-        // JCSexo.setSelectedIndex(-1); // Desselecciona el elemento en el JComboBox
-        //jCBClientes.setSelectedIndex(-1); // Desselecciona el elemento en el JComboBox
-        //  jLTrat.setEnabled(false);
-        jTPesoA.setEditable(false);
-        jTADescripcion.setEditable(false);
         jTADescripcion.setText("");
-        modeloTratamiento.setRowCount(0); // Limpiar la tabla antes de agregar nuevos datos
+        modeloTratamiento.setRowCount(0); // Limpia la tabla de tratamientos antes de agregar nuevos datos
         jTTratamiento.setEnabled(false);
         jTImporteTotal.setEditable(false);
         estadoGuardado = Estado.NADA;
-
     }
 
-    private void buscarxCodigo() throws ClassNotFoundException, SQLException {
+// Método para buscar un cliente por DNI
+    private void buscarPorDni() {
 
-        ClienteDAO clienteD = new ClienteDAO();
-
+        // Obtiene el DNI ingresado en el campo de texto
         int dni = 0;
-
         try {
-            dni = Integer.parseInt(jTDNI.getText());
+            dni = Integer.parseInt(jTDni.getText());
+
+            // Intenta buscar un cliente con el DNI ingresado en la base de datos
+            ClienteDAO clienteD = ClienteDAO.obtenerInstancia();
             Cliente cliente = clienteD.buscarListaClientexDni(dni);
 
             if (cliente != null) {
+                // Si el cliente existe, muestra sus datos en el formulario
                 mostrarClienteEnFormulario(cliente);
                 idCliente = cliente.getIdCliente();
                 cargarTabla(cliente.getIdCliente());
 
             } else {
+                // Si el cliente no existe, muestra un mensaje y da la opción de crear un nuevo cliente
                 estado = Estado.NUEVO;
+
+                int respuesta = JOptionPane.showInternalConfirmDialog(
+                        FormularioVisitas.this,
+                        "¿No se encontró el DNI, Desea dar de Alta un Nuevo Cliente?",
+                        "Advertencia",
+                        JOptionPane.YES_NO_OPTION
+                );
+
+                // Si el usuario elige "No", permite al usuario mantener la selección actual en la tabla de mascotas
+                if (respuesta == JOptionPane.YES_OPTION) {
+                    cargarFormularioCliente();
+                    return;
+                }
             }
 
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "No se encontro el DNI");
+            // Muestra un mensaje de error si ocurre una excepción al intentar buscar el cliente
+            JOptionPane.showMessageDialog(this, "Error al buscar el DNI: " + ex.getMessage());
         }
-
-//        try {
-        //          codigo = Integer.parseInt(jTCodigo.getText());
-//
-//            Tratamiento tratamiento = tratamientoD.buscarListaTratamientoxId(codigo);
-//
-//            if (tratamiento != null) {
-//                setTitle("Cargar Tratamiento" + (tratamiento.isEstado() ? "" : " -- Codigo dado de Baja"));
-//                jRBEstado.setSelected(tratamiento.isEstado());
-//
-//                mostrarTratamientoEnFormulario(tratamiento);
-//            } else {
-//                estado = Estado.NUEVO;
-//                JOptionPane.showMessageDialog(this, "No se encontró el codigo,el codigo disponible es " + ultimoRegistro());
-//                jTCodigo.setText(ultimoRegistro() + "");
-//            }
-//        } catch (NumberFormatException e) {
-//            JOptionPane.showMessageDialog(this, "Error: El código debe ser un número valido.");
-//        } catch (Exception ex) {
-//            Utilidades.mostrarError(ex, this);
-//        }
     }
 
-    private void guardar() throws Exception {
-        VisitaDAO visitaD = new VisitaDAO();
-        MascotaDAO mascotaD = new MascotaDAO();
-        TratamientoRealizadoDAO tratRealizadoD = new TratamientoRealizadoDAO();
-
-//        for (Map.Entry<Integer, Tratamiento> entry : tratamientosSeleccionados.entrySet()) {
-        // Visita visita = new Visita();
-//            TratamientoRealizado tratamientoRealizado = new TratamientoRealizado();
-//            Tratamiento tratamiento = entry.getValue();
-        // Crear una única visita para todos los tratamientos seleccionados
-        Visita visita = new Visita();
-        String descripcion = jTADescripcion.getText();
-        double importe = Double.parseDouble(jTImporteTotal.getText());
-        double pesoA = 0.0;
-
+    // Método para guardar la visita y tratamientos realizados
+    private void guardarVisita() {
         try {
-            String pesoAString = jTPesoA.getText().trim();
-            if (!pesoAString.isEmpty()) {
-                pesoA = Double.parseDouble(pesoAString);
+            VisitaDAO visitaD = VisitaDAO.obtenerInstancia();
+            MascotaDAO mascotaD = MascotaDAO.obtenerInstancia();
+            TratamientoRealizadoDAO tratRealizadoD = TratamientoRealizadoDAO.obtenerInstancia();
+
+            Visita visita = new Visita();
+            String descripcion = jTADescripcion.getText();
+            double importe = Double.parseDouble(jTImporteTotal.getText());
+            double pesoA = obtenerPeso(jTPesoA);
+            double pesoM = pesoA;
+            LocalDate fechaVisita = LocalDate.now();
+
+            // Asignar los valores al objeto Visita
+            visita.setPesoActual(pesoA);
+            visita.setDetallesSintoma(descripcion);
+            visita.setImporteVisita(importe);
+            visita.setFechaVisita(fechaVisita);
+
+            int idTrat = visitaD.guardarVisita(visita);
+            visita.setIdVisita(idTrat);
+            // Iterar sobre los tratamientos seleccionados y guardarlos como tratamientos realizados
+            for (Map.Entry<Integer, Tratamiento> entry : tratamientosSeleccionados.entrySet()) {
+                Tratamiento tratamiento = entry.getValue();
+                TratamientoRealizado tratamientoRealizado = new TratamientoRealizado();
+
+                //tratamientoRealizado.setIdTratamientoRealizado(idTrat);
+                tratamientoRealizado.setIdVisita(visita);
+                tratamientoRealizado.setIdMascota(mascotaD.obtenerMascotaPorId(idMascotas));
+                tratamientoRealizado.setIdTratamiento(tratamiento);
+                tratamientoRealizado.setImporte(tratamiento.getImporte());
+
+                // Guardar el tratamiento realizado en la base de datos
+                tratRealizadoD.guardarTratamientoRealizado(tratamientoRealizado);
+
             }
-        } catch (NumberFormatException ex) {
-            Utilidades.mostrarError(ex, this);
+            // Modificar la mascota fuera del bucle, si es necesario hacerlo solo una vez
+
+            Mascota mascota = mascotaD.obtenerMascotaPorId(idMascotas);
+            mascotaD.modificarMascotaPeso(mascota);
+
+        } catch (Exception ex) {
+            Logger.getLogger(FormularioVisitas.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        LocalDate fechaVisita = LocalDate.now();
-
-        // Asignar los valores al objeto Visita
-        visita.setPesoActual(pesoA);
-        visita.setDetallesSintoma(descripcion);
-        visita.setImporteVisita(importe);
-        visita.setFechaVisita(fechaVisita);
-
-        //JOptionPane.showMessageDialog(this, mascota);
-//                JOptionPane.showMessageDialog(this, tratamiento);
-//                JOptionPane.showMessageDialog(this, visita);
-//                
-//        try {
-        int idTrat = visitaD.guardarVisita(visita);
-        visita.setIdVisita(idTrat);
-        // Iterar sobre los tratamientos seleccionados y guardarlos como tratamientos realizados
-        for (Map.Entry<Integer, Tratamiento> entry : tratamientosSeleccionados.entrySet()) {
-            Tratamiento tratamiento = entry.getValue();
-            TratamientoRealizado tratamientoRealizado = new TratamientoRealizado();
-
-            //tratamientoRealizado.setIdTratamientoRealizado(idTrat);
-            tratamientoRealizado.setIdVisita(visita);
-            tratamientoRealizado.setIdMascota(mascotaD.buscarListaMascotaxDni(idMascotas));
-            tratamientoRealizado.setIdTratamiento(tratamiento);
-            tratamientoRealizado.setImporte(tratamiento.getImporte());
-
-            // Guardar el tratamiento realizado en la base de datos
-            tratRealizadoD.guardarTratamientoRealizado(tratamientoRealizado);
-
-        }
-        // Modificar la mascota fuera del bucle, si es necesario hacerlo solo una vez
-
-        Mascota mascota = mascotaD.buscarListaMascotaxDni(idMascotas);
-        mascotaD.modificarMascotaPeso(mascota);
-//            }catch (Exception ex) {
-//                Utilidades.mostrarError(ex, this);
-//            }
 
     }
 
-//                JOptionPane.showMessageDialog(this, mascota);
-//                JOptionPane.showMessageDialog(this, tratamiento);
-//                JOptionPane.showMessageDialog(this, visita);
-    private int ultimoRegistro() throws ClassNotFoundException, SQLException, Exception {
-        TratamientoDAO tratamientoD = new TratamientoDAO();
-        return tratamientoD.contarTotalRegistros();
+    // Método para cargar los tratamientos en la tabla de tratamientos
+    private void cargarTratamientos() {
 
-    }
-
-    private void cargarTratamientos() throws ClassNotFoundException, SQLException {
-
-        TratamientoDAO cursadas = new TratamientoDAO();
+        TratamientoDAO cursadas = TratamientoDAO.obtenerInstancia();
         Collection<Tratamiento> listarTratamientos = new ArrayList<>(); // Inicialización predeterminada
 
         listarTratamientos = cursadas.obtenerTratamientos();
@@ -760,57 +628,26 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
         for (Tratamiento tipo : listarTratamientos) {
             if (tipo.isEstado()) {
                 modeloTratamiento.addRow(new Object[]{tipo.getIdTratamiento(), tipo.getTipo(), tipo.getDescripcion(), tipo.getImporte()});
-//                modeloTratamiento.addRow(new Object[]{tipo.getTipo(), tipo.getImporte()});
 
             }
 
         }
     }
 
-//    private void mostrarTratamientoEnFormulario(Tratamiento tratamiento) {
-//
-//        jTTipo.setText(tratamiento.getTipo());
-//
-//        jTADescripcion.setText(tratamiento.getDescripcion());
-//
-//        jTImporte.setText(tratamiento.getImporte() + "");
-//
-//        if (tratamiento.isEstado()) {
-//            setTitle("Cargar Tratamiento");
-//        } else {
-//            setTitle("Tratamiento -- Codigo dado de Baja");
-//        }
-//
-//        jRBEstado.setSelected(tratamiento.isEstado());
-//
-//    }
     private void mostrarClienteEnFormulario(Cliente cliente) {
-        //JOptionPane.showMessageDialog(null, cliente);
+
         jTApellido.setText(cliente.getApellido());
         jTNombre.setText(cliente.getNombre());
-//        jTDireccion.setText(cliente.getDireccion());
-//        jTtelefono.setText(cliente.getTelefono());
-//        jTMail.setText(cliente.getEmail());
 
-//        if (cliente.isEstado()) {
-//            setTitle("Cargar Clientes");
-//        } else {
-//            setTitle("Cliente -- DNI dado de Baja");
-//        }
-//
-//        jRBEstado.setSelected(cliente.isEstado());
-//        estadoCliente = cliente.isEstado();
-//        jTContNombre.setText(cliente.getContactoNombre());
-//        jTContactoTelefono.setText(cliente.getContactoTelefono());
     }
 
     private void cargarTabla(int idCliente) throws Exception {
 
-        MascotaDAO cursadas = new MascotaDAO();
+        MascotaDAO cursadas = MascotaDAO.obtenerInstancia();
         Collection<Mascota> listaMascota = new ArrayList<>(); // Inicialización predeterminada
 
         listaMascota = cursadas.listarMascotasxIdCliente(idCliente);
-
+        modeloMascota.setRowCount(0); // Limpia la tabla de tratamientos antes de agregar nuevos datos
         for (Mascota tipo : listaMascota) {
             if (tipo.isEstado()) {
                 modeloMascota.addRow(new Object[]{tipo.getIdMascota(), tipo.getAlias(), tipo.getPesoActual()});
@@ -838,4 +675,29 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
         jTTratamiento.setModel(modeloTratamiento);
     }
 
+    private void cargarFormularioCliente() {
+        try {
+            FormularioCliente cargarCliente = new FormularioCliente(desktopPane);
+            //cargarCliente.setMascotaFormListener(this); // Donde `this` es el objeto que implementa el interfaz
+            cargarCliente.setSize(600, 500);
+            cargarCliente.pack();
+            int x = (desktopPane.getWidth() - cargarCliente.getWidth()) / 2;
+            int y = (desktopPane.getHeight() - cargarCliente.getHeight()) / 2;
+            cargarCliente.setBounds(x, y, cargarCliente.getWidth(), cargarCliente.getHeight());
+            desktopPane.add(cargarCliente);
+            cargarCliente.setVisible(true);
+        } catch (Exception ex) {
+            Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    private double obtenerPeso(JTextField textField) {
+        try {
+
+            String pesoString = textField.getText().trim();
+            return pesoString.isEmpty() ? 0.0 : Double.parseDouble(pesoString);
+        } catch (NumberFormatException e) {
+            return 0.0;
+        }
+    }
 }

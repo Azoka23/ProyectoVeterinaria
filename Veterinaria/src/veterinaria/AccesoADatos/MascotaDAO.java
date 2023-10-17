@@ -1,32 +1,39 @@
 package veterinaria.AccesoADatos;
 
-import veterinaria.Entidades.Cliente;
+// Importaciones de clases necesarias
 import veterinaria.Entidades.Mascota;
 import veterinaria.Entidades.Sexo;
-
-import veterinaria.Utilidades;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
-import javax.swing.JOptionPane;
 
+// Clase para interactuar con la tabla 'mascotas' en la base de datos
 public class MascotaDAO extends DAO {
 
-    public MascotaDAO() throws ClassNotFoundException, SQLException {
-        conectarBase();
+    // Constructor privado para implementar el patrón Singleton
+    private MascotaDAO() {
     }
 
-    public void guardarMascota(Mascota mascota) throws Exception {
-        //Utilidades.validar(mascota);
+    // Clase estática para contener la única instancia de MascotaDAO
+    private static class MascotaDAOHolder {
+
+        private static final MascotaDAO INSTANCE = new MascotaDAO();
+    }
+
+    // Método estático para obtener la instancia única de MascotaDAO
+    public static MascotaDAO obtenerInstancia() {
+        return MascotaDAOHolder.INSTANCE;
+    }
+
+    // Método para guardar una nueva mascota en la base de datos
+    public int guardarMascota(Mascota mascota) throws Exception {
         validarMascota(mascota);
         String sql = "INSERT INTO mascotas (alias, sexo, especie, raza, colorDePelo, fechaNac, pesoM,pesoA,idCliente, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        //try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, mascota.getAlias());
             preparedStatement.setString(2, mascota.getSexo().name());
@@ -38,24 +45,22 @@ public class MascotaDAO extends DAO {
             preparedStatement.setDouble(8, mascota.getPesoActual());
             preparedStatement.setInt(9, mascota.getIdCliente().getIdCliente());
             preparedStatement.setBoolean(10, mascota.isEstado());
-//JOptionPane.showMessageDialog(null, preparedStatement);
-            insertarModificarEliminar(preparedStatement);
 
-//        } catch (SQLException ex) {
-//            // Manejar la excepción si es necesario
-//            throw ex;
-//        } finally {
-//            desconectarBase(); // Asegura que la desconexión se realice incluso en caso de excepción.
+            return insertarModificarEliminar(preparedStatement);
+
+        } catch (SQLException ex) {
+            // Manejar la excepción SQL
+            ex.printStackTrace();
+            return -1; // Retornar un código de error específico o manejar según la lógica de la aplicación
         }
     }
 
-    public int modificarMascota(Mascota mascota) throws Exception {
-        // Utilidades.validar(mascota);
+    // Método para modificar los detalles de una mascota existente en la base de datos
+    public int modificarMascota(Mascota mascota) {
         validarMascota(mascota);
         String sql = "UPDATE mascotas SET alias=?, sexo=?, especie=?, raza=?, colorDePelo=?, fechaNac=?, pesoM=?,pesoA=?,idCliente=?, estado=? WHERE idMascota=?";
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
             preparedStatement.setString(1, mascota.getAlias());
             preparedStatement.setString(2, mascota.getSexo().name());
             preparedStatement.setString(3, mascota.getEspecie());
@@ -68,117 +73,107 @@ public class MascotaDAO extends DAO {
             preparedStatement.setBoolean(10, mascota.isEstado());
             preparedStatement.setInt(11, mascota.getIdMascota());
 
-            //JOptionPane.showMessageDialog(null, preparedStatement);
             return insertarModificarEliminar(preparedStatement);
         } catch (SQLException ex) {
-            // Manejar la excepción si es necesario
-            throw ex;
-        } finally {
-            desconectarBase(); // Asegura que la desconexión se realice incluso en caso de excepción.
+            // Manejar la excepción SQL
+            ex.printStackTrace();
+            return -1; // Retornar un código de error específico o manejar según la lógica de la aplicación
         }
     }
+
+    // Método para modificar el peso actual de una mascota en la base de datos
     public int modificarMascotaPeso(Mascota mascota) throws Exception {
-        // Utilidades.validar(mascota);
         validarMascota(mascota);
         String sql = "UPDATE mascotas SET pesoA=? WHERE idMascota=?";
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-
-
             preparedStatement.setDouble(1, mascota.getPesoActual());
-
             preparedStatement.setInt(2, mascota.getIdMascota());
 
-            //JOptionPane.showMessageDialog(null, preparedStatement);
             return insertarModificarEliminar(preparedStatement);
         } catch (SQLException ex) {
-            // Manejar la excepción si es necesario
-            throw ex;
-//        } finally {
-//            desconectarBase(); // Asegura que la desconexión se realice incluso en caso de excepción.
+            // Manejar la excepción SQL
+            ex.printStackTrace();
+            return -1; // Retornar un código de error específico o manejar según la lógica de la aplicación
         }
     }
-    public void bajaLogica(int codigo) throws Exception {
-        String sql = "UPDATE mascotas SET estado=? WHERE idMascota=?";
 
+    // Método para realizar una baja lógica de una mascota en la base de datos
+    public int bajaLogica(int codigo) throws Exception {
+        String sql = "UPDATE mascotas SET estado=? WHERE idMascota=?";
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setBoolean(1, false);
             preparedStatement.setInt(2, codigo);
 
-            insertarModificarEliminar(preparedStatement);
-
+            return insertarModificarEliminar(preparedStatement);
         } catch (SQLException ex) {
-            // Manejar la excepción si es necesario
-            throw ex;
-        } finally {
-            desconectarBase(); // Asegura que la desconexión se realice incluso en caso de excepción.
+            // Manejar la excepción SQL
+            ex.printStackTrace();
+            return -1; // Retornar un código de error específico o manejar según la lógica de la aplicación
         }
     }
 
-    public void altaLogica(int codigo) throws Exception {
+    // Método para realizar una alta lógica de una mascota en la base de datos
+    public int altaLogica(int codigo) throws Exception {
         String sql = "UPDATE mascotas SET estado=? WHERE idMascota=?";
-
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setBoolean(1, true);
             preparedStatement.setInt(2, codigo);
 
-            insertarModificarEliminar(preparedStatement);
-
+            return insertarModificarEliminar(preparedStatement);
         } catch (SQLException ex) {
-            // Manejar la excepción si es necesario
-            throw ex;
-        } finally {
-            desconectarBase(); // Asegura que la desconexión se realice incluso en caso de excepción.
+            // Manejar la excepción SQL
+            ex.printStackTrace();
+            return -1; // Retornar un código de error específico o manejar según la lógica de la aplicación
         }
     }
 
+    // Método para contar el total de registros en la tabla 'mascotas'
     public int contarTotalRegistros() throws Exception {
-        //Cuenta la cantidad de registros y cuando devuelvo el entero necesito sumar 1
         String sql = "SELECT COUNT(*) FROM mascotas";
-        //Obtengo el idMateria max, cuando devuelvo el entero sumo 1 --
-        //y en este caso si por algun motivo manualmente borre un registro de la tabla, de esta forma siempre obtengo el numero correcto
-        //String sql = "SELECT MAX(idMateria) FROM materias" 
+
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql); ResultSet resultSet = preparedStatement.executeQuery()) {
             if (resultSet.next()) {
                 int count = resultSet.getInt(1);
                 return count + 1;
             }
         } catch (SQLException ex) {
-            // Manejar la excepción si es necesario
-            throw ex;
-        } finally {
-            desconectarBase(); // Asegura que la desconexión se realice incluso en caso de excepción.
+            // Manejar la excepción SQL
+            ex.printStackTrace();
         }
         return 0; // Devuelve 0 si no se encontraron registros
     }
 
-    public Mascota buscarListaMascotaxDni(int idMascota) throws Exception {
+    // Método para buscar una mascota por su ID en la base de datos
+    public Mascota obtenerMascotaPorId(int idMascota) {
         String sql = "SELECT * FROM `mascotas` WHERE idMascota=?";
+        Mascota mascota = null;
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
             preparedStatement.setInt(1, idMascota);
-
             resultado = consultarBase(preparedStatement);
-//JOptionPane.showMessageDialog(null, resultado);
-            Mascota mascota = null;
 
             if (resultado.next()) {
+
                 mascota = obtenerMascotaDesdeResultado(resultado);
+
             }
-            return mascota;
 
+        } catch (SQLException ex) {
+            // Manejar las excepciones de SQL
+            ex.printStackTrace();
         }
-    }
-        public Mascota buscarListaMascotaxAliasIdCliente(String alias,int idCliente) throws Exception {
-        String sql = "SELECT * FROM `mascotas` WHERE alias=? AND idCliente=?";
 
+        return mascota;
+    }
+
+    public Mascota buscarListaMascotaxAliasIdCliente(String alias, int idCliente) throws Exception {
+        String sql = "SELECT * FROM `mascotas` WHERE alias=? AND idCliente=?";
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
-           
+
             preparedStatement.setString(1, alias);
             preparedStatement.setInt(2, idCliente);
-//JOptionPane.showMessageDialog(null, preparedStatement);
             resultado = consultarBase(preparedStatement);
-//JOptionPane.showMessageDialog(null, resultado);
             Mascota mascota = null;
 
             if (resultado.next()) {
@@ -188,6 +183,7 @@ public class MascotaDAO extends DAO {
 
         }
     }
+
     public Collection<Mascota> buscarListaMascotaxAlias(String alias) throws Exception {
         String sql = "SELECT DISTINCT * FROM `mascotas` WHERE alias=?";
 
@@ -205,27 +201,8 @@ public class MascotaDAO extends DAO {
 
         }
     }
-    
-    public Mascota obtenerMascotaPorId(int idMascota) throws Exception {
-        String sql = "SELECT * FROM `mascotas` WHERE idMascota=?";
 
-        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
-            preparedStatement.setInt(1, idMascota);
-            resultado = consultarBase(preparedStatement);
-
-            Mascota mascota = null;
-
-            if (resultado.next()) {
-
-                mascota = obtenerMascotaDesdeResultado(resultado);
-
-            }
-
-            return mascota;
-
-        }
-    }
-
+    // Método para listar todas las mascotas almacenadas en la base de datos
     public Collection<Mascota> listarMascotas() throws Exception {
         String sql = "SELECT * FROM `mascotas`";
 
@@ -240,9 +217,38 @@ public class MascotaDAO extends DAO {
 
             return mascotas;
 
+        } catch (SQLException ex) {
+            // Manejar las excepciones de SQL
+            ex.printStackTrace();
+        }
+        return new ArrayList<>(); // Retorna una lista vacía si no se encontraron registros
+    }
+
+    public Collection<Mascota> listarMascotasXTipoTratamiento(int idTratamiento) throws Exception {
+        String sql = "SELECT m.* "
+                + "FROM mascotas m "
+                + "JOIN tratamientosrealizados tr ON m.idMascota = tr.idMascota "
+                + "WHERE tr.idTratamiento = ?";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, idTratamiento);
+
+            resultado = consultarBase(preparedStatement);
+
+            Collection<Mascota> mascotas = new ArrayList();
+
+            while (resultado.next()) {
+
+                mascotas.add(obtenerMascotaDesdeResultado(resultado));
+                //JOptionPane.showMessageDialog(null, obtenerMascotaDesdeResultado(resultado));
+            }
+
+            return mascotas;
+
         }
     }
 
+    // Método para listar las mascotas de un cliente específico por su ID
     public Collection<Mascota> listarMascotasxIdCliente(int idCliente) throws Exception {
         String sql = "SELECT * FROM `mascotas` WHERE idCliente=?";
 
@@ -258,17 +264,20 @@ public class MascotaDAO extends DAO {
 
             return mascotas;
 
+        } catch (SQLException ex) {
+            // Manejar las excepciones de SQL
+            ex.printStackTrace();
         }
+        return new ArrayList<>(); // Retorna una lista vacía si no se encontraron registros
     }
 
-    private Mascota obtenerMascotaDesdeResultado(ResultSet result) throws SQLException, ClassNotFoundException, Exception {
-        // Crear una instancia de ClienteDAO
-        ClienteDAO clienteDAO = new ClienteDAO();
-
+// Método para obtener una mascota desde un resultado de consulta SQL
+    private Mascota obtenerMascotaDesdeResultado(ResultSet result) throws SQLException {
+        ClienteDAO clienteDAO = ClienteDAO.obtenerInstancia();
         Mascota mascota = new Mascota();
 
+//        try {
         mascota.setIdMascota(result.getInt("idMascota"));
-
         mascota.setAlias(result.getString("alias"));
         mascota.setSexo(Sexo.valueOf(result.getString("sexo")));
         mascota.setEspecie(result.getString("especie"));
@@ -283,9 +292,14 @@ public class MascotaDAO extends DAO {
         return mascota;
     }
 
-    private void validarMascota(Mascota mascota) throws Exception {
+    // Método para validar una mascota antes de realizar operaciones en la base de datos
+    private void validarMascota(Mascota mascota) {
         if (mascota == null) {
-            throw new Exception("Debe indicar un Cliente");
+            try {
+                throw new Exception("Debe indicar una mascota válida");
+            } catch (Exception ex) {
+                java.util.logging.Logger.getLogger(MascotaDAO.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            }
         }
     }
 }

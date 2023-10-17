@@ -1,25 +1,20 @@
 package veterinaria;
 
-import com.toedter.calendar.JDateChooser;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JComponent;
-import veterinaria.Entidades.Cliente;
-import veterinaria.Entidades.Mascota;
-import veterinaria.Entidades.Tratamiento;
-import veterinaria.Entidades.Visita;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
-import veterinaria.Entidades.Sexo;
 
+// Clase de utilidades para operaciones comunes en la aplicación de la clínica veterinaria
 public class Utilidades {
 
+    // Método para confirmar la salida de la aplicación
     public static boolean confirmarSalida(JInternalFrame internalFrame) {
+        // Muestra un cuadro de diálogo de confirmación para salir de la aplicación
         int confirmacion = JOptionPane.showOptionDialog(
                 internalFrame,
                 "¿Estás seguro que quieres salir de la aplicación?",
@@ -31,125 +26,49 @@ public class Utilidades {
                 "No"
         );
 
+        // Retorna verdadero si el usuario selecciona "Sí", falso de lo contrario
         return confirmacion == JOptionPane.YES_OPTION;
     }
 
+    // Método para limpiar el texto en los campos de texto proporcionados
     public static void limpiarSetText(javax.swing.JTextField... campos) {
+        // Itera sobre los campos de texto y establece su texto como vacío
         for (javax.swing.JTextField campo : campos) {
             campo.setText("");
         }
     }
 
+    // Método para mostrar un mensaje de error con la excepción proporcionada
     public static void mostrarError(Exception ex, JInternalFrame internalFrame) {
+        // Muestra un cuadro de diálogo con el mensaje de error de la excepción
         JOptionPane.showMessageDialog(internalFrame, "Error: " + ex.getMessage());
     }
 
-//    public static void validar(Object objet) throws Exception {
-//
-//        if (!(objet instanceof Cliente)) {
-//            throw new Exception("Debes indicar un Cliente");
-//        } else if (!(objet instanceof Mascota)) {
-//            throw new Exception("Debes indicar una Mascota");
-//        } else if (!(objet instanceof Tratamiento)) {
-//            throw new Exception("Debes indicar un Tratamiento");
-//        } else if (!(objet instanceof Visita)) {
-//            throw new Exception("Debes indicar una Visita");
-//        }
-//    }
-    // Método para asociar la tecla Enter con un campo de texto
+    // Método para asociar la tecla Enter con un componente específico
     public static void asociarEnterConComponente(JComponent componenteOrigen, JComponent componenteDestino) {
-    //public static void asociarEnterConCampo(JTextField campoOrigen, JTextField campoDestino) {
+        // Asocia la tecla Enter con el componente de destino para cambiar el foco
         KeyStroke enterKey = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
         componenteOrigen.getInputMap().put(enterKey, "EnterAction");
         componenteOrigen.getActionMap().put("EnterAction", new AbstractAction() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                componenteDestino.requestFocusInWindow(); // Cambiar el foco al campo de destino
+                componenteDestino.requestFocusInWindow(); // Cambia el foco al componente de destino
             }
         });
     }
 
-//    // Método para asociar la tecla Enter con un campo de texto y un Button
-//    public static void asociarEnterConCampoaBoton(JTextField campoOrigen, JButton botonDestino) {
-//        KeyStroke enterKey = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
-//        campoOrigen.getInputMap().put(enterKey, "EnterAction");
-//        campoOrigen.getActionMap().put("EnterAction", new AbstractAction() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                botonDestino.requestFocusInWindow(); // Cambiar el foco al campo de destino
-//            }
-//        });
-//    }
-//
-//    // Método para asociar la tecla Enter con un cboton y un Button
-//    public static void asociarEnterBotonABoton(JButton botonOrigen, JButton botonDestino) {
-//        KeyStroke enterKey = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
-//        botonOrigen.getInputMap().put(enterKey, "EnterAction");
-//        botonOrigen.getActionMap().put("EnterAction", new AbstractAction() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                botonDestino.requestFocusInWindow(); // Cambiar el foco al campo de destino
-//            }
-//        });
-//    }
-//
-//    // Método para asociar la tecla Enter con un cboton y un Button
-//    public static void asociarEnterCampoACombo(JTextField campoOrigen, JComboBox<Sexo> comboDestino) {
-//        KeyStroke enterKey = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
-//        campoOrigen.getInputMap().put(enterKey, "EnterAction");
-//        campoOrigen.getActionMap().put("EnterAction", new AbstractAction() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                comboDestino.requestFocusInWindow(); // Cambiar el foco al campo de destino
-//            }
-//        });
-//    }
-//
-//    // Método para asociar la tecla Enter con un cboton y un Button
-//    public static void asociarEnterComboACampo(JComboBox<Sexo> campoOrigen, JTextField comboDestino) {
-//        KeyStroke enterKey = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
-//        campoOrigen.getInputMap().put(enterKey, "EnterAction");
-//        campoOrigen.getActionMap().put("EnterAction", new AbstractAction() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                comboDestino.requestFocusInWindow(); // Cambiar el foco al campo de destino
-//            }
-//        });
-//    }
-//
-//    // Método para asociar la tecla Enter con un cboton y un Button
-//    public static void asociarEnterCampoAFecha(JTextField campoOrigen, JDateChooser comboDestino) {
-//        KeyStroke enterKey = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
-//        campoOrigen.getInputMap().put(enterKey, "EnterAction");
-//        campoOrigen.getActionMap().put("EnterAction", new AbstractAction() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                comboDestino.requestFocusInWindow(); // Cambiar el foco al campo de destino
-//            }
-//        });
-//    }
-//
-//    // Método para asociar la tecla Enter con un cboton y un Button
-//    public static void asociarEnterFechaACampo(JDateChooser campoOrigen, JTextField comboDestino) {
-//        KeyStroke enterKey = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
-//        campoOrigen.getInputMap().put(enterKey, "EnterAction");
-//        campoOrigen.getActionMap().put("EnterAction", new AbstractAction() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                comboDestino.requestFocusInWindow(); // Cambiar el foco al campo de destino
-//            }
-//        });
-//    }
-//
-//    // Método para asociar la tecla Enter con un cboton y un Button
-//    public static void asociarEnterFechaABoton(JDateChooser campoOrigen, JButton comboDestino) {
-//        KeyStroke enterKey = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0);
-//        campoOrigen.getInputMap().put(enterKey, "EnterAction");
-//        campoOrigen.getActionMap().put("EnterAction", new AbstractAction() {
-//            @Override
-//            public void actionPerformed(ActionEvent e) {
-//                comboDestino.requestFocusInWindow(); // Cambiar el foco al campo de destino
-//            }
-//        });
-//    }
+    // Método para obtener un entero desde un campo de texto
+    public static int obtenerEnteroDesdeCampo(JTextField campo) {
+        try {
+            return Integer.parseInt(campo.getText().trim()); // Convierte el texto en un entero
+        } catch (NumberFormatException e) {
+            return -1; // Retorna un valor negativo para indicar un error si no se puede convertir
+        }
+    }
+
+    // Método para obtener texto desde un campo de texto
+    public static String obtenerTextoDesdeCampo(JTextField campo) {
+        return campo.getText().trim(); // Obtiene y devuelve el texto del campo de texto
+    }
 }
+
