@@ -1,6 +1,5 @@
 package veterinaria.AccesoADatos;
 
-
 import veterinaria.Entidades.Cliente;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -157,16 +156,16 @@ public class ClienteDAO extends DAO {
     private Cliente obtenerClienteDesdeResultado(ResultSet result) throws SQLException {
         Cliente cliente = new Cliente();
 //        try {
-            cliente.setIdCliente(result.getInt("idCliente"));
-            cliente.setDni(result.getInt("dni"));
-            cliente.setApellido(result.getString("apellido"));
-            cliente.setNombre(result.getString("nombre"));
-            cliente.setDireccion(result.getString("direccion"));
-            cliente.setTelefono(result.getString("telefono"));
-            cliente.setContactoNombre(result.getString("contactoN"));
-            cliente.setContactoTelefono(result.getString("contactoTel"));
-            cliente.setEstado(result.getBoolean("estado"));
-            cliente.setEmail(result.getString("correoElectronico"));
+        cliente.setIdCliente(result.getInt("idCliente"));
+        cliente.setDni(result.getInt("dni"));
+        cliente.setApellido(result.getString("apellido"));
+        cliente.setNombre(result.getString("nombre"));
+        cliente.setDireccion(result.getString("direccion"));
+        cliente.setTelefono(result.getString("telefono"));
+        cliente.setContactoNombre(result.getString("contactoN"));
+        cliente.setContactoTelefono(result.getString("contactoTel"));
+        cliente.setEstado(result.getBoolean("estado"));
+        cliente.setEmail(result.getString("correoElectronico"));
 //        } catch (SQLException ex) {
 //            // Manejar excepción de SQL
 //            throw new Exception("Error al obtener datos del cliente desde el resultado", ex);
@@ -254,4 +253,25 @@ public class ClienteDAO extends DAO {
             throw new Exception("El cliente no puede ser nulo.");
         }
     }
+
+//    public int obtenerIdClientePorNombre(String apellidoCliente) {
+//        String sql = "SELECT idCliente FROM clientes WHERE apellido = ?";
+//
+//        try (PreparedStatement statement = conexion.prepareStatement(sql)) {
+//
+//            statement.setString(1, apellidoCliente);
+//            resultado = consultarBase(statement);
+//           // try (ResultSet resultSet = statement.executeQuery()) {
+//                if (resultado.next()) {
+//                     resultado.getInt("idCliente");
+//                 
+//                    //  } else {
+//                    //   return -1; // No se encontró el cliente
+//                }
+//           // }
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//            return -1; // Error al ejecutar la consulta
+//        }
+//    }
 }

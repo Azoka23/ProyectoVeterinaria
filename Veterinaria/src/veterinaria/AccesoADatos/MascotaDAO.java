@@ -302,4 +302,24 @@ public class MascotaDAO extends DAO {
             }
         }
     }
+
+    public int obtenerIdMascotaPorNombre(String nombreMascota, int idCliente) {
+        String sql = "SELECT idMascota FROM mascotas WHERE nombre = ? and idCliente=?";
+
+        try (PreparedStatement statement = conexion.prepareStatement(sql)) {
+
+            statement.setString(1, nombreMascota);
+            statement.setInt(2, idCliente);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getInt("idMascota");
+                } else {
+                    return -1; // No se encontró la mascota
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return -1; // Error al ejecutar la consulta
+        }
+    }
 }
