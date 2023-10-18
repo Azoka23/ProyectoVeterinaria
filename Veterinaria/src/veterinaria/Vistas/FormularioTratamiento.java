@@ -85,6 +85,8 @@ public class FormularioTratamiento extends javax.swing.JInternalFrame {
         setTitle("Formulario Tratamiento");
         setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
 
+        jPanel1.setBackground(new java.awt.Color(0, 153, 204));
+
         jLcodigo.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jLcodigo.setText("Codigo");
 
@@ -110,6 +112,7 @@ public class FormularioTratamiento extends javax.swing.JInternalFrame {
         });
 
         jBSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/home256_24783.png"))); // NOI18N
+        jBSalir.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204)));
         jBSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBSalirActionPerformed(evt);
@@ -117,6 +120,7 @@ public class FormularioTratamiento extends javax.swing.JInternalFrame {
         });
 
         jBGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/Save_37110.png"))); // NOI18N
+        jBGuardar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204)));
         jBGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBGuardarActionPerformed(evt);
@@ -124,6 +128,7 @@ public class FormularioTratamiento extends javax.swing.JInternalFrame {
         });
 
         jBBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/search_find_lupa_21889.png"))); // NOI18N
+        jBBuscar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204)));
         jBBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBBuscarActionPerformed(evt);

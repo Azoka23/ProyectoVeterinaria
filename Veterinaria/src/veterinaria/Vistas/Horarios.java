@@ -162,9 +162,9 @@ public class Horarios extends javax.swing.JInternalFrame {
     private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuardarActionPerformed
         try {
             //guardar reserva
-            
+
 //System.out.println("Botón Guardar presionado");
-obtenerInformacionCeldaSeleccionada();
+            obtenerInformacionCeldaSeleccionada();
         } catch (Exception ex) {
             Logger.getLogger(Horarios.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -233,10 +233,10 @@ obtenerInformacionCeldaSeleccionada();
                 if (filaSeleccionada != -1) {
                     String horarioSeleccionado = (String) TurnosModel.getValueAt(filaSeleccionada, 0);
                     // Preguntar al usuario por el nombre del cliente
-                    String nombreCliente = JOptionPane.showInputDialog("Ingrese el nombre del cliente:");
+                    String DniCliente = JOptionPane.showInputDialog("Ingrese el dni del cliente:");
                     String nombreMascota = JOptionPane.showInputDialog("Ingrese el nombre de la mascota");
                     // Ubicar el nombre del cliente en la segunda columna
-                    TurnosModel.setValueAt(nombreCliente, filaSeleccionada, 1);
+                    TurnosModel.setValueAt(DniCliente, filaSeleccionada, 1);
                     TurnosModel.setValueAt(nombreMascota, filaSeleccionada, 2);
 
                     // Actualizar la vista de la tabla
@@ -285,9 +285,9 @@ obtenerInformacionCeldaSeleccionada();
 //        System.out.println("Mascota: " + valorMascota);
 //    }
 //}
-    private void obtenerInformacionCeldaSeleccionada() throws Exception {
+    private void obtenerInformacionCeldaSeleccionada() throws Exception, Exception {
         ClienteDAO clienteD = ClienteDAO.obtenerInstancia();
-        Cliente cliente=new Cliente();
+        Cliente cliente = new Cliente();
         MascotaDAO mascotaD = MascotaDAO.obtenerInstancia();
         int filaSeleccionada = TablaTurnos.getSelectedRow();
 
@@ -296,24 +296,31 @@ obtenerInformacionCeldaSeleccionada();
             Object valorHorario = TablaTurnos.getValueAt(filaSeleccionada, 0);
 
             // Obtener el valor de la celda en la columna "Cliente"
-            Object valorDni= TablaTurnos.getValueAt(filaSeleccionada, 1);
+            Object valorDni = TablaTurnos.getValueAt(filaSeleccionada, 1);
 
             // Obtener el valor de la celda en la columna "Mascota"
             Object valorMascota = TablaTurnos.getValueAt(filaSeleccionada, 2);
 
-            // Asumiendo que tienes un objeto ReservaDAO llamado reservaDAO disponible en tu clase
+       //Imprimir la información en la consola
+      System.out.println("Horario: " + valorHorario);
+       System.out.println("Cliente: " + valorDni);
+        System.out.println("Mascota: " + valorMascota);
             try {
                 String horarioSeleccionado = (String) valorHorario;
-                int DniCliente = (int) valorDni;
+                String dniCliente = String.valueOf(valorDni);
+
+               int DniCliente = Integer.parseInt(dniCliente);// Convertir a String
+                //cliente = clienteD.buscarListaClientexDni(Integer.parseInt(dniCliente));
+
                 String nombreMascota = (String) valorMascota;
-               
-               cliente= clienteD.buscarListaClientexDni(DniCliente);
-                int idMascota=mascotaD.obtenerIdMascotaPorNombre(nombreMascota, cliente.getIdCliente());
+
+                cliente = clienteD.buscarListaClientexDni(DniCliente);
+                int idMascota = mascotaD.obtenerIdMascotaPorNombre(nombreMascota, cliente.getIdCliente());
                 // Llamar al nuevo método para guardar la reserva
                 ReservaDAO reservaDAO = ReservaDAO.obtenerInstancia();
 
                 //int idCliente, int idMascota, LocalDate fecha, String horario, String estado
-                int resultado = reservaDAO.guardarReserva(cliente.getIdCliente(),idMascota,selectedDate, horarioSeleccionado, true);
+                int resultado = reservaDAO.guardarReserva(cliente.getIdCliente(), idMascota, selectedDate, horarioSeleccionado, true);
 
                 if (resultado != -1) {
                     JOptionPane.showMessageDialog(this, "Reserva guardada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
@@ -326,5 +333,9 @@ obtenerInformacionCeldaSeleccionada();
             }
         }
     }
+    
+   
+
+
 
 }

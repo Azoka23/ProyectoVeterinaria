@@ -302,7 +302,7 @@ public class MascotaDAO extends DAO {
     }
 
     public int obtenerIdMascotaPorNombre(String nombreMascota, int idCliente) {
-        String sql = "SELECT idMascota FROM mascotas WHERE nombre = ? and idCliente=?";
+        String sql = "SELECT idMascota FROM mascotas WHERE alias = ? and idCliente=?";
 
         try (PreparedStatement statement = conexion.prepareStatement(sql)) {
 

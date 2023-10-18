@@ -26,7 +26,10 @@
   <Layout>
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
-          <Component id="jLayeredPane1" alignment="0" max="32767" attributes="0"/>
+          <Group type="102" alignment="0" attributes="0">
+              <Component id="jLayeredPane1" min="-2" max="-2" attributes="0"/>
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -58,7 +61,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <Component id="jLabel1" max="32767" attributes="0"/>
+                          <Component id="jLabel1" pref="508" max="32767" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" attributes="0">
@@ -108,9 +111,9 @@
                           </Group>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
                               <Component id="jTPago1" alignment="0" pref="86" max="32767" attributes="0"/>
-                              <Component id="jTPago2" alignment="0" pref="86" max="32767" attributes="0"/>
-                              <Component id="jTPago3" alignment="0" pref="86" max="32767" attributes="0"/>
-                              <Component id="jTPago4" alignment="0" pref="86" max="32767" attributes="0"/>
+                              <Component id="jTPago2" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jTPago3" alignment="0" max="32767" attributes="0"/>
+                              <Component id="jTPago4" alignment="0" max="32767" attributes="0"/>
                               <Component id="jTPago5" alignment="0" max="32767" attributes="0"/>
                               <Component id="jTTotal" alignment="0" max="32767" attributes="0"/>
                               <Component id="jTDescuento" max="32767" attributes="0"/>
@@ -187,13 +190,14 @@
                       <Component id="jBDescuento" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace type="separate" max="-2" attributes="0"/>
-                  <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jBPagar" alignment="0" min="-2" max="-2" attributes="0"/>
-                      <Component id="jTAPagar" min="-2" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="3" attributes="0">
+                      <Component id="jTAPagar" alignment="3" min="-2" max="-2" attributes="0"/>
+                      <Component id="jBPagar" alignment="3" min="-2" max="-2" attributes="0"/>
                   </Group>
+                  <EmptySpace min="-2" pref="13" max="-2" attributes="0"/>
                   <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
-                  <Component id="jLabel2" max="32767" attributes="0"/>
+                  <Component id="jLabel2" pref="33" max="32767" attributes="0"/>
                   <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
               </Group>
           </Group>

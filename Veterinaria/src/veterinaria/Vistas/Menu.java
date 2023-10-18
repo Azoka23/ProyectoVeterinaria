@@ -151,6 +151,8 @@ public class Menu extends javax.swing.JFrame {
         });
         jMbarAdm.add(jMIOtros);
 
+        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
+        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/artboard-10_89054.png"))); // NOI18N
         jMenuItem1.setText("Reservas turnos");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -164,7 +166,7 @@ public class Menu extends javax.swing.JFrame {
         jMBarFacturacion.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/budget256_24775.png"))); // NOI18N
         jMBarFacturacion.setText("Facturacion");
 
-        jMICosto.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
+        jMICosto.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F, java.awt.event.InputEvent.CTRL_MASK));
         jMICosto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/pet_rat_mouse_11098.png"))); // NOI18N
         jMICosto.setText("Costo visita");
         jMICosto.addActionListener(new java.awt.event.ActionListener() {

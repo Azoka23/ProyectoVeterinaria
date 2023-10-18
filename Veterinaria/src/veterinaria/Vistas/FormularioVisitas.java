@@ -185,6 +185,7 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
         setTitle("Formulario visitas");
         setPreferredSize(new java.awt.Dimension(700, 600));
 
+        jPanel1.setBackground(new java.awt.Color(0, 153, 204));
         jPanel1.setPreferredSize(new java.awt.Dimension(500, 335));
 
         jLDNI.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
@@ -220,6 +221,7 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
         });
 
         jBbuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/Save_37110.png"))); // NOI18N
+        jBbuscar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204)));
         jBbuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBbuscarActionPerformed(evt);

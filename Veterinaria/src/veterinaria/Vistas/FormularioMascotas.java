@@ -101,6 +101,7 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
         setTitle("Cargar Mascota");
         setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
 
+        jPanel1.setBackground(new java.awt.Color(0, 153, 204));
         jPanel1.setForeground(new java.awt.Color(0, 204, 204));
         jPanel1.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
 
@@ -155,6 +156,7 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
         jCBClientes.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
 
         jBGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/Save_37110.png"))); // NOI18N
+        jBGuardar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204)));
         jBGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBGuardarActionPerformed(evt);
@@ -170,6 +172,7 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
         });
 
         jBSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/home256_24783.png"))); // NOI18N
+        jBSalir.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204)));
         jBSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBSalirActionPerformed(evt);
@@ -203,7 +206,9 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
                     .addComponent(jTPesoM, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addGap(136, 136, 136)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jBGuardar)
+                        .addGap(27, 27, 27)
                         .addComponent(jBSalir)
                         .addGap(50, 50, 50))
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -217,9 +222,6 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(364, 364, 364)
                         .addComponent(jRBEstado))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(322, 322, 322)
-                        .addComponent(jBGuardar))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(141, 141, 141)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
