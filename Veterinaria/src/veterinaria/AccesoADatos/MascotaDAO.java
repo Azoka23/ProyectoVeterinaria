@@ -14,19 +14,16 @@ import java.util.Collection;
 // Clase para interactuar con la tabla 'mascotas' en la base de datos
 public class MascotaDAO extends DAO {
 
-    // Constructor privado para implementar el patrón Singleton
+    // Instancia única de MascotaDAO inicializada de forma segura y perezosa
+    private static final MascotaDAO INSTANCE = new MascotaDAO();
+
+    // Constructor privado para evitar la creación de instancias fuera de la clase
     private MascotaDAO() {
-    }
-
-    // Clase estática para contener la única instancia de MascotaDAO
-    private static class MascotaDAOHolder {
-
-        private static final MascotaDAO INSTANCE = new MascotaDAO();
     }
 
     // Método estático para obtener la instancia única de MascotaDAO
     public static MascotaDAO obtenerInstancia() {
-        return MascotaDAOHolder.INSTANCE;
+        return INSTANCE;
     }
 
     // Método para guardar una nueva mascota en la base de datos
@@ -84,11 +81,12 @@ public class MascotaDAO extends DAO {
     // Método para modificar el peso actual de una mascota en la base de datos
     public int modificarMascotaPeso(Mascota mascota) throws Exception {
         validarMascota(mascota);
-        String sql = "UPDATE mascotas SET pesoA=? WHERE idMascota=?";
+        String sql = "UPDATE mascotas SET pesoA=?, pesoM=? WHERE idMascota=?";
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setDouble(1, mascota.getPesoActual());
-            preparedStatement.setInt(2, mascota.getIdMascota());
+            preparedStatement.setDouble(2, mascota.getPesoMedia());
+            preparedStatement.setInt(3, mascota.getIdMascota());
 
             return insertarModificarEliminar(preparedStatement);
         } catch (SQLException ex) {

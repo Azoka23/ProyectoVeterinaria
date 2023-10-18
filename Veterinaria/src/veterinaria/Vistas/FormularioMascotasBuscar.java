@@ -418,7 +418,7 @@ public class FormularioMascotasBuscar extends javax.swing.JInternalFrame {
     // Método para limpiar y habilitar campos para buscar mascotas por alias
     private void limpiarMostrar() {
         estado = Estado.BUSCAR;
-        jTPesoA.setEnabled(true);
+        //jTPesoA.setEnabled(true);
 
         JCSexo.setEnabled(true);
         jTColorDePelo.setEnabled(true);
@@ -526,7 +526,7 @@ public class FormularioMascotasBuscar extends javax.swing.JInternalFrame {
                     Utilidades.obtenerTextoDesdeCampo(jTRaza),
                     Utilidades.obtenerTextoDesdeCampo(jTColorDePelo),
                     fechaNacimiento,
-                    obtenerPeso(jTPesoA),
+                    obtenerPeso(jTPesoM),
                     obtenerPeso(jTPesoA),
                     cliente,
                     jRBEstado.isSelected()
@@ -582,7 +582,7 @@ public class FormularioMascotasBuscar extends javax.swing.JInternalFrame {
         jTColorDePelo.setText(mascota.getColorDePelo());
         jDCFechaNac.setDate(Date.valueOf(mascota.getFechaNacimiento()));
         jTPesoM.setText(mascota.getPesoMedia() + "");
-        jTPesoA.setText(mascota.getPesoMedia() + "");
+        jTPesoA.setText(mascota.getPesoActual()+ "");
 
         if (mascota.isEstado()) {
             setTitle("Cargar Mascotas");

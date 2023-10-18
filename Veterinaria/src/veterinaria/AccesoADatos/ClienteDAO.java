@@ -224,6 +224,70 @@ public class ClienteDAO extends DAO {
     }
 
     /**
+     * Obtiene una lista de todos los clientes en la base de datos.
+     *
+     * @return Una lista de objetos Cliente que representa a todos los clientes
+     * en la base de datos.
+     * @throws ClassNotFoundException Si no se encuentra la clase de la base de
+     * datos.
+     * @throws SQLException Si ocurre un error de SQL durante la operación.
+     */
+    public List<Cliente> obtenerClientesConMascota() throws Exception {
+        List<Cliente> clientes = new ArrayList<>();
+        String sql
+                = "SELECT DISTINCT * "
+                + "FROM clientes c "
+                + "LEFT JOIN mascotas m ON c.idCliente = m.idCliente "
+                + "WHERE m.idCliente IS NOT NULL";
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            resultado = consultarBase(preparedStatement);
+            if (resultado != null) {
+                while (resultado.next()) {
+                    clientes.add(obtenerClienteDesdeResultado(resultado));
+                }
+                resultado.close();
+            }
+        } catch (SQLException ex) {
+            // Manejar la excepción si es necesario
+            ex.printStackTrace(); // Otra opción es utilizar un sistema de registro para registrar el error
+            // Puedes lanzar una excepción personalizada si lo deseas
+            // throw new MiExcepcionPersonalizada("Error al obtener clientes desde la base de datos", ex);
+        }
+        return clientes;
+    }
+    /**
+     * Obtiene una lista de todos los clientes en la base de datos.
+     *
+     * @return Una lista de objetos Cliente que representa a todos los clientes
+     * en la base de datos.
+     * @throws ClassNotFoundException Si no se encuentra la clase de la base de
+     * datos.
+     * @throws SQLException Si ocurre un error de SQL durante la operación.
+     */
+    public List<Cliente> obtenerClientesSinMascota() throws Exception {
+        List<Cliente> clientes = new ArrayList<>();
+        String sql
+                = "SELECT DISTINCT * "
+                + "FROM clientes c "
+                + "LEFT JOIN mascotas m ON c.idCliente = m.idCliente "
+                + "WHERE m.idCliente IS NULL";
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            resultado = consultarBase(preparedStatement);
+            if (resultado != null) {
+                while (resultado.next()) {
+                    clientes.add(obtenerClienteDesdeResultado(resultado));
+                }
+                resultado.close();
+            }
+        } catch (SQLException ex) {
+            // Manejar la excepción si es necesario
+            ex.printStackTrace(); // Otra opción es utilizar un sistema de registro para registrar el error
+            // Puedes lanzar una excepción personalizada si lo deseas
+            // throw new MiExcepcionPersonalizada("Error al obtener clientes desde la base de datos", ex);
+        }
+        return clientes;
+    }
+    /**
      * Obtiene una colección de todos los clientes en la base de datos.
      *
      * @return Una colección de objetos Cliente que representa a todos los
@@ -253,25 +317,4 @@ public class ClienteDAO extends DAO {
             throw new Exception("El cliente no puede ser nulo.");
         }
     }
-
-//    public int obtenerIdClientePorNombre(String apellidoCliente) {
-//        String sql = "SELECT idCliente FROM clientes WHERE apellido = ?";
-//
-//        try (PreparedStatement statement = conexion.prepareStatement(sql)) {
-//
-//            statement.setString(1, apellidoCliente);
-//            resultado = consultarBase(statement);
-//           // try (ResultSet resultSet = statement.executeQuery()) {
-//                if (resultado.next()) {
-//                     resultado.getInt("idCliente");
-//                 
-//                    //  } else {
-//                    //   return -1; // No se encontró el cliente
-//                }
-//           // }
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//            return -1; // Error al ejecutar la consulta
-//        }
-//    }
 }

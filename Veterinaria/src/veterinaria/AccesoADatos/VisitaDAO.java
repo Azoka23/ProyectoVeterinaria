@@ -50,6 +50,30 @@ public class VisitaDAO extends DAO {
         }
     }
 
+    // Método para contar el total de registros en la tabla 'mascotas'
+    public double avgPesoM(int idMascota) throws Exception {
+        String sql = "SELECT ROUND(AVG(pesoActual), 2) AS promedioPesoUltimas10Visitas "
+                + "FROM visitas v "
+                + "JOIN tratamientosrealizados tr ON v.idVisita = tr.idVisita "
+                + "WHERE tr.idMascota = ? "
+                + "ORDER BY v.fechaV DESC "
+                + "LIMIT 10";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, idMascota);
+            resultado = consultarBase(preparedStatement);
+            
+            if (resultado.next()) {
+                double pesoM = resultado.getDouble(1);
+                return pesoM;
+            }
+        } catch (SQLException ex) {
+            // Manejar la excepción SQL
+            ex.printStackTrace();
+        }
+        return 0; // Devuelve 0 si no se encontraron registros
+    }
+
     public Collection<Visita> listarMascotasPorVisitas(int idMascotas) throws Exception {
         String sql = "SELECT DISTINCT v.idVisita, v.fechaV, v.detallesSintomas, v.pesoActual, v.importe "
                 + "FROM tratamientosrealizados tr "
@@ -70,8 +94,8 @@ public class VisitaDAO extends DAO {
 
         }
     }
-
 // Método para obtener una mascota desde un resultado de consulta SQL
+
     private Visita obtenerVisitaDesdeResultado(ResultSet result) throws SQLException {
 
         Visita visita = new Visita();

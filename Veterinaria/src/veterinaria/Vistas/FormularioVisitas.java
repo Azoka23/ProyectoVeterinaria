@@ -580,7 +580,7 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
             String descripcion = jTADescripcion.getText();
             double importe = Double.parseDouble(jTImporteTotal.getText());
             double pesoA = obtenerPeso(jTPesoA);
-            double pesoM = pesoA;
+            double pesoM = visitaD.avgPesoM(idMascotas);
             LocalDate fechaVisita = LocalDate.now();
 
             // Asignar los valores al objeto Visita
@@ -609,6 +609,8 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
             // Modificar la mascota fuera del bucle, si es necesario hacerlo solo una vez
 
             Mascota mascota = mascotaD.obtenerMascotaPorId(idMascotas);
+            mascota.setPesoActual(pesoA);
+            mascota.setPesoMedia(pesoM);
             mascotaD.modificarMascotaPeso(mascota);
 
         } catch (Exception ex) {
