@@ -167,6 +167,11 @@ public class Menu extends javax.swing.JFrame {
         jMICosto.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
         jMICosto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/pet_rat_mouse_11098.png"))); // NOI18N
         jMICosto.setText("Costo visita");
+        jMICosto.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMICostoActionPerformed(evt);
+            }
+        });
         jMBarFacturacion.add(jMICosto);
 
         jMenuBar1.add(jMBarFacturacion);
@@ -349,6 +354,25 @@ public class Menu extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void jMICostoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMICostoActionPerformed
+        // Facturacion
+        
+        jEscritorio.removeAll();
+        jEscritorio.repaint();
+        //jEscritorio.add(jLULP);
+        Facturacion facturacion = new Facturacion();
+        // Configurar el tamaño del JInternalFrame
+       facturacion.setSize(600, 500);
+        facturacion.pack();
+        // Calcular el centro del JDesktopPane
+        int x = (jEscritorio.getWidth() - facturacion.getWidth()) / 2;
+        int y = (jEscritorio.getHeight() - facturacion.getHeight()) / 2;
+        // Establecer la ubicación y agregar el JInternalFrame
+        facturacion.setBounds(x, y, facturacion.getWidth(), facturacion.getHeight());
+        jEscritorio.add(facturacion);
+        facturacion.setVisible(true);
+    }//GEN-LAST:event_jMICostoActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

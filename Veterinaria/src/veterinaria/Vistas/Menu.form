@@ -161,6 +161,9 @@
                 </Property>
                 <Property name="text" type="java.lang.String" value="Costo visita"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMICostoActionPerformed"/>
+              </Events>
             </MenuItem>
           </SubComponents>
         </Menu>
