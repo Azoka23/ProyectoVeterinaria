@@ -27,6 +27,7 @@ public class Menu extends javax.swing.JFrame {
         setResizable(true);
         pack(); // Ajusta el tamaño inicial según el contenido
         setVisible(true);
+        jEscritorio.add(JLPET);
     }
 
     // Método principal para iniciar la aplicación
@@ -42,6 +43,7 @@ public class Menu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        JLPET = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jBarClientes = new javax.swing.JMenu();
         jMIBuscar = new javax.swing.JMenuItem();
@@ -62,6 +64,9 @@ public class Menu extends javax.swing.JFrame {
         setTitle("PET DOCTOR");
         setBackground(new java.awt.Color(255, 255, 255));
         setPreferredSize(new java.awt.Dimension(800, 700));
+
+        JLPET.setFont(new java.awt.Font("Academy Engraved LET", 0, 24)); // NOI18N
+        JLPET.setText("PET DOCTOR");
 
         jBarClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/people_114360.png"))); // NOI18N
         jBarClientes.setText("Clientes");
@@ -188,11 +193,17 @@ public class Menu extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 599, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(279, Short.MAX_VALUE)
+                .addComponent(JLPET)
+                .addGap(90, 90, 90))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 489, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(367, Short.MAX_VALUE)
+                .addComponent(JLPET)
+                .addGap(93, 93, 93))
         );
 
         pack();
@@ -378,6 +389,7 @@ public class Menu extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel JLPET;
     private javax.swing.JMenu jBarClientes;
     private javax.swing.JMenu jBarMascotas;
     private javax.swing.JMenu jMBarFacturacion;

@@ -154,6 +154,7 @@ public class Facturacion extends javax.swing.JInternalFrame {
         jBTotal.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jBTotal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/diagram-31_24486.png"))); // NOI18N
         jBTotal.setText("Total");
+        jBTotal.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jBTotal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBTotalActionPerformed(evt);
@@ -162,6 +163,7 @@ public class Facturacion extends javax.swing.JInternalFrame {
 
         jBDescuento.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jBDescuento.setText("Descuento");
+        jBDescuento.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jBDescuento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBDescuentoActionPerformed(evt);
@@ -171,6 +173,7 @@ public class Facturacion extends javax.swing.JInternalFrame {
         jBPagar.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jBPagar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/cash_512_icon-icons.com_75969.png"))); // NOI18N
         jBPagar.setText("A Pagar");
+        jBPagar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jBPagar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBPagarActionPerformed(evt);
@@ -179,8 +182,10 @@ public class Facturacion extends javax.swing.JInternalFrame {
 
         jBImprimir.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jBImprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/Print_icon-icons.com_73705.png"))); // NOI18N
+        jBImprimir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/vcsupdaterequired_93493.png"))); // NOI18N
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);

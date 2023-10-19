@@ -8,12 +8,17 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import veterinaria.AccesoADatos.ClienteDAO;
+import veterinaria.AccesoADatos.DAO;
 import veterinaria.AccesoADatos.MascotaDAO;
 import veterinaria.AccesoADatos.ReservaDAO;
 import veterinaria.Entidades.Cliente;
@@ -27,6 +32,8 @@ public class Horarios extends javax.swing.JInternalFrame {
     //private CustomPanel customPanel = new CustomPanel("/reservaturnos/Imagines/fonfoVete.png");
     private LocalDate selectedDate;
     private DefaultTableModel TurnosModel = new DefaultTableModel() {
+        private Estado estado = Estado.NADA;
+        private boolean estadoCliente;
 
         public boolean isCellEditable(int fila, int columna) {
             return false;
@@ -45,6 +52,7 @@ public class Horarios extends javax.swing.JInternalFrame {
         //updateFechaLabel();
         updateFechaTField();
         armarCabecerareservaTurno();
+
         showSelectedDate();
 
     }
@@ -65,6 +73,7 @@ public class Horarios extends javax.swing.JInternalFrame {
         jLFecha = new javax.swing.JLabel();
         jBGuardar = new javax.swing.JButton();
         jTextField1 = new javax.swing.JTextField();
+        jButton1 = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("Seleccion de horario");
@@ -94,6 +103,7 @@ public class Horarios extends javax.swing.JInternalFrame {
         jScrollPane1.setViewportView(TablaTurnos);
 
         jBSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/home256_24783.png"))); // NOI18N
+        jBSalir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jBSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBSalirActionPerformed(evt);
@@ -103,6 +113,7 @@ public class Horarios extends javax.swing.JInternalFrame {
         jLFecha.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
 
         jBGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/Save_37110.png"))); // NOI18N
+        jBGuardar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jBGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBGuardarActionPerformed(evt);
@@ -110,6 +121,14 @@ public class Horarios extends javax.swing.JInternalFrame {
         });
 
         jTextField1.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
+
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/gui_cancel_icon_157198.png"))); // NOI18N
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -123,9 +142,11 @@ public class Horarios extends javax.swing.JInternalFrame {
                         .addGap(18, 18, 18)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(255, 255, 255)
+                        .addGap(179, 179, 179)
+                        .addComponent(jButton1)
+                        .addGap(18, 18, 18)
                         .addComponent(jBGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(37, 37, 37)
+                        .addGap(25, 25, 25)
                         .addComponent(jBSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -145,10 +166,12 @@ public class Horarios extends javax.swing.JInternalFrame {
                 .addGap(2, 2, 2)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jBGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBSalir, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jBSalir)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jButton1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(jBGuardar, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(6, 6, 6))
         );
 
         pack();
@@ -171,11 +194,22 @@ public class Horarios extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_jBGuardarActionPerformed
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // Cancelar turno
+        try {
+            cancelarCita();
+        } catch (Exception ex) {
+            Logger.getLogger(Horarios.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }//GEN-LAST:event_jButton1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable TablaTurnos;
     private javax.swing.JButton jBGuardar;
     private javax.swing.JButton jBSalir;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLFecha;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
@@ -207,45 +241,58 @@ public class Horarios extends javax.swing.JInternalFrame {
     }
 
     void initTimeTable(LocalDate selectedDate) {
-        TurnosModel = new DefaultTableModel() {
-            public boolean isCellEditable(int fila, int columna) {
-                return false;
+        try {
+            //TurnosModel = new DefaultTableModel() {
+            //   public boolean isCellEditable(int fila, int columna) {
+            //    return false;
+            //  }
+            // };
+
+            // armarCabecerareservaTurno(); // Asegúrate de haber configurado la cabecera correctamente
+            // Limpiar la tabla antes de agregar nuevos datos
+            TurnosModel.setRowCount(0);
+            // Definir el rango de horas (por ejemplo, de 10 a 18)
+            int horaInicio = 10;
+            int horaFin = 18;
+            // Llenar la primera columna con horarios
+            //for (int hora = horaInicio; hora <= horaFin; hora++) {
+            //   String horario = String.format("%02d:00", hora);
+            //  TurnosModel.addRow(new Object[]{horario, "", ""}); // Columnas adicionales vacías para Cliente y Mascota
+            // }
+            ReservaDAO reservaDAO = ReservaDAO.obtenerInstancia();
+            List<Reserva> listaDeReservas = new ArrayList();
+            listaDeReservas = reservaDAO.buscarListaReservasxfecha(selectedDate);
+            for (Reserva tipo : listaDeReservas) {
+                //JOptionPane.showMessageDialog(null, tipo);
+                //horario = String.format("%02d:00", tipo.getHorario());
+                TurnosModel.addRow(new Object[]{tipo.getHorario(),tipo.getCliente().getApellido()+ ", " +tipo.getCliente().getNombre() ,tipo.getMascota().getAlias() }); // Columnas adicionales vacías para Cliente y Mascota
+
             }
-        };
+// Establecer el modelo de la tabla
+            TablaTurnos.setModel(TurnosModel);
+            TablaTurnos.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseClicked(MouseEvent e) {
+                    int filaSeleccionada = TablaTurnos.getSelectedRow();
+                    if (filaSeleccionada != -1) {
+                        String horarioSeleccionado = (String) TurnosModel.getValueAt(filaSeleccionada, 0);
+                        // Preguntar al usuario por el nombre del cliente
+                        String DniCliente = JOptionPane.showInputDialog("Ingrese el dni del cliente:");
+                        String nombreMascota = JOptionPane.showInputDialog("Ingrese el nombre de la mascota");
+                        // Ubicar el nombre del cliente en la segunda columna
+                        TurnosModel.setValueAt(DniCliente, filaSeleccionada, 1);
+                        TurnosModel.setValueAt(nombreMascota, filaSeleccionada, 2);
 
-        armarCabecerareservaTurno(); // Asegúrate de haber configurado la cabecera correctamente
-        // Limpiar la tabla antes de agregar nuevos datos
-        TurnosModel.setRowCount(0);
-        // Definir el rango de horas (por ejemplo, de 10 a 18)
-        int horaInicio = 10;
-        int horaFin = 18;
-        // Llenar la primera columna con horarios
-        for (int hora = horaInicio; hora <= horaFin; hora++) {
-            String horario = String.format("%02d:00", hora);
-            TurnosModel.addRow(new Object[]{horario, "", ""}); // Columnas adicionales vacías para Cliente y Mascota
-        }
-        // Establecer el modelo de la tabla
-        TablaTurnos.setModel(TurnosModel);
-        TablaTurnos.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                int filaSeleccionada = TablaTurnos.getSelectedRow();
-                if (filaSeleccionada != -1) {
-                    String horarioSeleccionado = (String) TurnosModel.getValueAt(filaSeleccionada, 0);
-                    // Preguntar al usuario por el nombre del cliente
-                    String DniCliente = JOptionPane.showInputDialog("Ingrese el dni del cliente:");
-                    String nombreMascota = JOptionPane.showInputDialog("Ingrese el nombre de la mascota");
-                    // Ubicar el nombre del cliente en la segunda columna
-                    TurnosModel.setValueAt(DniCliente, filaSeleccionada, 1);
-                    TurnosModel.setValueAt(nombreMascota, filaSeleccionada, 2);
-
-                    // Actualizar la vista de la tabla
-                    // Configurar el renderizador en tu JTable
+                        // Actualizar la vista de la tabla
+                        // Configurar el renderizador en tu JTable
 //TablaTurnos.setDefaultRenderer(Object.class, reservaRenderer);
-                    TablaTurnos.repaint();
+                        TablaTurnos.repaint();
+                    }
                 }
-            }
-        });
+            });
+        } catch (Exception ex) {
+            Logger.getLogger(Horarios.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 
@@ -265,27 +312,7 @@ public class Horarios extends javax.swing.JInternalFrame {
         }
     }
 
-//private void obtenerInformacionCeldaSeleccionada() {
-//    int filaSeleccionada = TablaTurnos.getSelectedRow();
-//
-//    if (filaSeleccionada != -1) {
-//        // Obtener el valor de la celda en la columna "Horario"
-//        Object valorHorario = TablaTurnos.getValueAt(filaSeleccionada, 0);
-//
-//        // Obtener el valor de la celda en la columna "Cliente"
-//        Object valorNombre = TablaTurnos.getValueAt(filaSeleccionada, 1);
-//
-//        // Obtener el valor de la celda en la columna "Mascota"
-//         Object valorMascota = TablaTurnos.getValueAt(filaSeleccionada, 2);
-//        
-//
-//        // Imprimir la información en la consola
-//        System.out.println("Horario: " + valorHorario);
-//        System.out.println("Cliente: " + valorNombre);
-//        System.out.println("Mascota: " + valorMascota);
-//    }
-//}
-    private void obtenerInformacionCeldaSeleccionada() throws Exception, Exception {
+    private void obtenerInformacionCeldaSeleccionada() throws Exception {
         ClienteDAO clienteD = ClienteDAO.obtenerInstancia();
         Cliente cliente = new Cliente();
         MascotaDAO mascotaD = MascotaDAO.obtenerInstancia();
@@ -301,41 +328,84 @@ public class Horarios extends javax.swing.JInternalFrame {
             // Obtener el valor de la celda en la columna "Mascota"
             Object valorMascota = TablaTurnos.getValueAt(filaSeleccionada, 2);
 
-       //Imprimir la información en la consola
-      System.out.println("Horario: " + valorHorario);
-       System.out.println("Cliente: " + valorDni);
-        System.out.println("Mascota: " + valorMascota);
+            // Imprimir la información en la consola
+            System.out.println("Horario: " + valorHorario);
+            System.out.println("Cliente: " + valorDni);
+            System.out.println("Mascota: " + valorMascota);
+
             try {
                 String horarioSeleccionado = (String) valorHorario;
                 String dniCliente = String.valueOf(valorDni);
 
-               int DniCliente = Integer.parseInt(dniCliente);// Convertir a String
-                //cliente = clienteD.buscarListaClientexDni(Integer.parseInt(dniCliente));
-
+                int DniCliente = Integer.parseInt(dniCliente);
                 String nombreMascota = (String) valorMascota;
 
                 cliente = clienteD.buscarListaClientexDni(DniCliente);
                 int idMascota = mascotaD.obtenerIdMascotaPorNombre(nombreMascota, cliente.getIdCliente());
-                // Llamar al nuevo método para guardar la reserva
-                ReservaDAO reservaDAO = ReservaDAO.obtenerInstancia();
 
-                //int idCliente, int idMascota, LocalDate fecha, String horario, String estado
+                ReservaDAO reservaDAO = ReservaDAO.obtenerInstancia();
                 int resultado = reservaDAO.guardarReserva(cliente.getIdCliente(), idMascota, selectedDate, horarioSeleccionado, true);
 
                 if (resultado != -1) {
+                    // Pintar la fila recién agregada
+                    TablaTurnos.setRowSelectionInterval(filaSeleccionada, filaSeleccionada);
+
+                    // Resaltar la fila con un color 
+                    TablaTurnos.setSelectionBackground(new java.awt.Color(173, 216, 230));
+
                     JOptionPane.showMessageDialog(this, "Reserva guardada exitosamente.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                 } else {
                     JOptionPane.showMessageDialog(this, "No se pudo guardar la reserva. Cliente o mascota no encontrados.", "Error", JOptionPane.ERROR_MESSAGE);
                 }
             } catch (ClassNotFoundException | SQLException ex) {
-                // Manejar la excepción si es necesario
+
                 ex.printStackTrace();
             }
         }
     }
-    
-   
 
+//TERMINAR
+    private void cancelarCita() throws Exception {
+        obtenerInformacionCeldaSeleccionada();
+        ReservaDAO reservaDAO = ReservaDAO.obtenerInstancia();
 
+    }
 
+//private void buscarClientePorDni() {
+//        // Obtiene el documento ingresado en el campo de texto
+//        //String documento = Utilidades.obtenerTextoDesdeCampo(jTDocumento);
+//
+//        // Verifica si el campo de documento está vacío y muestra un mensaje de advertencia
+//        if (valorDni.isEmpty()) {
+//            JOptionPane.showMessageDialog(null, "Debes escribir un documento");
+//            return;
+//        }
+//
+//        try {
+//            // Obtiene el DNI como entero
+//            int dni = Utilidades.obtenerEnteroDesdeCampo(jTDocumento);
+//
+//            // Intenta buscar un cliente con el DNI ingresado en la base de datos
+//            ClienteDAO clienteD = ClienteDAO.obtenerInstancia();
+//            Cliente cliente = clienteD.buscarListaClientexDni(dni);
+//
+//            estado = Estado.BUSCAR;
+//            if (cliente == null) {
+//
+//                estado = Estado.NUEVO;
+//            }
+//
+//            mostrarClienteEnFormulario(cliente);
+//            idCliente = cliente.getIdCliente();
+//
+//            cargarTabla(cliente.getIdCliente());
+//
+//        } catch (NumberFormatException ex) {
+//            JOptionPane.showMessageDialog(this, "Error: Debes ingresar un número de documento válido.");
+//        } catch (Exception ex) {
+//            Logger.getLogger(FormularioCliente.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//    }
+//
+//    
 }

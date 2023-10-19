@@ -15,6 +15,12 @@ import java.util.Calendar;
 import javax.swing.JButton;
 import javax.swing.JDesktopPane;
 import javax.swing.JPanel;
+import javax.swing.JOptionPane;
+import javax.swing.JDialog;
+import javax.swing.JButton;
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class Calendario extends javax.swing.JInternalFrame {
 
@@ -168,29 +174,89 @@ public class Calendario extends javax.swing.JInternalFrame {
     }
 
 
-    private void siguiente() {
-        
-        // Obtén la fecha seleccionada
-        LocalDate selectedDate = selectDateFromCalendar();
+//    private void siguiente() {
+//        
+//        // Obtén la fecha seleccionada
+//        LocalDate selectedDate = selectDateFromCalendar();
+//
+//        // Verifica si la fecha es válida
+//        if (selectedDate != null) {
+//            // Crea e inicia el JInternalFrame de Horarios
+//            Horarios horarios = new Horarios(selectedDate);
+//            horarios.initTimeTable(selectedDate);
+//
+//            // Agrega el JInternalFrame al JDesktopPane
+//            JDesktopPane desktopPane = getDesktopPane();
+//            desktopPane.add(horarios);
+//
+//            // Házlo visible
+//            horarios.setVisible(true);
+//        } else {
+//            System.out.println("Debes seleccionar una fecha.");
+//        }
+//    }
 
-        // Verifica si la fecha es válida
-        if (selectedDate != null) {
-            // Crea e inicia el JInternalFrame de Horarios
-            Horarios horarios = new Horarios(selectedDate);
-            horarios.initTimeTable(selectedDate);
 
-            // Agrega el JInternalFrame al JDesktopPane
-            JDesktopPane desktopPane = getDesktopPane();
-            desktopPane.add(horarios);
 
-            // Házlo visible
-            horarios.setVisible(true);
+// ...
+
+private void siguiente() {
+    // Obtén la fecha seleccionada
+    LocalDate selectedDate = selectDateFromCalendar();
+
+    // Verifica si la fecha es válida
+    if (selectedDate != null) {
+        // Crear el mensaje a mostrar
+        String message = "Fecha seleccionada: " + selectedDate;
+
+        // Crear botones personalizados
+        Object[] options = {"Aceptar", "Cancelar"};
+
+        // Mostrar el cuadro de diálogo
+        int result = JOptionPane.showOptionDialog(
+                this,        // Componente padre
+                message,     // Mensaje a mostrar
+                "Confirmar fecha", // Título del cuadro de diálogo
+                JOptionPane.DEFAULT_OPTION, // Tipo de botones (puede ser cambiado según tus necesidades)
+                JOptionPane.INFORMATION_MESSAGE, // Tipo de mensaje
+                null,        // Icono (puede ser null)
+                options,     // Botones personalizados
+                options[0]    // Botón predeterminado
+        );
+
+        // Verificar el resultado
+        if (result == 0) {
+            // Si el usuario hace clic en "Aceptar", continuar con el flujo normal
+            // (Aquí deberías incluir la lógica para actualizar tu tabla y ventana de horarios)
+            updateTableAndHorarios(selectedDate);
         } else {
-            System.out.println("Debes seleccionar una fecha.");
+            // Si el usuario hace clic en "Cancelar", realizar alguna acción o simplemente no hacer nada
+            System.out.println("Operación cancelada por el usuario.");
         }
+    } else {
+        System.out.println("Debes seleccionar una fecha.");
     }
+}
+
+private void updateTableAndHorarios(LocalDate selectedDate) {
+    // Actualizar la tabla
+    // (Aquí deberías incluir la lógica para actualizar la tabla con los horarios)
+
+    // Crear e iniciar la ventana de horarios
+    Horarios horarios = new Horarios(selectedDate);
+    horarios.initTimeTable(selectedDate);
+
+    // Agregar la ventana de horarios al JDesktopPane
+    JDesktopPane desktopPane = getDesktopPane();
+    desktopPane.add(horarios);
+
+    // Hacer visible la ventana de horarios
+    horarios.setVisible(true);
+}
 
 
+    
+    
     private void showTimeTable(LocalDate selectedDate) {
         System.out.println("Fecha recibida en showTimeTable: " + selectedDate);
         Horarios horarios = new Horarios(selectedDate);
@@ -200,6 +266,12 @@ public class Calendario extends javax.swing.JInternalFrame {
         desktopPane.add(horarios);
         horarios.setVisible(true);
     }
+
+  
+
+
+
+
 
 
 }

@@ -128,6 +128,7 @@ public class FormularioCliente extends javax.swing.JInternalFrame implements Mas
 
         jBGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/Save_37110.png"))); // NOI18N
         jBGuardar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204)));
+        jBGuardar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jBGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBGuardarActionPerformed(evt);
@@ -145,6 +146,7 @@ public class FormularioCliente extends javax.swing.JInternalFrame implements Mas
 
         jBSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/home256_24783.png"))); // NOI18N
         jBSalir.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204)));
+        jBSalir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jBSalir.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
             public void mouseMoved(java.awt.event.MouseEvent evt) {
                 jBSalirMouseMoved(evt);
@@ -179,6 +181,7 @@ public class FormularioCliente extends javax.swing.JInternalFrame implements Mas
         jBMascotas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/77_85219.png"))); // NOI18N
         jBMascotas.setText("+");
         jBMascotas.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204)));
+        jBMascotas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jBMascotas.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
         jBMascotas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -381,7 +384,7 @@ public class FormularioCliente extends javax.swing.JInternalFrame implements Mas
 
     private void jBSalirMouseMoved(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBSalirMouseMoved
         // movimiento del mouse salir
-        jBSalir.setText("SALIR");
+        
         
     }//GEN-LAST:event_jBSalirMouseMoved
 
