@@ -5,7 +5,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Time;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -29,14 +31,14 @@ public class ReservaDAO extends DAO {
         private static final ReservaDAO INSTANCE = new ReservaDAO();
     }
 
-    public int guardarReserva(int idCliente, int idMascota, LocalDate fecha, String horario, boolean estado) throws ClassNotFoundException, SQLException {
+    public int guardarReserva(int idCliente, int idMascota, LocalDate fecha, LocalTime horario, boolean estado) throws ClassNotFoundException, SQLException {
         String sql = "INSERT INTO reservas (idCliente, idMascota, fecha, horario, estado) VALUES (?, ?, ?, ?, ?)";
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setInt(1, idCliente);
             preparedStatement.setInt(2, idMascota);
             preparedStatement.setDate(3, Date.valueOf(fecha));
-            preparedStatement.setString(4, horario);
+            preparedStatement.setTime(4, Time.valueOf(horario));
             preparedStatement.setBoolean(5, estado);
 
             return insertarModificarEliminar(preparedStatement);

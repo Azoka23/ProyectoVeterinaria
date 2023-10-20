@@ -234,7 +234,7 @@ public class Horarios extends javax.swing.JInternalFrame {
     private void showSelectedDate() {
 
         if (selectedDate != null) {
-            JOptionPane.showMessageDialog(this, "Selected Date: " + selectedDate.toString(), "Selected Date", JOptionPane.INFORMATION_MESSAGE);
+            //JOptionPane.showMessageDialog(this, "Selected Date: " + selectedDate.toString(), "Selected Date", JOptionPane.INFORMATION_MESSAGE);
         } else {
             JOptionPane.showMessageDialog(this, "Selected Date is null", "Error", JOptionPane.ERROR_MESSAGE);
         }
@@ -311,11 +311,12 @@ public class Horarios extends javax.swing.JInternalFrame {
             jTextField1.setText("Fecha seleccionada: N/A");
         }
     }
-
+//busca la informacion de la tabla y la guarda
     private void obtenerInformacionCeldaSeleccionada() throws Exception {
         ClienteDAO clienteD = ClienteDAO.obtenerInstancia();
         Cliente cliente = new Cliente();
         MascotaDAO mascotaD = MascotaDAO.obtenerInstancia();
+        Mascota mascota=new Mascota();
         int filaSeleccionada = TablaTurnos.getSelectedRow();
 
         if (filaSeleccionada != -1) {
@@ -334,17 +335,17 @@ public class Horarios extends javax.swing.JInternalFrame {
             System.out.println("Mascota: " + valorMascota);
 
             try {
-                String horarioSeleccionado = (String) valorHorario;
+               horarioSeleccionado =  (String) valorHorario;
                 String dniCliente = String.valueOf(valorDni);
 
                 int DniCliente = Integer.parseInt(dniCliente);
                 String nombreMascota = (String) valorMascota;
 
                 cliente = clienteD.buscarListaClientexDni(DniCliente);
-                int idMascota = mascotaD.obtenerIdMascotaPorNombre(nombreMascota, cliente.getIdCliente());
+                mascota = mascotaD.buscarListaMascotaxAliasIdCliente(nombreMascota, cliente.getIdCliente());
 
                 ReservaDAO reservaDAO = ReservaDAO.obtenerInstancia();
-                int resultado = reservaDAO.guardarReserva(cliente.getIdCliente(), idMascota, selectedDate, horarioSeleccionado, true);
+               int resultado = reservaDAO.guardarReserva(cliente.getIdCliente(), mascota.getIdMascota(), selectedDate, horarioSeleccionado, true);
 
                 if (resultado != -1) {
                     // Pintar la fila recién agregada
@@ -431,6 +432,7 @@ void initTimeTable(LocalDate selectedDate) {
         for (Reserva tipo : listaDeReservas) {
             if (tipo.getHorario().equals(horario)) {
                 TurnosModel.addRow(new Object[]{tipo.getHorario(), tipo.getCliente().getApellido() + ", " + tipo.getCliente().getNombre(), tipo.getMascota().getAlias()});
+                JOptionPane.showMessageDialog(null,"estoy aca");
                 reservaEnEsteHorario = true;
                 break;
             }
