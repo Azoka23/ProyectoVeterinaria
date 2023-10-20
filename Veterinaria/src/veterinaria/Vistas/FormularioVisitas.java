@@ -3,14 +3,22 @@ package veterinaria.Vistas;
 // Importación de paquetes y librerías necesarias para la clase
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -18,12 +26,22 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.AbstractDocument;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.common.PDRectangle;
+import org.apache.pdfbox.pdmodel.font.PDType1Font;
+import org.apache.pdfbox.rendering.ImageType;
+import org.apache.pdfbox.rendering.PDFRenderer;
+import org.apache.pdfbox.rendering.RenderDestination;
+
 import veterinaria.AccesoADatos.ClienteDAO;
 import veterinaria.AccesoADatos.MascotaDAO;
 import veterinaria.AccesoADatos.TratamientoDAO;
 import veterinaria.AccesoADatos.TratamientoRealizadoDAO;
 import veterinaria.AccesoADatos.VisitaDAO;
 import veterinaria.Entidades.Cliente;
+import veterinaria.Entidades.Factura;
 import veterinaria.Entidades.Mascota;
 import veterinaria.Entidades.Tratamiento;
 import veterinaria.Entidades.TratamientoRealizado;
@@ -78,6 +96,7 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    estado = Estado.CLIENTE;
                     buscarPorDni();
                 }
             }
@@ -105,6 +124,7 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
                         jLMascota1.setText("Mascota: " + alias);
                         jTADescripcion.setEditable(true);
                         estadoGuardado = Estado.NO_GUARDADO;
+                        estado = Estado.MASCOTA;
                     }
                 }
             }
@@ -141,7 +161,7 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
                     // Actualiza el mapa tratamientosSeleccionados solo después de procesar todas las selecciones
                     tratamientosSeleccionados.clear();
                     tratamientosSeleccionados.putAll(tratamientosSeleccionadosTemp);
-
+                    estado = Estado.TRATAMIENTO;
                     // Muestra la suma en jTImporteTotal
                     jTImporteTotal.setText(String.valueOf(sumaImportes));
                 }
@@ -164,7 +184,7 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
         jTApellido = new javax.swing.JTextField();
         jTNombre = new javax.swing.JTextField();
         jBSalir = new javax.swing.JButton();
-        jBbuscar = new javax.swing.JButton();
+        jBGuardar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTMascotas = new javax.swing.JTable();
         jLTratamiento = new javax.swing.JLabel();
@@ -185,7 +205,6 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
         setTitle("Formulario visitas");
         setPreferredSize(new java.awt.Dimension(700, 600));
 
-        jPanel1.setBackground(new java.awt.Color(0, 153, 204));
         jPanel1.setPreferredSize(new java.awt.Dimension(500, 335));
 
         jLDNI.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
@@ -201,8 +220,6 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
         jLMascota.setText("Mascotas");
 
         jBBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/search_find_lupa_21889.png"))); // NOI18N
-        jBBuscar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204)));
-        jBBuscar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jBBuscar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBBuscarActionPerformed(evt);
@@ -216,20 +233,16 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
         jTNombre.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
 
         jBSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/home256_24783.png"))); // NOI18N
-        jBSalir.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204)));
-        jBSalir.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jBSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBSalirActionPerformed(evt);
             }
         });
 
-        jBbuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/Save_37110.png"))); // NOI18N
-        jBbuscar.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 153, 204)));
-        jBbuscar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        jBbuscar.addActionListener(new java.awt.event.ActionListener() {
+        jBGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/Save_37110.png"))); // NOI18N
+        jBGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBbuscarActionPerformed(evt);
+                jBGuardarActionPerformed(evt);
             }
         });
 
@@ -329,13 +342,12 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
                                                 .addComponent(jTPesoA, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE))
                                             .addGroup(jPanel1Layout.createSequentialGroup()
                                                 .addGap(53, 53, 53)
-                                                .addComponent(jBbuscar))))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(18, 18, 18)
-                                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(jLabel1)
-                                            .addComponent(jTImporteTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))))))))
+                                                .addComponent(jBGuardar))))
+                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 409, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel1)
+                                    .addComponent(jTImporteTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE))))))
                 .addContainerGap(92, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -391,7 +403,7 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
                             .addComponent(jLPeso)
                             .addComponent(jTPesoA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jBbuscar)))
+                        .addComponent(jBGuardar)))
                 .addGap(101, 101, 101))
         );
 
@@ -422,7 +434,7 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
     private void jBBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBBuscarActionPerformed
         // Obtiene el DNI ingresado en el campo de texto
         String dni = jTDni.getText().trim();
-
+        estado = Estado.CLIENTE;
         // Verifica si el campo está vacío
         if (dni.isEmpty()) {
             // Muestra un mensaje de advertencia si el DNI está vacío
@@ -431,14 +443,14 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
         } else {
             // Limpia los campos y establece el estado del formulario a buscar
             limpiarBuscar();
-            estado = Estado.BUSCAR;
+            //estado = Estado.BUSCAR;
 
             // Llama al método para buscar el cliente por el DNI ingresado
             buscarPorDni();
         }
     }//GEN-LAST:event_jBBuscarActionPerformed
 
-    private void jBbuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBbuscarActionPerformed
+    private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuardarActionPerformed
         try {
             // Verifica si hay campos vacíos en el formulario
             if (camposVacios()) {
@@ -447,23 +459,25 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
             } else {
                 // Llama al método para guardar la visita
                 guardarVisita();
+                if (estado.equals(Estado.TRATAMIENTO)) {
+                    // Limpia los campos después de guardar la visita y marca el estado como GUARDADO
+                    limpiarVisita();
+                    estado = Estado.GUARDADO;
+                }
 
-                // Limpia los campos después de guardar la visita y marca el estado como GUARDADO
-                limpiarVisita();
-                estadoGuardado = Estado.GUARDADO;
             }
         } catch (Exception ex) {
             // Muestra cualquier excepción ocurrida durante el proceso de guardar la visita
             Utilidades.mostrarError(ex, this);
         }
 
-    }//GEN-LAST:event_jBbuscarActionPerformed
+    }//GEN-LAST:event_jBGuardarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBBuscar;
+    private javax.swing.JButton jBGuardar;
     private javax.swing.JButton jBSalir;
-    private javax.swing.JButton jBbuscar;
     private javax.swing.JLabel jLApellido;
     private javax.swing.JLabel jLDNI;
     private javax.swing.JLabel jLDescripcion;
@@ -578,52 +592,71 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
 
     // Método para guardar la visita y tratamientos realizados
     private void guardarVisita() {
-        try {
-            VisitaDAO visitaD = VisitaDAO.obtenerInstancia();
-            MascotaDAO mascotaD = MascotaDAO.obtenerInstancia();
-            TratamientoRealizadoDAO tratRealizadoD = TratamientoRealizadoDAO.obtenerInstancia();
+        if (estado.equals(Estado.TRATAMIENTO)) {
 
-            Visita visita = new Visita();
-            String descripcion = jTADescripcion.getText();
-            double importe = Double.parseDouble(jTImporteTotal.getText());
-            double pesoA = obtenerPeso(jTPesoA);
-            double pesoM = visitaD.avgPesoM(idMascotas);
-            LocalDate fechaVisita = LocalDate.now();
+            try {
+                Factura factura = new Factura();
+                VisitaDAO visitaD = VisitaDAO.obtenerInstancia();
+                MascotaDAO mascotaD = MascotaDAO.obtenerInstancia();
+                List<Tratamiento> listaTratamientos = new ArrayList<>();
+                TratamientoRealizadoDAO tratRealizadoD = TratamientoRealizadoDAO.obtenerInstancia();
 
-            // Asignar los valores al objeto Visita
-            visita.setPesoActual(pesoA);
-            visita.setDetallesSintoma(descripcion);
-            visita.setImporteVisita(importe);
-            visita.setFechaVisita(fechaVisita);
+                Visita visita = new Visita();
+                String descripcion = jTADescripcion.getText();
+                double importe = Double.parseDouble(jTImporteTotal.getText());
+                double pesoA = obtenerPeso(jTPesoA);
+                double pesoM = visitaD.avgPesoM(idMascotas);
+                LocalDate fechaVisita = LocalDate.now();
+                factura.setFecha(fechaVisita);
+                // Asignar los valores al objeto Visita
+                visita.setPesoActual(pesoA);
+                visita.setDetallesSintoma(descripcion);
+                visita.setImporteVisita(importe);
+                visita.setFechaVisita(fechaVisita);
 
-            int idTrat = visitaD.guardarVisita(visita);
-            visita.setIdVisita(idTrat);
-            // Iterar sobre los tratamientos seleccionados y guardarlos como tratamientos realizados
-            for (Map.Entry<Integer, Tratamiento> entry : tratamientosSeleccionados.entrySet()) {
-                Tratamiento tratamiento = entry.getValue();
-                TratamientoRealizado tratamientoRealizado = new TratamientoRealizado();
+                int idTrat = visitaD.guardarVisita(visita);
 
-                //tratamientoRealizado.setIdTratamientoRealizado(idTrat);
-                tratamientoRealizado.setIdVisita(visita);
-                tratamientoRealizado.setIdMascota(mascotaD.obtenerMascotaPorId(idMascotas));
-                tratamientoRealizado.setIdTratamiento(tratamiento);
-                tratamientoRealizado.setImporte(tratamiento.getImporte());
+                visita.setIdVisita(idTrat);
+                factura.setIdVisita(idTrat);
 
-                // Guardar el tratamiento realizado en la base de datos
-                tratRealizadoD.guardarTratamientoRealizado(tratamientoRealizado);
+                //factura.setIdVisita(idTrat);idVisita
+                // Iterar sobre los tratamientos seleccionados y guardarlos como tratamientos realizados
+                for (Map.Entry<Integer, Tratamiento> entry : tratamientosSeleccionados.entrySet()) {
+                    Tratamiento tratamiento = entry.getValue();
+                    TratamientoRealizado tratamientoRealizado = new TratamientoRealizado();
 
+                    //tratamientoRealizado.setIdTratamientoRealizado(idTrat);
+                    tratamientoRealizado.setIdVisita(visita);
+                    tratamientoRealizado.setIdMascota(mascotaD.obtenerMascotaPorId(idMascotas));
+                    tratamientoRealizado.setIdTratamiento(tratamiento);
+                    tratamientoRealizado.setImporte(tratamiento.getImporte());
+                    listaTratamientos.add(tratamiento);
+                    // Guardar el tratamiento realizado en la base de datos
+                    tratRealizadoD.guardarTratamientoRealizado(tratamientoRealizado);
+
+                }
+                // Modificar la mascota fuera del bucle, si es necesario hacerlo solo una vez
+
+                Mascota mascota = mascotaD.obtenerMascotaPorId(idMascotas);
+                mascota.setPesoActual(pesoA);
+                mascota.setPesoMedia(pesoM);
+                //clienteD.obtenerClientexId(mascota.getIdCliente());
+                factura.setCliente(mascota.getIdCliente());
+                factura.setTotal(importe);
+                factura.setMascota(mascota);
+                factura.setTratamientos(listaTratamientos);
+                factura.setDescuento(importe * .1);
+                mascotaD.modificarMascotaPeso(mascota);
+                generarPDF(factura);
+                // msgCierre();
+                JOptionPane.showMessageDialog(this, "Se guardo correctamente, y el remito fue generado");
+                
+            } catch (Exception ex) {
+                Logger.getLogger(FormularioVisitas.class.getName()).log(Level.SEVERE, null, ex);
             }
-            // Modificar la mascota fuera del bucle, si es necesario hacerlo solo una vez
-
-            Mascota mascota = mascotaD.obtenerMascotaPorId(idMascotas);
-            mascota.setPesoActual(pesoA);
-            mascota.setPesoMedia(pesoM);
-            mascotaD.modificarMascotaPeso(mascota);
-
-        } catch (Exception ex) {
-            Logger.getLogger(FormularioVisitas.class.getName()).log(Level.SEVERE, null, ex);
+        } else {
+            JOptionPane.showMessageDialog(this, "Seleccione algun tratamiento");
         }
-
     }
 
     // Método para cargar los tratamientos en la tabla de tratamientos
@@ -708,5 +741,114 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
         } catch (NumberFormatException e) {
             return 0.0;
         }
+    }
+
+    public void generarPDF(Factura factura) {
+        try {
+            PDDocument document = new PDDocument();
+            PDPage page = new PDPage(PDRectangle.A4);
+            document.addPage(page);
+
+            PDPageContentStream contentStream = new PDPageContentStream(document, page);
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 14); // Fuente para el encabezado
+            float yPosition = 750; // Posición inicial del encabezado
+
+            // Agrega el encabezado al PDF
+            contentStream.beginText();
+            contentStream.newLineAtOffset(50, yPosition);
+            contentStream.showText("REMITO");
+            contentStream.endText();
+
+            // Configura la posición inicial del texto en la página para el contenido de la factura
+            yPosition -= 30; // Espacio entre el encabezado y el contenido
+            contentStream.setFont(PDType1Font.HELVETICA_BOLD, 12); // Fuente para el contenido
+
+            String facturaContent = factura.generarFactura();
+
+            // Divide el contenido de la factura en líneas
+            String[] lines = facturaContent.split("\n");
+
+            // Agrega el contenido de la factura al PDF
+            for (String line : lines) {
+                contentStream.beginText();
+                contentStream.newLineAtOffset(50, yPosition);
+                contentStream.showText(line);
+                contentStream.endText();
+                yPosition -= 15; // Espacio entre líneas
+            }
+
+            contentStream.close();
+            //String directorioApp = System.getProperty("user.dir");
+
+            document.save("remito" + String.valueOf(factura.getIdVisita()) + ".pdf");
+            document.close();
+
+            System.out.println("Remito generado correctamente.");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+////    public void MostrarPDF() {
+////        try {
+////            // Ruta del archivo PDF a abrir
+////           File file = new File("remito" + String.valueOf(factura.getIdVisita()) + ".pdf");
+////
+////            // Crea un objeto PDDocument para el archivo PDF
+////            PDDocument document = PDDocument.load(file);
+////
+////            // Crea un objeto PDFRenderer para renderizar el PDF como imágenes
+////            PDFRenderer pdfRenderer = new PDFRenderer(document);
+////
+////            // Número de página que deseas mostrar
+////            int pageNumber = 0;
+////
+////            // Ajustar la resolución (DPI) para controlar el tamaño de la imagen
+////            int dpi = 80; // Puedes ajustar este valor según tus necesidades
+////
+////            // Renderizar la página del PDF como una imagen
+////            BufferedImage bufferedImage = pdfRenderer.renderImageWithDPI(pageNumber, dpi, ImageType.RGB);
+//////
+//////              // Redimensionar la imagen a un tamaño específico (opcional)
+//////            int width = bufferedImage.getWidth();
+//////            int height = bufferedImage.getHeight();
+//////            int newWidth = 400; // Ancho deseado
+//////            int newHeight = (int) (height * ((double) newWidth / width)); // Calcular la altura proporcional
+//////            BufferedImage resizedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_RGB);
+//////            resizedImage.getGraphics().drawImage(bufferedImage, 0, 0, newWidth, newHeight, null);
+//////          
+////            // Mostrar la imagen en un cuadro de diálogo usando JOptionPane
+////            ImageIcon icon = new ImageIcon(bufferedImage);
+////            JOptionPane.showMessageDialog(null, icon);
+////
+////            // Cierra el documento después de usarlo
+////            document.close();
+////
+////            System.out.println("PDF abierto y mostrado como imágenes.");
+////
+////        } catch (IOException e) {
+////            e.printStackTrace();
+////        }
+////    }
+    public void msgCierre() {
+        // Crea un hilo que se encargará de mostrar el JOptionPane
+        Thread showMessageThread = new Thread(() -> {
+            // Muestra el JOptionPane
+            JOptionPane.showMessageDialog(this, "Se guardo correctamente, y pdf generado");
+        });
+
+        // Inicia el hilo
+        showMessageThread.start();
+
+        // Espera durante 2 segundos antes de interrumpir el hilo
+        try {
+            Thread.sleep(2000); // Espera 2 segundos (2000 milisegundos)
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        // Interrumpe el hilo después de 2 segundos para cerrar el JOptionPane
+        showMessageThread.interrupt();
     }
 }

@@ -7,7 +7,13 @@ public enum Estado {
     BAJA,
     EDITAR,
     BUSCAR,
+    TRATAMIENTO,
+    MASCOTA,
+    CLIENTE,
     GUARDADO,
     NO_GUARDADO,
-    NADA;
+    NADA,
+    CLIENTE_MASCOTA,
+    CLIENTE_VISITA,
+    MASCOTA_TRATAMIENTO;
 }
