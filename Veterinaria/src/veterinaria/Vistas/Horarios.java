@@ -335,7 +335,7 @@ public class Horarios extends javax.swing.JInternalFrame {
             System.out.println("Mascota: " + valorMascota);
 
             try {
-               horarioSeleccionado =  (String) valorHorario;
+              String horarioSeleccionado =  (String) valorHorario;
                 String dniCliente = String.valueOf(valorDni);
 
                 int DniCliente = Integer.parseInt(dniCliente);
@@ -430,9 +430,10 @@ void initTimeTable(LocalDate selectedDate) {
 
         boolean reservaEnEsteHorario = false;
         for (Reserva tipo : listaDeReservas) {
+            JOptionPane.showMessageDialog(null,tipo.getHorario()+ " , " + horario);
             if (tipo.getHorario().equals(horario)) {
                 TurnosModel.addRow(new Object[]{tipo.getHorario(), tipo.getCliente().getApellido() + ", " + tipo.getCliente().getNombre(), tipo.getMascota().getAlias()});
-                JOptionPane.showMessageDialog(null,"estoy aca");
+                //JOptionPane.showMessageDialog(null,"estoy aca");
                 reservaEnEsteHorario = true;
                 break;
             }
