@@ -240,62 +240,62 @@ public class Horarios extends javax.swing.JInternalFrame {
         }
     }
 
-    void initTimeTable(LocalDate selectedDate) {
-        try {
-            //TurnosModel = new DefaultTableModel() {
-            //   public boolean isCellEditable(int fila, int columna) {
-            //    return false;
-            //  }
-            // };
-
-            // armarCabecerareservaTurno(); // Asegúrate de haber configurado la cabecera correctamente
-            // Limpiar la tabla antes de agregar nuevos datos
-            TurnosModel.setRowCount(0);
-            // Definir el rango de horas (por ejemplo, de 10 a 18)
-            int horaInicio = 10;
-            int horaFin = 18;
-            // Llenar la primera columna con horarios
-            //for (int hora = horaInicio; hora <= horaFin; hora++) {
-            //   String horario = String.format("%02d:00", hora);
-            //  TurnosModel.addRow(new Object[]{horario, "", ""}); // Columnas adicionales vacías para Cliente y Mascota
-            // }
-            ReservaDAO reservaDAO = ReservaDAO.obtenerInstancia();
-            List<Reserva> listaDeReservas = new ArrayList();
-            listaDeReservas = reservaDAO.buscarListaReservasxfecha(selectedDate);
-            for (Reserva tipo : listaDeReservas) {
-                //JOptionPane.showMessageDialog(null, tipo);
-                //horario = String.format("%02d:00", tipo.getHorario());
-                TurnosModel.addRow(new Object[]{tipo.getHorario(),tipo.getCliente().getApellido()+ ", " +tipo.getCliente().getNombre() ,tipo.getMascota().getAlias() }); // Columnas adicionales vacías para Cliente y Mascota
-
-            }
-// Establecer el modelo de la tabla
-            TablaTurnos.setModel(TurnosModel);
-            TablaTurnos.addMouseListener(new MouseAdapter() {
-                @Override
-                public void mouseClicked(MouseEvent e) {
-                    int filaSeleccionada = TablaTurnos.getSelectedRow();
-                    if (filaSeleccionada != -1) {
-                        String horarioSeleccionado = (String) TurnosModel.getValueAt(filaSeleccionada, 0);
-                        // Preguntar al usuario por el nombre del cliente
-                        String DniCliente = JOptionPane.showInputDialog("Ingrese el dni del cliente:");
-                        String nombreMascota = JOptionPane.showInputDialog("Ingrese el nombre de la mascota");
-                        // Ubicar el nombre del cliente en la segunda columna
-                        TurnosModel.setValueAt(DniCliente, filaSeleccionada, 1);
-                        TurnosModel.setValueAt(nombreMascota, filaSeleccionada, 2);
-
-                        // Actualizar la vista de la tabla
-                        // Configurar el renderizador en tu JTable
-//TablaTurnos.setDefaultRenderer(Object.class, reservaRenderer);
-                        TablaTurnos.repaint();
-                    }
-                }
-            });
-        } catch (Exception ex) {
-            Logger.getLogger(Horarios.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
-    }
-
+//    void initTimeTable(LocalDate selectedDate) {
+//        try {
+//            //TurnosModel = new DefaultTableModel() {
+//            //   public boolean isCellEditable(int fila, int columna) {
+//            //    return false;
+//            //  }
+//            // };
+//
+//            // armarCabecerareservaTurno(); // Asegúrate de haber configurado la cabecera correctamente
+//            // Limpiar la tabla antes de agregar nuevos datos
+//            TurnosModel.setRowCount(0);
+//            // Definir el rango de horas (por ejemplo, de 10 a 18)
+//            int horaInicio = 10;
+//            int horaFin = 18;
+//            // Llenar la primera columna con horarios
+//            //for (int hora = horaInicio; hora <= horaFin; hora++) {
+//            //   String horario = String.format("%02d:00", hora);
+//            //  TurnosModel.addRow(new Object[]{horario, "", ""}); // Columnas adicionales vacías para Cliente y Mascota
+//            // }
+//            ReservaDAO reservaDAO = ReservaDAO.obtenerInstancia();
+//            List<Reserva> listaDeReservas = new ArrayList();
+//            listaDeReservas = reservaDAO.buscarListaReservasxfecha(selectedDate);
+//            for (Reserva tipo : listaDeReservas) {
+//                //JOptionPane.showMessageDialog(null, tipo);
+//                //horario = String.format("%02d:00", tipo.getHorario());
+//                TurnosModel.addRow(new Object[]{tipo.getHorario(),tipo.getCliente().getApellido()+ ", " +tipo.getCliente().getNombre() ,tipo.getMascota().getAlias() }); // Columnas adicionales vacías para Cliente y Mascota
+//
+//            }
+//// Establecer el modelo de la tabla
+//            TablaTurnos.setModel(TurnosModel);
+//            TablaTurnos.addMouseListener(new MouseAdapter() {
+//                @Override
+//                public void mouseClicked(MouseEvent e) {
+//                    int filaSeleccionada = TablaTurnos.getSelectedRow();
+//                    if (filaSeleccionada != -1) {
+//                        String horarioSeleccionado = (String) TurnosModel.getValueAt(filaSeleccionada, 0);
+//                        // Preguntar al usuario por el nombre del cliente
+//                        String DniCliente = JOptionPane.showInputDialog("Ingrese el dni del cliente:");
+//                        String nombreMascota = JOptionPane.showInputDialog("Ingrese el nombre de la mascota");
+//                        // Ubicar el nombre del cliente en la segunda columna
+//                        TurnosModel.setValueAt(DniCliente, filaSeleccionada, 1);
+//                        TurnosModel.setValueAt(nombreMascota, filaSeleccionada, 2);
+//
+//                        // Actualizar la vista de la tabla
+//                        // Configurar el renderizador en tu JTable
+////TablaTurnos.setDefaultRenderer(Object.class, reservaRenderer);
+//                        TablaTurnos.repaint();
+//                    }
+//                }
+//            });
+//        } catch (Exception ex) {
+//            Logger.getLogger(Horarios.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//
+//    }
+// no estoy usando este metodo
     private void updateFechaLabel() {
         if (selectedDate != null) {
             jLFecha.setText("Fecha seleccionada: " + selectedDate.toString());
@@ -408,4 +408,57 @@ public class Horarios extends javax.swing.JInternalFrame {
 //    }
 //
 //    
+    // Método para inicializar la tabla de turnos
+void initTimeTable(LocalDate selectedDate) {
+    TurnosModel.setRowCount(0);
+
+    int horaInicio = 10;
+    int horaFin = 18;
+
+    ReservaDAO reservaDAO = ReservaDAO.obtenerInstancia();
+    List<Reserva> listaDeReservas = new ArrayList<>();
+
+    try {
+        listaDeReservas = reservaDAO.buscarListaReservasxfecha(selectedDate);
+    } catch (Exception ex) {
+        Logger.getLogger(Horarios.class.getName()).log(Level.SEVERE, null, ex);
+    }
+
+    for (int hora = horaInicio; hora <= horaFin; hora++) {
+        String horario = String.format("%02d:00", hora);
+
+        boolean reservaEnEsteHorario = false;
+        for (Reserva tipo : listaDeReservas) {
+            if (tipo.getHorario().equals(horario)) {
+                TurnosModel.addRow(new Object[]{tipo.getHorario(), tipo.getCliente().getApellido() + ", " + tipo.getCliente().getNombre(), tipo.getMascota().getAlias()});
+                reservaEnEsteHorario = true;
+                break;
+            }
+        }
+
+        if (!reservaEnEsteHorario) {
+            TurnosModel.addRow(new Object[]{horario, "", ""});
+        }
+    }
+
+    TablaTurnos.setModel(TurnosModel);
+
+    TablaTurnos.addMouseListener(new MouseAdapter() {
+        @Override
+        public void mouseClicked(MouseEvent e) {
+            int filaSeleccionada = TablaTurnos.getSelectedRow();
+            if (filaSeleccionada != -1) {
+                String horarioSeleccionado = (String) TurnosModel.getValueAt(filaSeleccionada, 0);
+                String DniCliente = JOptionPane.showInputDialog("Ingrese el DNI del cliente:");
+                String nombreMascota = JOptionPane.showInputDialog("Ingrese el nombre de la mascota");
+
+                TurnosModel.setValueAt(DniCliente, filaSeleccionada, 1);
+                TurnosModel.setValueAt(nombreMascota, filaSeleccionada, 2);
+
+                TablaTurnos.repaint();
+            }
+        }
+    });
+}
+
 }
