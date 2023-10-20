@@ -6,6 +6,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.ResultSet;
+import java.util.Collection;
+import veterinaria.Entidades.Mascota;
 import veterinaria.Entidades.Tratamiento;
 
 public class TratamientoDAO extends DAO {
@@ -170,7 +172,27 @@ public class TratamientoDAO extends DAO {
         }
         return tratamientos;
     }
+    public Collection<Tratamiento> listarTratamientoPorEstado(boolean activo) throws Exception {
+        Collection<Tratamiento> tratamientoFiltradas = new ArrayList<>();
+        String sql = "SELECT * FROM tratamientos WHERE estado = ?";
 
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setBoolean(1, activo);
+            resultado = consultarBase(preparedStatement);
+
+            while (resultado.next()) {
+                Tratamiento tratamiento = obtenerTratamientoDesdeResultado(resultado);
+                tratamientoFiltradas.add(tratamiento);
+            }
+        } catch (SQLException ex) {
+            // Manejar la excepción si es necesario
+            ex.printStackTrace();
+            // Puedes lanzar una excepción personalizada si lo deseas
+            // throw new MiExcepcionPersonalizada("Error al obtener mascotas desde la base de datos", ex);
+        }
+
+        return tratamientoFiltradas;
+    }
     /**
      * Realiza una eliminación lógica de un tratamiento en la base de datos.
      *

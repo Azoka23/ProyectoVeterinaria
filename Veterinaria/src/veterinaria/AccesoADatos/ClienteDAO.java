@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.sql.Statement;
+import veterinaria.Entidades.Mascota;
 
 public class ClienteDAO extends DAO {
 
@@ -234,11 +235,12 @@ public class ClienteDAO extends DAO {
      */
     public List<Cliente> obtenerClientesConMascota() throws Exception {
         List<Cliente> clientes = new ArrayList<>();
-        String sql
-                = "SELECT DISTINCT * "
+        String sql = "SELECT DISTINCT c.idCliente, c.dni, c.apellido, c.nombre, c.direccion, c.telefono, c.contactoN, c.contactoTel, c.estado, c.correoElectronico "
                 + "FROM clientes c "
                 + "LEFT JOIN mascotas m ON c.idCliente = m.idCliente "
-                + "WHERE m.idCliente IS NOT NULL";
+                + "WHERE m.idCliente IS NOT NULL "
+                + "ORDER BY c.apellido ASC";
+
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
             resultado = consultarBase(preparedStatement);
             if (resultado != null) {
@@ -255,6 +257,7 @@ public class ClienteDAO extends DAO {
         }
         return clientes;
     }
+
     /**
      * Obtiene una lista de todos los clientes en la base de datos.
      *
@@ -266,11 +269,11 @@ public class ClienteDAO extends DAO {
      */
     public List<Cliente> obtenerClientesSinMascota() throws Exception {
         List<Cliente> clientes = new ArrayList<>();
-        String sql
-                = "SELECT DISTINCT * "
+        String sql = "SELECT DISTINCT c.idCliente, c.dni, c.apellido, c.nombre, c.direccion, c.telefono, c.contactoN, c.contactoTel, c.estado, c.correoElectronico "
                 + "FROM clientes c "
                 + "LEFT JOIN mascotas m ON c.idCliente = m.idCliente "
-                + "WHERE m.idCliente IS NULL";
+                + "WHERE m.idCliente IS NULL "
+                + "ORDER BY c.apellido ASC";
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
             resultado = consultarBase(preparedStatement);
             if (resultado != null) {
@@ -287,6 +290,7 @@ public class ClienteDAO extends DAO {
         }
         return clientes;
     }
+
     /**
      * Obtiene una colección de todos los clientes en la base de datos.
      *
@@ -304,6 +308,28 @@ public class ClienteDAO extends DAO {
             }
             return clientes;
         }
+    }
+
+    public Collection<Cliente> listarClientePorEstado(boolean activo) throws Exception {
+        Collection<Cliente> clientesFiltradas = new ArrayList<>();
+        String sql = "SELECT * FROM clientes WHERE estado = ? ORDER BY apellido ASC";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setBoolean(1, activo);
+            resultado = consultarBase(preparedStatement);
+
+            while (resultado.next()) {
+                Cliente cliente = obtenerClienteDesdeResultado(resultado);
+                clientesFiltradas.add(cliente);
+            }
+        } catch (SQLException ex) {
+            // Manejar la excepción si es necesario
+            ex.printStackTrace();
+            // Puedes lanzar una excepción personalizada si lo deseas
+            // throw new MiExcepcionPersonalizada("Error al obtener mascotas desde la base de datos", ex);
+        }
+
+        return clientesFiltradas;
     }
 
     /**

@@ -222,6 +222,28 @@ public class MascotaDAO extends DAO {
         return new ArrayList<>(); // Retorna una lista vacía si no se encontraron registros
     }
 
+    public Collection<Mascota> listarMascotasPorEstado(boolean activo) throws Exception {
+        Collection<Mascota> mascotasFiltradas = new ArrayList<>();
+        String sql = "SELECT * FROM mascotas WHERE estado = ?";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setBoolean(1, activo);
+            resultado = consultarBase(preparedStatement);
+
+            while (resultado.next()) {
+                Mascota mascota = obtenerMascotaDesdeResultado(resultado);
+                mascotasFiltradas.add(mascota);
+            }
+        } catch (SQLException ex) {
+            // Manejar la excepción si es necesario
+            ex.printStackTrace();
+            // Puedes lanzar una excepción personalizada si lo deseas
+            // throw new MiExcepcionPersonalizada("Error al obtener mascotas desde la base de datos", ex);
+        }
+
+        return mascotasFiltradas;
+    }
+
     public Collection<Mascota> listarMascotasXTipoTratamiento(int idTratamiento) throws Exception {
         String sql = "SELECT m.* "
                 + "FROM mascotas m "
@@ -302,7 +324,7 @@ public class MascotaDAO extends DAO {
     }
 
     public int obtenerIdMascotaPorNombre(String nombreMascota, int idCliente) {
-        String sql = "SELECT idMascota FROM mascotas WHERE alias = ? and idCliente=?";
+        String sql = "SELECT idMascota FROM mascotas WHERE nombre = ? and idCliente=?";
 
         try (PreparedStatement statement = conexion.prepareStatement(sql)) {
 

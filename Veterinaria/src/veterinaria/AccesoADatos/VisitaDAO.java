@@ -8,6 +8,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import javax.swing.JOptionPane;
 
 // Clase para acceder a los datos de las visitas en la base de datos
 public class VisitaDAO extends DAO {
@@ -62,7 +67,7 @@ public class VisitaDAO extends DAO {
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
             preparedStatement.setInt(1, idMascota);
             resultado = consultarBase(preparedStatement);
-            
+
             if (resultado.next()) {
                 double pesoM = resultado.getDouble(1);
                 return pesoM;
@@ -94,8 +99,61 @@ public class VisitaDAO extends DAO {
 
         }
     }
-// Método para obtener una mascota desde un resultado de consulta SQL
 
+    public Collection<Visita> listarVisitasPorCliente(int idCliente) throws Exception {
+
+        String sql = "SELECT DISTINCT v.idVisita, v.fechaV, v.detallesSintomas, v.pesoActual, v.importe "
+                + "FROM tratamientosrealizados tr "
+                + "JOIN visitas v ON tr.idVisita = v.idVisita "
+                + "WHERE tr.idMascota = ?";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, idCliente);
+            resultado = consultarBase(preparedStatement);
+
+            Collection<Visita> visitas = new ArrayList();
+
+            while (resultado.next()) {
+                visitas.add(obtenerVisitaDesdeResultado(resultado));
+            }
+
+            return visitas;
+
+        }
+    }
+
+    public Map<Visita, String> obtenerVisitasDeCliente(int idCliente) throws Exception {
+        Map<Visita, String> visitasConAlias = new LinkedHashMap<>();
+
+        String sql = "SELECT v.idVisita, v.fechaV, v.detallesSintomas, v.pesoActual, v.importe, "
+                + "m.alias AS nombreMascota, m.sexo, m.especie, m.raza, m.colorDePelo, m.fechaNac "
+                + "FROM visitas v "
+                + "JOIN tratamientosrealizados tr ON v.idVisita = tr.idVisita "
+                + "JOIN mascotas m ON tr.idMascota = m.idMascota "
+                + "JOIN clientes c ON m.idCliente = c.idCliente "
+                + "WHERE c.idCliente = ? "
+                + "GROUP BY v.idVisita "
+                + "ORDER BY v.fechaV ASC";
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, idCliente);
+            resultado = consultarBase(preparedStatement);
+
+            while (resultado.next()) {
+                Visita visita = obtenerVisitaDesdeResultado(resultado);
+                String nombreMascota = resultado.getString("nombreMascota");
+                visitasConAlias.put(visita, nombreMascota);
+            }
+        } catch (SQLException ex) {
+            // Manejar la excepción si es necesario
+            ex.printStackTrace();
+            // Puedes lanzar una excepción personalizada si lo deseas
+            //throw new MiExcepcionPersonalizada("Error al obtener visitas desde la base de datos", ex);
+        }
+        return visitasConAlias;
+    }
+
+// Método para obtener una mascota desde un resultado de consulta SQL
     private Visita obtenerVisitaDesdeResultado(ResultSet result) throws SQLException {
 
         Visita visita = new Visita();
@@ -105,6 +163,29 @@ public class VisitaDAO extends DAO {
         visita.setDetallesSintoma(result.getString("detallesSintomas"));
         visita.setPesoActual(result.getDouble("pesoActual"));
         visita.setImporteVisita(result.getDouble("importe"));
+
+        return visita;
+    }
+    
+        // Método para buscar una mascota por su ID en la base de datos
+    public Visita obtenerVisitaPorId(int idVisita) {
+        String sql = "SELECT * FROM `visitas` WHERE idVisita=?";
+        Visita visita = null;
+
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, idVisita);
+            resultado = consultarBase(preparedStatement);
+
+            if (resultado.next()) {
+
+                visita = obtenerVisitaDesdeResultado(resultado);
+
+            }
+
+        } catch (SQLException ex) {
+            // Manejar las excepciones de SQL
+            ex.printStackTrace();
+        }
 
         return visita;
     }
