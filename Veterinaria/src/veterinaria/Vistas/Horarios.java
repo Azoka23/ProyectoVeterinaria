@@ -10,6 +10,7 @@ import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -312,11 +313,12 @@ public class Horarios extends javax.swing.JInternalFrame {
         }
     }
 //busca la informacion de la tabla y la guarda
+
     private void obtenerInformacionCeldaSeleccionada() throws Exception {
         ClienteDAO clienteD = ClienteDAO.obtenerInstancia();
         Cliente cliente = new Cliente();
         MascotaDAO mascotaD = MascotaDAO.obtenerInstancia();
-        Mascota mascota=new Mascota();
+        Mascota mascota = new Mascota();
         int filaSeleccionada = TablaTurnos.getSelectedRow();
 
         if (filaSeleccionada != -1) {
@@ -335,7 +337,7 @@ public class Horarios extends javax.swing.JInternalFrame {
             System.out.println("Mascota: " + valorMascota);
 
             try {
-              String horarioSeleccionado =  (String) valorHorario;
+                String horarioSeleccionado = (String) valorHorario;
                 String dniCliente = String.valueOf(valorDni);
 
                 int DniCliente = Integer.parseInt(dniCliente);
@@ -345,7 +347,7 @@ public class Horarios extends javax.swing.JInternalFrame {
                 mascota = mascotaD.buscarListaMascotaxAliasIdCliente(nombreMascota, cliente.getIdCliente());
 
                 ReservaDAO reservaDAO = ReservaDAO.obtenerInstancia();
-               int resultado = reservaDAO.guardarReserva(cliente.getIdCliente(), mascota.getIdMascota(), selectedDate, horarioSeleccionado, true);
+                int resultado = reservaDAO.guardarReserva(cliente.getIdCliente(), mascota.getIdMascota(), selectedDate, horarioSeleccionado, true);
 
                 if (resultado != -1) {
                     // Pintar la fila recién agregada
@@ -410,58 +412,64 @@ public class Horarios extends javax.swing.JInternalFrame {
 //
 //    
     // Método para inicializar la tabla de turnos
-void initTimeTable(LocalDate selectedDate) {
-    TurnosModel.setRowCount(0);
+    void initTimeTable(LocalDate selectedDate) {
+        TurnosModel.setRowCount(0);
 
-    int horaInicio = 10;
-    int horaFin = 18;
+        int horaInicio = 10;
+        int horaFin = 18;
 
-    ReservaDAO reservaDAO = ReservaDAO.obtenerInstancia();
-    List<Reserva> listaDeReservas = new ArrayList<>();
+        ReservaDAO reservaDAO = ReservaDAO.obtenerInstancia();
+        List<Reserva> listaDeReservas = new ArrayList<>();
 
-    try {
-        listaDeReservas = reservaDAO.buscarListaReservasxfecha(selectedDate);
-    } catch (Exception ex) {
-        Logger.getLogger(Horarios.class.getName()).log(Level.SEVERE, null, ex);
-    }
+        try {
+            listaDeReservas = reservaDAO.buscarListaReservasxfecha(selectedDate);
+        } catch (Exception ex) {
+            Logger.getLogger(Horarios.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-    for (int hora = horaInicio; hora <= horaFin; hora++) {
-        String horario = String.format("%02d:00", hora);
+        for (int hora = horaInicio; hora <= horaFin; hora++) {
+            String horario = String.format("%02d:00", hora);
 
-        boolean reservaEnEsteHorario = false;
-        for (Reserva tipo : listaDeReservas) {
-            JOptionPane.showMessageDialog(null,tipo.getHorario()+ " , " + horario);
-            if (tipo.getHorario().equals(horario)) {
-                TurnosModel.addRow(new Object[]{tipo.getHorario(), tipo.getCliente().getApellido() + ", " + tipo.getCliente().getNombre(), tipo.getMascota().getAlias()});
-                //JOptionPane.showMessageDialog(null,"estoy aca");
-                reservaEnEsteHorario = true;
-                break;
+            boolean reservaEnEsteHorario = false;
+            for (Reserva tipo : listaDeReservas) {
+                // Obtener el horario de Reserva como un objeto LocalTime
+                LocalTime horarioReserva = tipo.getHorario();
+
+                // Convertir horario (cadena) a un objeto LocalTime
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+                LocalTime horarioComparar = LocalTime.parse(horario, formatter);
+
+                // Comparar los horarios
+                if (horarioReserva.equals(horarioComparar)) {
+                    TurnosModel.addRow(new Object[]{tipo.getHorario(), tipo.getCliente().getApellido() + ", " + tipo.getCliente().getNombre(), tipo.getMascota().getAlias()});
+                    reservaEnEsteHorario = true;
+                    break;
+                }
+            }
+
+            if (!reservaEnEsteHorario) {
+                TurnosModel.addRow(new Object[]{horario, "", ""});
             }
         }
 
-        if (!reservaEnEsteHorario) {
-            TurnosModel.addRow(new Object[]{horario, "", ""});
-        }
-    }
+        TablaTurnos.setModel(TurnosModel);
 
-    TablaTurnos.setModel(TurnosModel);
+        TablaTurnos.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                int filaSeleccionada = TablaTurnos.getSelectedRow();
+                if (filaSeleccionada != -1) {
+                    String horarioSeleccionado = (String) TurnosModel.getValueAt(filaSeleccionada, 0);
+                    String DniCliente = JOptionPane.showInputDialog("Ingrese el DNI del cliente:");
+                    String nombreMascota = JOptionPane.showInputDialog("Ingrese el nombre de la mascota");
 
-    TablaTurnos.addMouseListener(new MouseAdapter() {
-        @Override
-        public void mouseClicked(MouseEvent e) {
-            int filaSeleccionada = TablaTurnos.getSelectedRow();
-            if (filaSeleccionada != -1) {
-                String horarioSeleccionado = (String) TurnosModel.getValueAt(filaSeleccionada, 0);
-                String DniCliente = JOptionPane.showInputDialog("Ingrese el DNI del cliente:");
-                String nombreMascota = JOptionPane.showInputDialog("Ingrese el nombre de la mascota");
+                    TurnosModel.setValueAt(DniCliente, filaSeleccionada, 1);
+                    TurnosModel.setValueAt(nombreMascota, filaSeleccionada, 2);
 
-                TurnosModel.setValueAt(DniCliente, filaSeleccionada, 1);
-                TurnosModel.setValueAt(nombreMascota, filaSeleccionada, 2);
-
-                TablaTurnos.repaint();
+                    TablaTurnos.repaint();
+                }
             }
-        }
-    });
-}
+        });
+    }
 
 }
