@@ -227,10 +227,10 @@ private void siguiente() {
         // Verificar el resultado
         if (result == 0) {
             // Si el usuario hace clic en "Aceptar", continuar con el flujo normal
-            // (Aquí deberías incluir la lógica para actualizar tu tabla y ventana de horarios)
+            
             updateTableAndHorarios(selectedDate);
         } else {
-            // Si el usuario hace clic en "Cancelar", realizar alguna acción o simplemente no hacer nada
+            // Si el usuario hace clic en "Cancelar"
             System.out.println("Operación cancelada por el usuario.");
         }
     } else {
@@ -240,8 +240,7 @@ private void siguiente() {
 
 private void updateTableAndHorarios(LocalDate selectedDate) {
     // Actualizar la tabla
-    // (Aquí deberías incluir la lógica para actualizar la tabla con los horarios)
-
+  
     // Crear e iniciar la ventana de horarios
     Horarios horarios = new Horarios(selectedDate);
     horarios.initTimeTable(selectedDate);

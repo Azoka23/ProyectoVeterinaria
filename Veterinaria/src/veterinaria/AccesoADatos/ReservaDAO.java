@@ -76,5 +76,34 @@ public class ReservaDAO extends DAO {
 
         return reserva;
     }
+    
+    public boolean cancelarReservaPorDNI(int dni) throws SQLException {
+    try {
+        String sql = "DELETE FROM reservas WHERE idCliente IN (SELECT idCliente FROM clientes WHERE dni = ?)";
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setInt(1, dni);
+            int rowsAffected = preparedStatement.executeUpdate();
+            return rowsAffected > 0; // Devuelve true si se afectó al menos una fila (es decir, se canceló al menos una reserva).
+        }
+    } catch (SQLException ex) {
+        // Manejar la excepción aquí (lanzarla o registrarla, según tus necesidades).
+        throw ex;
+    }
+}
+
+public boolean cancelarReserva(LocalDate fecha, LocalTime horario) throws SQLException {
+    try {
+        String sql = "DELETE FROM reservas WHERE fecha = ? AND horario = ?";
+        try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
+            preparedStatement.setDate(1, Date.valueOf(fecha));
+            preparedStatement.setTime(2, Time.valueOf(horario));
+            int rowsAffected = preparedStatement.executeUpdate();
+            return rowsAffected > 0; // Devuelve true si se afectó al menos una fila (es decir, se canceló al menos una reserva).
+        }
+    } catch (SQLException ex) {
+        // Manejar la excepción aquí (lanzarla o registrarla, según tus necesidades).
+        throw ex;
+    }
+}
 
 }
