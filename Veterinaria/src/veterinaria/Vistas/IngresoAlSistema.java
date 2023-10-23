@@ -1,12 +1,17 @@
 package veterinaria.Vistas;
 
+import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import veterinaria.AccesoADatos.UsuarioDAO;
+import veterinaria.Entidades.Usuario;
 import veterinaria.Utilidades;
 
 public class IngresoAlSistema extends javax.swing.JFrame {
 
     private boolean passwordVisible = false; // Variable de estado para rastrear la visibilidad de la contraseña
-
+    private String nombre;
     /**
      * Creates new form MenuPrincipal
      */
@@ -112,7 +117,7 @@ public class IngresoAlSistema extends javax.swing.JFrame {
 
         jlBienvenida.setBackground(new java.awt.Color(204, 204, 204));
         jlBienvenida.setFont(new java.awt.Font("Academy Engraved LET", 1, 36)); // NOI18N
-        jlBienvenida.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/green_pets_icon-icons.com_59415 (1).png"))); // NOI18N
+        jlBienvenida.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/HuellaGreen.png"))); // NOI18N
         jlBienvenida.setText("    PET DOCTOR");
         jlBienvenida.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -121,7 +126,7 @@ public class IngresoAlSistema extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jpLogging, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jlBienvenida, javax.swing.GroupLayout.DEFAULT_SIZE, 493, Short.MAX_VALUE)
+            .addComponent(jlBienvenida, javax.swing.GroupLayout.DEFAULT_SIZE, 529, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -141,7 +146,14 @@ public class IngresoAlSistema extends javax.swing.JFrame {
 
     private void jBIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBIngresarActionPerformed
 
-        ingresar();
+        try {
+            //ingresar();
+            ingresar2();
+        } catch (SQLException ex) {
+            Logger.getLogger(IngresoAlSistema.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(IngresoAlSistema.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }//GEN-LAST:event_jBIngresarActionPerformed
 
@@ -161,8 +173,15 @@ public class IngresoAlSistema extends javax.swing.JFrame {
     }//GEN-LAST:event_jLMostrarMouseClicked
 
     private void jBIngresarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jBIngresarKeyPressed
-        // TODO add your handling code here:
-        ingresar();
+        try {
+            // TODO add your handling code here:
+            //ingresar();
+            ingresar2();
+        } catch (SQLException ex) {
+            Logger.getLogger(IngresoAlSistema.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex) {
+            Logger.getLogger(IngresoAlSistema.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jBIngresarKeyPressed
 
     /**
@@ -221,16 +240,16 @@ public class IngresoAlSistema extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Debe llenar todos los campos");
         } else if (usuario.equals("ulp") && password.equals("hola")) {
             // Crear una instancia del Menú
-            Menu menu = new Menu();
+            //Menu menu = new Menu();
 
             // Establecer el tamaño preferido del Menú
-            menu.setSize(800, 700);
+            //menu.setSize(800, 700);
 
             // Hacer el Menú visible
-            menu.setVisible(true);
+            //menu.setVisible(true);
 
             // Centrar el Menú en la pantalla
-            menu.setLocationRelativeTo(null);
+            //menu.setLocationRelativeTo(null);
 
             // Cerrar el formulario actual
             this.dispose();
@@ -240,4 +259,39 @@ public class IngresoAlSistema extends javax.swing.JFrame {
             jTPassword.setText("");
         }
     }
+        public void ingresar2() throws ClassNotFoundException, SQLException, Exception {{
+        nombre = jTUsuario.getText();
+        char[] passwordChars = jTPassword.getPassword();
+        String password = new String(passwordChars);
+                    if(nombre.isEmpty() || password.isEmpty()){
+                    JOptionPane.showMessageDialog(this, "Debe llenar todos los campos");
+                    }    
+                      try{
+                          UsuarioDAO usuarioDAO = UsuarioDAO.obtenerInstancia();
+                          Usuario username = new Usuario();
+                          username = usuarioDAO.buscarListaUsuarioxNombre(nombre);
+                          String passwordDAO = username.getPassword();
+                             if (username==null){
+                              JOptionPane.showMessageDialog(this, "El usuario no existe");
+                          } else if(password.equals(passwordDAO)){
+                                      IngresoAlSistema login = new IngresoAlSistema();
+                                      login.dispose();
+                                      Menu menu = new Menu(username);
+             
+                                      menu.setVisible(true);
+                                      menu.setLocationRelativeTo(null);
+                                                                          
+                                  } else {
+                              JOptionPane.showMessageDialog(this, "Usuario y/aaao contraseña incorrectos");
+                              jTUsuario.setText("");
+                              jTPassword.setText("");
+                              }
+                             }
+                         catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Se produjo un error al eliminar el usuario.");
+            }
+        
+         
+}
+}
 }

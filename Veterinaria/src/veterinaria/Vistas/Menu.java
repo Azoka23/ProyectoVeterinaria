@@ -3,20 +3,24 @@ package veterinaria.Vistas;
 import javax.swing.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import veterinaria.Entidades.Usuario;
 
 // Clase principal que representa el menú principal de la aplicación
 public class Menu extends javax.swing.JFrame {
 
     // Instancia de DesktopPaneWithBackground que se utilizará como fondo del JFrame
     DesktopPaneWithBackground jEscritorio;
+    Usuario currentUserRole;// Rol del usuario actual
 
     /**
      * Constructor de la clase Menu
      */
-    public Menu() {
+    public Menu(Usuario rol) {
+        this.currentUserRole = rol;
         // Inicialización de componentes
         initComponents();
-
+        // Agregar el menú al JFrame
+        setJMenuBar(getMenu());
         // Configuración del fondo del JFrame
         jEscritorio = new DesktopPaneWithBackground("/veterinaria/Imagenes/HuellaPresentacion.png");
         setContentPane(jEscritorio);
@@ -27,9 +31,57 @@ public class Menu extends javax.swing.JFrame {
         setResizable(true);
         pack(); // Ajusta el tamaño inicial según el contenido
         setVisible(true);
-        jEscritorio.add(JLPET);
     }
 
+      private JMenuBar getMenu() {
+        //JMenuBar menuBar = new JMenuBar();
+        // Obtener el menú específico para el tipo de usuario actual
+        switch (currentUserRole.getRol()) {
+        case 0: // ADMINISTRADOR
+        jMenuBar1.add(new AdministradorMenu());
+        break;
+        case 1: // VETERINARIO
+        jMenuBar1.add(new VeterinarioMenu());
+        break;
+       case 2: // ASISTENTE
+        jMenuBar1.add(new AsistenteMenu());
+        break;
+        }
+   return jMenuBar1;
+    }
+        // Clase interna para el menú del Administrador
+    private class AdministradorMenu extends JMenu {
+
+        public AdministradorMenu() {
+            setText("Usuario Administrador");
+
+        }
+    }
+
+    // Clase interna para el menú del Veterinario
+    private class VeterinarioMenu extends JMenu {
+
+        public VeterinarioMenu() {
+            setText("Usuario Veterinario");
+
+            // Agregar elementos de menú específicos para el Veterinario
+              
+              jMBarUsuario.setVisible(false);
+        }
+    }
+
+    // Clase interna para el menú del Asistente
+    private class AsistenteMenu extends JMenu {
+
+        public AsistenteMenu() {
+            setText("Usuario Asistente");
+
+            // Agregar elementos de menú específicos para el Asistente
+               jMBarUsuario.setVisible(false);
+               jMIOtros.setVisible(false);
+        }
+    }
+    
     // Método principal para iniciar la aplicación
     public static void main(String args[]) {
         SwingUtilities.invokeLater(Menu::new);
@@ -43,7 +95,6 @@ public class Menu extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        JLPET = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jBarClientes = new javax.swing.JMenu();
         jMIBuscar = new javax.swing.JMenuItem();
@@ -55,18 +106,16 @@ public class Menu extends javax.swing.JFrame {
         jMIVisitas = new javax.swing.JMenuItem();
         jMITratam = new javax.swing.JMenuItem();
         jMIOtros = new javax.swing.JMenuItem();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        jMIReservas = new javax.swing.JMenuItem();
         jMBarFacturacion = new javax.swing.JMenu();
         jMICosto = new javax.swing.JMenuItem();
+        jMBarUsuario = new javax.swing.JMenu();
+        jMIRegisUsuarios = new javax.swing.JMenuItem();
         jMBarSalir = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("PET DOCTOR");
         setBackground(new java.awt.Color(255, 255, 255));
-        setPreferredSize(new java.awt.Dimension(800, 700));
-
-        JLPET.setFont(new java.awt.Font("Academy Engraved LET", 0, 24)); // NOI18N
-        JLPET.setText("PET DOCTOR");
 
         jBarClientes.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/people_114360.png"))); // NOI18N
         jBarClientes.setText("Clientes");
@@ -156,15 +205,15 @@ public class Menu extends javax.swing.JFrame {
         });
         jMbarAdm.add(jMIOtros);
 
-        jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
-        jMenuItem1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/artboard-10_89054.png"))); // NOI18N
-        jMenuItem1.setText("Reservas turnos");
-        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+        jMIReservas.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_G, java.awt.event.InputEvent.CTRL_MASK));
+        jMIReservas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/artboard-10_89054.png"))); // NOI18N
+        jMIReservas.setText("Reservas turnos");
+        jMIReservas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jMenuItem1ActionPerformed(evt);
+                jMIReservasActionPerformed(evt);
             }
         });
-        jMbarAdm.add(jMenuItem1);
+        jMbarAdm.add(jMIReservas);
 
         jMenuBar1.add(jMbarAdm);
 
@@ -183,6 +232,20 @@ public class Menu extends javax.swing.JFrame {
 
         jMenuBar1.add(jMBarFacturacion);
 
+        jMBarUsuario.setText("Usuarios");
+
+        jMIRegisUsuarios.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.CTRL_MASK));
+        jMIRegisUsuarios.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/people_114360.png"))); // NOI18N
+        jMIRegisUsuarios.setText("Usuarios");
+        jMIRegisUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMIRegisUsuariosActionPerformed(evt);
+            }
+        });
+        jMBarUsuario.add(jMIRegisUsuarios);
+
+        jMenuBar1.add(jMBarUsuario);
+
         jMBarSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/477A86B10B034C3087ADC368774218B1.png"))); // NOI18N
         jMBarSalir.setText("Salir");
         jMenuBar1.add(jMBarSalir);
@@ -193,17 +256,11 @@ public class Menu extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(279, Short.MAX_VALUE)
-                .addComponent(JLPET)
-                .addGap(90, 90, 90))
+            .addGap(0, 599, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(367, Short.MAX_VALUE)
-                .addComponent(JLPET)
-                .addGap(93, 93, 93))
+            .addGap(0, 489, Short.MAX_VALUE)
         );
 
         pack();
@@ -304,6 +361,7 @@ public class Menu extends javax.swing.JFrame {
     }//GEN-LAST:event_jMINuevoActionPerformed
 
     private void jMbarAdmActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMbarAdmActionPerformed
+
         
     }//GEN-LAST:event_jMbarAdmActionPerformed
 // Acción cuando se selecciona "Visitas" en el menú de Administración
@@ -348,7 +406,7 @@ public class Menu extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMIBuscarMascotasActionPerformed
 
-    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+    private void jMIReservasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMIReservasActionPerformed
         // Reservas
          jEscritorio.removeAll();
         jEscritorio.repaint();
@@ -366,7 +424,7 @@ public class Menu extends javax.swing.JFrame {
         calendario.setVisible(true);
         
         
-    }//GEN-LAST:event_jMenuItem1ActionPerformed
+    }//GEN-LAST:event_jMIReservasActionPerformed
 
     private void jMICostoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMICostoActionPerformed
         // Facturacion
@@ -387,24 +445,43 @@ public class Menu extends javax.swing.JFrame {
         facturacion.setVisible(true);
     }//GEN-LAST:event_jMICostoActionPerformed
 
+    private void jMIRegisUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMIRegisUsuariosActionPerformed
+          
+ // Crear y mostrar el formulario para gestionar visitas
+             jEscritorio.removeAll();
+             jEscritorio.repaint();
+             RegistroUsuarios usuario = new RegistroUsuarios(jEscritorio);
+             usuario.setSize(600, 500);
+             usuario.pack();
+             // Calcular el centro del JDesktopPane
+             int x = (jEscritorio.getWidth() - usuario.getWidth()) / 2;
+             int y = (jEscritorio.getHeight() - usuario.getHeight()) / 2;
+             // Establecer la ubicación y agregar el JInternalFrame
+             usuario.setBounds(x, y, usuario.getWidth(), usuario.getHeight());
+             jEscritorio.add(usuario);
+             usuario.setVisible(true);
+         // TODO add your handling code here:
+    }//GEN-LAST:event_jMIRegisUsuariosActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JLabel JLPET;
     private javax.swing.JMenu jBarClientes;
     private javax.swing.JMenu jBarMascotas;
     private javax.swing.JMenu jMBarFacturacion;
     private javax.swing.JMenu jMBarSalir;
+    private javax.swing.JMenu jMBarUsuario;
     private javax.swing.JMenuItem jMIBuscar;
     private javax.swing.JMenuItem jMIBuscarMascotas;
     private javax.swing.JMenuItem jMICosto;
     private javax.swing.JMenuItem jMINuevaMasc;
     private javax.swing.JMenuItem jMINuevo;
     private javax.swing.JMenuItem jMIOtros;
+    private javax.swing.JMenuItem jMIRegisUsuarios;
+    private javax.swing.JMenuItem jMIReservas;
     private javax.swing.JMenuItem jMITratam;
     private javax.swing.JMenuItem jMIVisitas;
     private javax.swing.JMenu jMbarAdm;
     private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuItem jMenuItem1;
     // End of variables declaration//GEN-END:variables
 
 }

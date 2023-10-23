@@ -31,7 +31,7 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Component id="jpLogging" alignment="0" max="32767" attributes="0"/>
-          <Component id="jlBienvenida" alignment="0" pref="493" max="32767" attributes="0"/>
+          <Component id="jlBienvenida" alignment="0" pref="529" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -161,7 +161,7 @@
           <Font name="Academy Engraved LET" size="36" style="1"/>
         </Property>
         <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-          <Image iconType="3" name="/veterinaria/Imagenes/green_pets_icon-icons.com_59415 (1).png"/>
+          <Image iconType="3" name="/veterinaria/Imagenes/HuellaGreen.png"/>
         </Property>
         <Property name="text" type="java.lang.String" value="    PET DOCTOR"/>
         <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
