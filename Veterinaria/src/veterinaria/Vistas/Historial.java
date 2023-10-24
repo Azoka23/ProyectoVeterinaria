@@ -1,10 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package veterinaria.Vistas;
 
+import veterinaria.Vistas.Estado;
+import veterinaria.Vistas.DesktopPaneWithBackground;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -29,6 +26,7 @@ import veterinaria.AccesoADatos.MascotaDAO;
 import veterinaria.AccesoADatos.TratamientoDAO;
 import veterinaria.AccesoADatos.TratamientoRealizadoDAO;
 import veterinaria.AccesoADatos.VisitaDAO;
+import veterinaria.Vistas.CustomPanel;
 import veterinaria.Entidades.Cliente;
 import veterinaria.Entidades.ConsultasLista;
 import veterinaria.Entidades.Mascota;
@@ -89,230 +87,52 @@ public class Historial extends javax.swing.JInternalFrame {
      * Creates new form Historial
      */
     public Historial() {
+        CustomPanel customPanel = new CustomPanel(); // Crea un panel personalizado
+        this.setContentPane(customPanel); // Establece el panel personalizado como el contenido del marco interno
+        
+        // Inicializa los componentes del formulario
         initComponents();
 
+        // Carga los datos en el combo box de historias clínicas
         cargarComboHistoriaL();
 
+        // Establece el título del formulario
         setTitle("Historial - Listar todas las visitas de una misma mascota");
+
+        // Inicializa las cabeceras de las tablas
         inicializarCabezeras();
+
+        // Carga los datos en el combo box de historias clínicas nuevamente (repetido)
         cargarComboHistoriaL();
 
+        // Configura los listeners (eventos) para los componentes del formulario
         configurarListeners();
+
+        // Selecciona un cliente en la tabla de clientes
         seleccionarCliente();
+
+        // Selecciona una mascota en la tabla de mascotas
         seleccionarMascotas();
+
+        // Selecciona un tratamiento en la tabla de tratamientos
         seleccionarTratamiento();
+
+        // Carga los datos de los clientes en la tabla de clientes
         cargarTablaClientes();
+
+        // Oculta la columna "Id" en la tabla de clientes
         ocultarColumna(jTClientes, "Id");
+
+        // Establece el estado inicial del formulario como CLIENTE_MASCOTA
         estado = Estado.CLIENTE_MASCOTA;
-        // para la tabla jTMascotas
-        jTClientes.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Desactiva el ajuste automático para poder ajustar manualmente
+
+        // Configura el modo de ajuste automático de las columnas para la tabla de clientes
+        jTClientes.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Desactiva el ajuste automático para permitir ajustes manuales
         packAll(jTClientes); // Ajusta el ancho de las columnas
 
-        // para la tabla jTMascotas
-        jTMascotas.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Desactiva el ajuste automático para poder ajustar manualmente
+        // Configura el modo de ajuste automático de las columnas para la tabla de mascotas
+        jTMascotas.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Desactiva el ajuste automático para permitir ajustes manuales
         packAll(jTMascotas); // Ajusta el ancho de las columnas
-////
-////        // Guarda el nombre de la columna que deseas ocultar
-////        String nombreIdClienteOculto = "Id";
-////        indiceColumnaOcultaCliente = jTClientes.getColumn(nombreIdClienteOculto).getModelIndex();
-////
-////        // Oculta la columna por su nombre
-////        jTClientes.getColumnModel().getColumn(indiceColumnaOcultaCliente).setWidth(0);
-////        jTClientes.getColumnModel().getColumn(indiceColumnaOcultaCliente).setMinWidth(0);
-////        jTClientes.getColumnModel().getColumn(indiceColumnaOcultaCliente).setMaxWidth(0);
-////
-////        // Listener para la tabla de Clientes
-////        jTClientes.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-////            @Override
-////            public void valueChanged(ListSelectionEvent e) {
-////                // Verifica si la selección está cambiada y no está en modo de ajuste
-////                if (!e.getValueIsAdjusting()) {
-////                    // Obtiene la fila seleccionada
-////                    int selectedRow = jTClientes.getSelectedRow();
-////                    // Verifica si hay una fila seleccionada
-////                    if (selectedRow != -1) {
-////                        // Obtén el valor de todas las columnas en la fila seleccionada
-////
-////                        // idCliente = (Integer) jTClientes.getValueAt(selectedRow, 0);
-////                        idCliente = (Integer) jTClientes.getValueAt(selectedRow, indiceColumnaOcultaCliente);
-//////                        apellido = (String) jTClientes.getValueAt(selectedRow, 1);
-////                        // para la tabla jTClientes
-////                        jTClientes.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Desactiva el ajuste automático para poder ajustar manualmente
-////                        packAll(jTClientes); // Ajusta el ancho de las columnas
-////                        //JOptionPane.showMessageDialog(null, idCliente);
-////                        cargarTablaMascotas(idCliente);
-////
-////                        // Guarda el nombre de la columna que deseas ocultar
-////                        String nombreIdMascotaOcultoMascota = "Id";
-////                        indiceColumnaOcultaMacota = jTMascotas.getColumn(nombreIdMascotaOcultoMascota).getModelIndex();
-////
-////                        // Oculta la columna por su nombre
-////                        jTMascotas.getColumnModel().getColumn(indiceColumnaOcultaMacota).setWidth(0);
-////                        jTMascotas.getColumnModel().getColumn(indiceColumnaOcultaMacota).setMinWidth(0);
-////                        jTMascotas.getColumnModel().getColumn(indiceColumnaOcultaMacota).setMaxWidth(0);
-////
-////                    }
-////                }
-////            }
-////        });
-////        // Listener para la tabla de mascotas
-////        jTMascotas.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-////            @Override
-////            public void valueChanged(ListSelectionEvent e) {
-////                // Verifica si la selección está cambiada y no está en modo de ajuste
-////                if (!e.getValueIsAdjusting()) {
-////                    // Obtiene la fila seleccionada
-////                    int selectedRow = jTMascotas.getSelectedRow();
-////                    // Verifica si hay una fila seleccionada
-////                    if (selectedRow != -1) {
-////                        // Obtén el valor de todas las columnas en la fila seleccionada
-////                        //idMascotas = (String) jTMascotas.getValueAt(selectedRow, 0);
-////                        idMascotas = (Integer) jTMascotas.getValueAt(selectedRow, indiceColumnaOcultaMacota);
-////                        alias = (String) jTMascotas.getValueAt(selectedRow, 1);
-////                        jLHistoriales.setText("Historial - Mascota con Alias: " + alias);
-////                        // Limpia los campos de visita y carga los tratamientos
-////                        //limpiarHistorial();
-////                        tablaHistorialVisita(idMascotas);
-//////                        // Habilita la edición y muestra información de la mascota seleccionada
-//////                        jTTratamiento.setEnabled(true);
-//////                        jTPesoA.setEditable(true);
-//////                        jLMascota1.setText("Mascota: " + alias);
-//////                        jTADescripcion.setEditable(true);
-//////                        estadoGuardado = Estado.NO_GUARDADO;
-////                    }
-////                }
-////            }
-////        });
-////        // Listener para la tabla de tratamiento
-////        jTTTratamientos.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
-////            @Override
-////            public void valueChanged(ListSelectionEvent e) {
-////                // Verifica si la selección está cambiada y no está en modo de ajuste
-////                if (!e.getValueIsAdjusting()) {
-////                    // Obtiene la fila seleccionada
-////                    int selectedRow = jTTTratamientos.getSelectedRow();
-////                    // Verifica si hay una fila seleccionada
-////                    if (selectedRow != -1) {
-////                        try {
-////                            // Obtén el valor de todas las columnas en la fila seleccionada
-////                            idTratamiento = (Integer) jTTTratamientos.getValueAt(selectedRow, indiceColumnaOcultaTratamiento);
-////                            //alias = (String) jTMascotas.getValueAt(selectedRow, 1);
-////                            // Limpia los campos de visita y carga los tratamientos
-////                            //limpiarHistorial();
-////                            cargarMascotaXTipo(idTratamiento);
-//////                        // Habilita la edición y muestra información de la mascota seleccionada
-//////                        jTTratamiento.setEnabled(true);
-//////                        jTPesoA.setEditable(true);
-//////                        jLMascota1.setText("Mascota: " + alias);
-//////                        jTADescripcion.setEditable(true);
-//////                        estadoGuardado = Estado.NO_GUARDADO;
-////                        } catch (Exception ex) {
-////                            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
-////                        }
-////                    }
-////                }
-////            }
-////        });
-////        // Agrega el ActionListener al JComboBox
-////        jCBListar.addActionListener(new ActionListener() {
-////            @Override
-////            public void actionPerformed(ActionEvent e) {
-////                // Obtén el índice del elemento seleccionado
-////                int selectedIndex = jCBListar.getSelectedIndex();
-////
-////                // Actualiza la cabecera de la tabla según el elemento seleccionado
-////                if (selectedIndex == 0) {
-////                    jLHistoriales.setText("Historial");
-////                    tratamientoModel.setRowCount(0);
-////                    armarCabeceraCliente();
-////                    cargarTablaClientes();
-////
-////                    // Guarda el nombre de la columna que deseas ocultar
-////                    String nombreIdClienteOculto = "Id";
-////                    indiceColumnaOcultaCliente = jTClientes.getColumn(nombreIdClienteOculto).getModelIndex();
-////
-////                    // Oculta la columna por su nombre
-////                    jTClientes.getColumnModel().getColumn(indiceColumnaOcultaCliente).setWidth(0);
-////                    jTClientes.getColumnModel().getColumn(indiceColumnaOcultaCliente).setMinWidth(0);
-////                    jTClientes.getColumnModel().getColumn(indiceColumnaOcultaCliente).setMaxWidth(0);
-////
-////                    // Si se selecciona la primera opción en el JComboBox
-////                    armarCabeceraHistorialVisita();
-////                    //jLSlecciones.setText("Listar todas las visitas de una misma mascota");
-////                    setTitle("Historial - Listar todas las visitas de una misma mascota");
-//////                    // para la tabla jTListas
-//////                    jTListas.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Desactiva el ajuste automático para poder ajustar manualmente
-//////                    packAll(jTListas); // Ajusta el ancho de las columnas
-////
-////                } else if (selectedIndex == 1) {
-////                    // Si se selecciona la segunda opción en el JComboBox
-////                    armarCabeceraHistorialTratamiento();
-////                    armarCabeceraTipo();
-////
-////                    tablaTipoTratamiento();
-////
-////                    clientesModel.setRowCount(0);
-////                    mascotaModel.setRowCount(0);
-////                    // jLSlecciones.setText("Listar todas las mascotas que hacen el mismo tratamiento");
-////                    setTitle("Historial - Listar todas las mascotas que hacen el mismo tratamiento");
-////
-////                    // Guarda el nombre de la columna que deseas ocultar
-////                    String nombreIdTratamientoOculto = "Id";
-////                    indiceColumnaOcultaTratamiento = jTTTratamientos.getColumn(nombreIdTratamientoOculto).getModelIndex();
-////
-////                    // Oculta la columna por su nombre
-////                    jTTTratamientos.getColumnModel().getColumn(indiceColumnaOcultaTratamiento).setWidth(0);
-////                    jTTTratamientos.getColumnModel().getColumn(indiceColumnaOcultaTratamiento).setMinWidth(0);
-////                    jTTTratamientos.getColumnModel().getColumn(indiceColumnaOcultaTratamiento).setMaxWidth(0);
-////                    jLHistoriales.setText("Historial - Mascotas");
-//////                    // para la tabla jTListas
-//////                    jTListas.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Desactiva el ajuste automático para poder ajustar manualmente
-//////                    packAll(jTListas); // Ajusta el ancho de las columnas
-////                } else if (selectedIndex == 2) {
-////                    jLHistoriales.setText("Historial");
-////                    // Si se selecciona la tercera opción en el JComboBox
-////                    armarCabeceraHistorialCliente();
-////                    setTitle("Historial - Listar todas las mascotas por cliente");
-////                    tratamientoModel.setRowCount(0);
-////                    armarCabeceraCliente();
-////                    cargarTablaClientes();
-////
-////                    // Guarda el nombre de la columna que deseas ocultar
-////                    String nombreIdClienteOculto = "Id";
-////                    indiceColumnaOcultaCliente = jTClientes.getColumn(nombreIdClienteOculto).getModelIndex();
-////
-////                    // Oculta la columna por su nombre
-////                    jTClientes.getColumnModel().getColumn(indiceColumnaOcultaCliente).setWidth(0);
-////                    jTClientes.getColumnModel().getColumn(indiceColumnaOcultaCliente).setMinWidth(0);
-////                    jTClientes.getColumnModel().getColumn(indiceColumnaOcultaCliente).setMaxWidth(0);
-////
-//////                    // para la tabla jTListas
-//////                    jTListas.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Desactiva el ajuste automático para poder ajustar manualmente
-//////                    packAll(jTListas); // Ajusta el ancho de las columnas
-////                } else if (selectedIndex == 3) {
-////                    jLHistoriales.setText("Historial");
-////                    // Si se selecciona la cuarta opción en el JComboBox
-////                    armarCabeceraHistorialEstado();
-////                    setTitle("Historial - Listar los tratamientos de la mascota en una visita");
-//////                    // para la tabla jTListas
-//////                    jTListas.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Desactiva el ajuste automático para poder ajustar manualmente
-//////                    packAll(jTListas); // Ajusta el ancho de las columnas
-////
-////                } else if (selectedIndex == 4) {
-////                    jLHistoriales.setText("Historial");
-////                    setTitle("Historial - Listar los tratamientos de la mascota en una visita");
-////                    // Si se selecciona la quinta opción en el JComboBox
-////                    armarCabeceraHistorialTratamientoXMascota();
-//////                    // para la tabla jTListas
-//////                    jTListas.setAutoResizeMode(JTable.AUTO_RESIZE_OFF); // Desactiva el ajuste automático para poder ajustar manualmente
-//////                    packAll(jTListas); // Ajusta el ancho de las columnas
-////
-////                }
-////
-////                // Llama a tu método aquí
-////                //tuMetodo();
-////            }
-////        });
     }
 
     /**
@@ -324,73 +144,33 @@ public class Historial extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jLayeredPane1 = new javax.swing.JLayeredPane();
         jPanel1 = new javax.swing.JPanel();
+        jLListado = new javax.swing.JLabel();
+        jCBListar = new javax.swing.JComboBox<>();
+        jPanel2 = new javax.swing.JPanel();
+        jLClientes = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTClientes = new javax.swing.JTable();
         jLMascotas = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTMascotas = new javax.swing.JTable();
+        jLTratamientos = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         jTTTratamientos = new javax.swing.JTable();
-        jBbuscar = new javax.swing.JButton();
-        jBSalir = new javax.swing.JButton();
+        jPanel3 = new javax.swing.JPanel();
         jLHistoriales = new javax.swing.JLabel();
-        jSeparator1 = new javax.swing.JSeparator();
-        jCBListar = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         JTHistoriales = new javax.swing.JTable();
-        jLListado = new javax.swing.JLabel();
-        jLTratamientos = new javax.swing.JLabel();
-        jLClientes = new javax.swing.JLabel();
-        jSeparator2 = new javax.swing.JSeparator();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        jTClientes = new javax.swing.JTable();
+        jPanel4 = new javax.swing.JPanel();
+        jBSalir = new javax.swing.JButton();
+        jBbuscar = new javax.swing.JButton();
 
-        setClosable(true);
-        setTitle("Historial");
-        setMinimumSize(new java.awt.Dimension(600, 500));
-        setPreferredSize(new java.awt.Dimension(600, 500));
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setOpaque(false);
 
-        jPanel1.setPreferredSize(new java.awt.Dimension(600, 500));
-
-        jLMascotas.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        jLMascotas.setText("Mascotas");
-
-        jTMascotas.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane1.setViewportView(jTMascotas);
-
-        jTTTratamientos.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane3.setViewportView(jTTTratamientos);
-
-        jBbuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/Save_37110.png"))); // NOI18N
-
-        jBSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/home256_24783.png"))); // NOI18N
-        jBSalir.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBSalirActionPerformed(evt);
-            }
-        });
-
-        jLHistoriales.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        jLHistoriales.setText("Historiales");
+        jLListado.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
+        jLListado.setText("Seleccionar Listados");
 
         jCBListar.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
         jCBListar.addActionListener(new java.awt.event.ActionListener() {
@@ -399,26 +179,31 @@ public class Historial extends javax.swing.JInternalFrame {
             }
         });
 
-        JTHistoriales.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        jScrollPane2.setViewportView(JTHistoriales);
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLListado)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCBListar, javax.swing.GroupLayout.PREFERRED_SIZE, 414, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(13, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLListado)
+                    .addComponent(jCBListar, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
 
-        jLListado.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        jLListado.setText("Seleccionar Listados");
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setOpaque(false);
 
-        jLTratamientos.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
-        jLTratamientos.setText("Tipos de Tratamientos");
-
-        jLClientes.setFont(new java.awt.Font("Roboto", 0, 14)); // NOI18N
+        jLClientes.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
         jLClientes.setText("Clientes");
 
         jTClientes.setModel(new javax.swing.table.DefaultTableModel(
@@ -434,106 +219,193 @@ public class Historial extends javax.swing.JInternalFrame {
         ));
         jScrollPane4.setViewportView(jTClientes);
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 549, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 613, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLHistoriales)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(43, 43, 43)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jBSalir)
-                                    .addComponent(jBbuscar)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jLListado)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jCBListar, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLClientes))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLMascotas)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLTratamientos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))))))
-                .addContainerGap(198, Short.MAX_VALUE))
+        jLMascotas.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
+        jLMascotas.setText("Mascotas");
+
+        jTMascotas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane1.setViewportView(jTMascotas);
+
+        jLTratamientos.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
+        jLTratamientos.setText("Tipos de Tratamientos");
+
+        jTTTratamientos.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane3.setViewportView(jTTTratamientos);
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 214, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLClientes))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLMascotas)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLTratamientos, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLListado)
-                    .addComponent(jCBListar, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLClientes)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLMascotas)
                         .addComponent(jLTratamientos)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setOpaque(false);
+
+        jLHistoriales.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
+        jLHistoriales.setText("Historiales");
+
+        JTHistoriales.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(JTHistoriales);
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLHistoriales)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
                 .addComponent(jLHistoriales)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(44, 44, 44)
-                        .addComponent(jBSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 8, Short.MAX_VALUE))
+        );
+
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel4.setOpaque(false);
+
+        jBSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/home256_24783.png"))); // NOI18N
+        jBSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBSalirActionPerformed(evt);
+            }
+        });
+
+        jBbuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/Save_37110.png"))); // NOI18N
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 147, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createSequentialGroup()
+                    .addGap(55, 55, 55)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jBSalir)
                         .addComponent(jBbuscar))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(141, 141, 141))
+                    .addContainerGap(50, Short.MAX_VALUE)))
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 215, Short.MAX_VALUE)
+            .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(jPanel4Layout.createSequentialGroup()
+                    .addGap(56, 56, 56)
+                    .addComponent(jBSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGap(18, 18, 18)
+                    .addComponent(jBbuscar)
+                    .addContainerGap(56, Short.MAX_VALUE)))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 811, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 600, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(48, 48, 48)
+                        .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jCBListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBListarActionPerformed
+
+    }//GEN-LAST:event_jCBListarActionPerformed
+
     private void jBSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSalirActionPerformed
         salirAplicacion();
         // TODO add your handling code here:
     }//GEN-LAST:event_jBSalirActionPerformed
-
-    private void jCBListarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBListarActionPerformed
-
-
-    }//GEN-LAST:event_jCBListarActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -546,25 +418,32 @@ public class Historial extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLListado;
     private javax.swing.JLabel jLMascotas;
     private javax.swing.JLabel jLTratamientos;
+    private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JTable jTClientes;
     private javax.swing.JTable jTMascotas;
     private javax.swing.JTable jTTTratamientos;
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Carga las opciones en el JComboBox para listar diferentes tipos de
+     * consultas.
+     */
     public void cargarComboHistoriaL() {
         try {
-            jCBListar.removeAllItems(); // Limpiar el JComboBox
+            jCBListar.removeAllItems(); // Limpia el JComboBox para evitar duplicados
             ConsultaDAO consultas = ConsultaDAO.obtenerInstancia();
             Collection<ConsultasLista> listasDeConsultas = new ArrayList<>();
             listasDeConsultas = consultas.listarConsultas();
 
+            // Agrega las opciones al JComboBox
             for (ConsultasLista tipo : listasDeConsultas) {
                 jCBListar.addItem(tipo);
             }
@@ -573,60 +452,85 @@ public class Historial extends javax.swing.JInternalFrame {
         }
     }
 
-    private void armarCabeceraHistorialVisita() {// listar todas las visitas de una misma mascota
+    /**
+     * Configura la cabecera de la tabla de historiales para mostrar visitas de
+     * una mascota.
+     */
+    private void armarCabeceraHistorialVisita() {
         historialModel.setColumnCount(0); // Elimina todas las columnas existentes
         historialModel.addColumn("Fecha");
-        historialModel.addColumn("Diagnostico");
+        historialModel.addColumn("Diagnóstico");
         historialModel.addColumn("Importe");
         historialModel.addColumn("Alias");
         JTHistoriales.setModel(historialModel);
     }
 
-    private void armarCabeceraHistorialTratamiento() {//listar todas las mascotas que hacen el mismo tratamiento
+    /**
+     * Configura la cabecera de la tabla de historiales para mostrar mascotas
+     * que hacen el mismo tratamiento.
+     */
+    private void armarCabeceraHistorialTratamiento() {
         historialModel.setColumnCount(0); // Elimina todas las columnas existentes
-        //historialModel.addColumn("Id");
         historialModel.addColumn("Alias");
         historialModel.addColumn("Peso");
         JTHistoriales.setModel(historialModel);
     }
 
+    /**
+     * Configura la cabecera de la tabla de historiales para mostrar mascotas
+     * activas.
+     */
     private void armarCabeceraHistorialMascotaActivo() {
         historialModel.setColumnCount(0); // Elimina todas las columnas existentes
         historialModel.addColumn("Alias");
         historialModel.addColumn("Peso Actual");
         historialModel.addColumn("Apellido");
         historialModel.addColumn("Nombre");
-
         JTHistoriales.setModel(historialModel);
     }
 
+    /**
+     * Configura la cabecera de la tabla de historiales para mostrar
+     * tratamientos de una mascota en específico.
+     */
     private void armarCabeceraHistorialMascotaTratamientos() {
         historialModel.setColumnCount(0); // Elimina todas las columnas existentes
         historialModel.addColumn("Fecha Visita");
         historialModel.addColumn("Tipo Tratamiento");
-        historialModel.addColumn("Descripcion");
-
+        historialModel.addColumn("Descripción");
         JTHistoriales.setModel(historialModel);
     }
 
+    /**
+     * Configura la cabecera de la tabla de historiales para mostrar
+     * tratamientos según su estado.
+     */
     private void armarCabeceraHistorialTratamientoXEstado() {
         historialModel.setColumnCount(0); // Elimina todas las columnas existentes
         historialModel.addColumn("Tipo");
-        historialModel.addColumn("Descripcion");
+        historialModel.addColumn("Descripción");
         historialModel.addColumn("Importe");
         JTHistoriales.setModel(historialModel);
     }
 
+    /**
+     * Configura la cabecera de la tabla de historiales para mostrar clientes
+     * según su estado.
+     */
     private void armarCabeceraHistorialClienteXEstado() {
         historialModel.setColumnCount(0); // Elimina todas las columnas existentes
         historialModel.addColumn("Apellido");
         historialModel.addColumn("Nombre");
         historialModel.addColumn("DNI");
-        historialModel.addColumn("Telefono");
+        historialModel.addColumn("Teléfono");
         historialModel.addColumn("E-mail");
         JTHistoriales.setModel(historialModel);
     }
 
+    /**
+     * Configura la cabecera de la tabla de historiales para mostrar clientes
+     * con o sin mascotas.
+     */
     private void armarCabeceraClienteConSinMascota() {
         historialModel.setColumnCount(0); // Elimina todas las columnas existentes
         historialModel.addColumn("Apellido");
@@ -635,70 +539,80 @@ public class Historial extends javax.swing.JInternalFrame {
         JTHistoriales.setModel(historialModel);
     }
 
+    /**
+     * Configura la cabecera de la tabla de mascotas.
+     */
     private void armarCabeceraMascota() {
         mascotaModel.setColumnCount(0); // Elimina todas las columnas existentes
         mascotaModel.addColumn("Id");
         mascotaModel.addColumn("Alias");
-
         mascotaModel.addColumn("Peso");
-
         jTMascotas.setModel(mascotaModel);
     }
 
+    /**
+     * Configura la cabecera de la tabla de clientes.
+     */
     private void armarCabeceraCliente() {
-
         clientesModel.setColumnCount(0); // Elimina todas las columnas existentes
         clientesModel.addColumn("Id");
         clientesModel.addColumn("DNI");
         clientesModel.addColumn("Apellido");
-
         clientesModel.addColumn("Nombre");
-
         jTClientes.setModel(clientesModel);
     }
 
+    /**
+     * Configura la cabecera de la tabla de tipos de tratamientos.
+     */
     private void armarCabeceraTipo() {
         tratamientoModel.setColumnCount(0); // Elimina todas las columnas existentes
         tratamientoModel.addColumn("Id");
         tratamientoModel.addColumn("Tipo");
-
         jTTTratamientos.setModel(tratamientoModel);
     }
 
+    /**
+     * Cierra la aplicación si el usuario confirma la salida.
+     */
     private void salirAplicacion() {
         if (Utilidades.confirmarSalida(this)) {
             dispose();
         }
     }
 
+    /**
+     * Carga las mascotas de un cliente específico en la tabla de mascotas.
+     *
+     * @param documento Número de documento del cliente.
+     */
     private void cargarTablaMascotas(int documento) {
-
         try {
+            MascotaDAO mascotaDAO = MascotaDAO.obtenerInstancia();
+            Collection<Mascota> listaMascota = mascotaDAO.listarMascotasxIdCliente(documento);
+            mascotaModel.setRowCount(0); // Limpia la tabla de mascotas antes de agregar nuevos datos
 
-            MascotaDAO cursadas = MascotaDAO.obtenerInstancia();
-            Collection<Mascota> listaMascota = new ArrayList<>(); // Inicialización predeterminada
-
-            listaMascota = cursadas.listarMascotasxIdCliente(documento);
-            mascotaModel.setRowCount(0); // Limpia la tabla de tratamientos antes de agregar nuevos datos
             for (Mascota tipo : listaMascota) {
                 if (tipo.isEstado()) {
-                    // mascotaModel.addRow(new Object[]{tipo.getIdMascota(), tipo.getAlias(), tipo.getPesoActual()});
                     mascotaModel.addRow(new Object[]{tipo.getIdMascota(), tipo.getAlias(), tipo.getPesoActual()});
-
                 }
-
             }
         } catch (Exception ex) {
             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
+    /**
+     * Carga las mascotas activas o inactivas en la tabla de historiales.
+     *
+     * @param activo Indica si se deben mostrar las mascotas activas (true) o
+     * inactivas (false).
+     */
     private void cargarTablaMascotasActivoInactivo(boolean activo) {
         try {
             MascotaDAO mascotaDAO = MascotaDAO.obtenerInstancia();
             Collection<Mascota> listaMascotas = mascotaDAO.listarMascotasPorEstado(activo);
-            historialModel.setRowCount(0); // Limpia la tabla de tratamientos antes de agregar nuevos datos
+            historialModel.setRowCount(0); // Limpia la tabla de historiales antes de agregar nuevos datos
 
             for (Mascota mascota : listaMascotas) {
                 historialModel.addRow(new Object[]{mascota.getAlias(), mascota.getPesoActual(),
@@ -709,11 +623,17 @@ public class Historial extends javax.swing.JInternalFrame {
         }
     }
 
+    /**
+     * Carga los tratamientos activos o inactivos en la tabla de historiales.
+     *
+     * @param activo Indica si se deben mostrar los tratamientos activos (true)
+     * o inactivos (false).
+     */
     private void cargarTablaTratamientoActivoInactivo(boolean activo) {
         try {
-            TratamientoDAO tratamientoD = TratamientoDAO.obtenerInstancia();
-            Collection<Tratamiento> listaTratamiento = tratamientoD.listarTratamientoPorEstado(activo);
-            historialModel.setRowCount(0); // Limpia la tabla de tratamientos antes de agregar nuevos datos
+            TratamientoDAO tratamientoDAO = TratamientoDAO.obtenerInstancia();
+            Collection<Tratamiento> listaTratamiento = tratamientoDAO.listarTratamientoPorEstado(activo);
+            historialModel.setRowCount(0); // Limpia la tabla de historiales antes de agregar nuevos datos
 
             for (Tratamiento tipo : listaTratamiento) {
                 historialModel.addRow(new Object[]{tipo.getTipo(), tipo.getDescripcion(), tipo.getImporte()});
@@ -723,11 +643,17 @@ public class Historial extends javax.swing.JInternalFrame {
         }
     }
 
+    /**
+     * Carga los clientes activos o inactivos en la tabla de historiales.
+     *
+     * @param activo Indica si se deben mostrar los clientes activos (true) o
+     * inactivos (false).
+     */
     private void cargarTablaClienteActivoInactivo(boolean activo) {
         try {
-            ClienteDAO clienteD = ClienteDAO.obtenerInstancia();
-            Collection<Cliente> listaCliente = clienteD.listarClientePorEstado(activo);
-            historialModel.setRowCount(0); // Limpia la tabla de tratamientos antes de agregar nuevos datos
+            ClienteDAO clienteDAO = ClienteDAO.obtenerInstancia();
+            Collection<Cliente> listaCliente = clienteDAO.listarClientePorEstado(activo);
+            historialModel.setRowCount(0); // Limpia la tabla de historiales antes de agregar nuevos datos
 
             for (Cliente tipo : listaCliente) {
                 historialModel.addRow(new Object[]{tipo.getApellido(), tipo.getNombre(), tipo.getDni(), tipo.getTelefono(), tipo.getEmail()});
@@ -737,124 +663,130 @@ public class Historial extends javax.swing.JInternalFrame {
         }
     }
 
+    /**
+     * Carga todos los clientes activos en la tabla de clientes.
+     */
     private void cargarTablaClientes() {
-
         try {
-            ClienteDAO cursadas = ClienteDAO.obtenerInstancia();
-            Collection<Cliente> listaCliente = new ArrayList<>(); // Inicialización predeterminada
+            ClienteDAO clienteDAO = ClienteDAO.obtenerInstancia();
+            Collection<Cliente> listaCliente = clienteDAO.obtenerClientes();
+            clientesModel.setRowCount(0); // Limpia la tabla de clientes antes de agregar nuevos datos
 
-            listaCliente = cursadas.obtenerClientes();
-            clientesModel.setRowCount(0); // Limpia la tabla de tratamientos antes de agregar nuevos datos
             for (Cliente tipo : listaCliente) {
                 if (tipo.isEstado()) {
-                    // clientesModel.addRow(new Object[]{tipo.getIdCliente(), tipo.getDni(), tipo.getApellido(), tipo.getNombre()});
                     clientesModel.addRow(new Object[]{tipo.getIdCliente(), tipo.getDni(), tipo.getApellido(), tipo.getNombre()});
-
                 }
-
             }
         } catch (Exception ex) {
             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
+    /**
+     * Carga los clientes con o sin mascota en la tabla de historiales.
+     *
+     * @param conMascota Indica si se deben mostrar los clientes con mascotas
+     * (true) o sin mascotas (false).
+     */
     private void cargarTablaClientesConSinMascota(boolean conMascota) {
-
         try {
-            ClienteDAO cursadas = ClienteDAO.obtenerInstancia();
+            ClienteDAO clienteDAO = ClienteDAO.obtenerInstancia();
             Collection<Cliente> listaCliente = new ArrayList<>(); // Inicialización predeterminada
+
             if (conMascota) {
-                listaCliente = cursadas.obtenerClientesConMascota();
+                listaCliente = clienteDAO.obtenerClientesConMascota();
             } else {
-                listaCliente = cursadas.obtenerClientesSinMascota();
+                listaCliente = clienteDAO.obtenerClientesSinMascota();
             }
 
-            historialModel.setRowCount(0); // Limpia la tabla de tratamientos antes de agregar nuevos datos
+            historialModel.setRowCount(0); // Limpia la tabla de historiales antes de agregar nuevos datos
             for (Cliente tipo : listaCliente) {
                 if (tipo.isEstado()) {
-                    // clientesModel.addRow(new Object[]{tipo.getIdCliente(), tipo.getDni(), tipo.getApellido(), tipo.getNombre()});
                     historialModel.addRow(new Object[]{tipo.getApellido(), tipo.getNombre(), tipo.getDni()});
-
                 }
-
             }
         } catch (Exception ex) {
             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
+    /**
+     * Carga las mascotas que han recibido un tipo de tratamiento específico en
+     * la tabla de historiales.
+     *
+     * @param idTratamiento Identificador del tipo de tratamiento.
+     * @throws Exception Si ocurre un error al acceder a la base de datos.
+     */
     private void cargarMascotaXTipo(int idTratamiento) throws Exception {
+        MascotaDAO mascotaDAO = MascotaDAO.obtenerInstancia();
+        Collection<Mascota> listaMascota = mascotaDAO.listarMascotasXTipoTratamiento(idTratamiento);
+        historialModel.setRowCount(0); // Limpia la tabla de historiales antes de agregar nuevos datos
 
-        MascotaDAO cursadas = MascotaDAO.obtenerInstancia();
-        Collection<Mascota> listaMascota = new ArrayList<>(); // Inicialización predeterminada
-
-        listaMascota = cursadas.listarMascotasXTipoTratamiento(idTratamiento);
-        historialModel.setRowCount(0); // Limpia la tabla de tratamientos antes de agregar nuevos datos
         for (Mascota tipo : listaMascota) {
             if (tipo.isEstado()) {
-                // historialModel.addRow(new Object[]{tipo.getIdMascota(), tipo.getAlias(), tipo.getPesoActual()});
                 historialModel.addRow(new Object[]{tipo.getAlias(), tipo.getPesoActual()});
-
             }
-
         }
-
     }
 
+    /**
+     * Carga en la tabla de historial las visitas asociadas a una mascota
+     * específica.
+     *
+     * @param idMascotas Identificador de la mascota.
+     */
     private void tablaHistorialVisita(int idMascotas) {
         try {
             VisitaDAO cursadas = VisitaDAO.obtenerInstancia();
-            Collection<Visita> listaVistas = new ArrayList<>(); // Inicialización predeterminada
-
-            listaVistas = cursadas.listarMascotasPorVisitas(idMascotas);
+            Collection<Visita> listaVistas = cursadas.listarMascotasPorVisitas(idMascotas);
             historialModel.setRowCount(0); // Limpia la tabla de tratamientos antes de agregar nuevos datos
-            for (Visita tipo : listaVistas) {
-                //if (tipo.isEstado()) {
-                historialModel.addRow(new Object[]{tipo.getFechaVisita(), tipo.getDetallesSintoma(), tipo.getImporteVisita()});
 
-                // }
+            // Itera sobre las visitas y agrega filas a la tabla
+            for (Visita tipo : listaVistas) {
+                historialModel.addRow(new Object[]{tipo.getFechaVisita(), tipo.getDetallesSintoma(), tipo.getImporteVisita()});
             }
         } catch (Exception ex) {
             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
+    /**
+     * Carga en la tabla de historial los tratamientos realizados para una
+     * mascota específica.
+     *
+     * @param idMascotas Identificador de la mascota.
+     */
     private void tablaHistorialMascotaTratamientos(int idMascotas) {
         try {
             TratamientoRealizadoDAO cursadas = TratamientoRealizadoDAO.obtenerInstancia();
-            Collection<TratamientoRealizado> listaMascotaTratamientos = new ArrayList<>(); // Inicialización predeterminada
-
-            listaMascotaTratamientos = cursadas.obtenerTratamientosDeMascota(idMascotas);
+            Collection<TratamientoRealizado> listaMascotaTratamientos = cursadas.obtenerTratamientosDeMascota(idMascotas);
             historialModel.setRowCount(0); // Limpia la tabla de tratamientos antes de agregar nuevos datos
+
+            // Itera sobre los tratamientos realizados y agrega filas a la tabla
             for (TratamientoRealizado tipo : listaMascotaTratamientos) {
-                //if (tipo.isEstado()) {
                 historialModel.addRow(new Object[]{tipo.getIdVisita().getFechaVisita(), tipo.getIdTratamiento().getTipo(), tipo.getIdTratamiento().getDescripcion()});
-               // JOptionPane.showMessageDialog(null, tipo);
-                // }
             }
         } catch (Exception ex) {
             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
+    /**
+     * Carga en la tabla de historial las visitas asociadas a un cliente
+     * específico.
+     *
+     * @param idCliente Identificador del cliente.
+     */
     private void tablaHistorialVisitaCliente(int idCliente) {
         try {
             VisitaDAO cursadas = VisitaDAO.obtenerInstancia();
-            Map<Visita, String> visitasConAlias = new LinkedHashMap<>();
-            visitasConAlias = cursadas.obtenerVisitasDeCliente(idCliente);
+            Map<Visita, String> visitasConAlias = cursadas.obtenerVisitasDeCliente(idCliente);
             historialModel.setRowCount(0); // Limpia la tabla de tratamientos antes de agregar nuevos datos
 
+            // Si el mapa está vacío, muestra un mensaje, de lo contrario, agrega filas a la tabla
             if (visitasConAlias.isEmpty()) {
-                // El mapa está vacío, no hay datos para mostrar en la tabla
-                // Puedes mostrar un mensaje o realizar alguna acción adecuada al caso vacío
-                // Por ejemplo, mostrar un mensaje en un JLabel o JTextArea que diga "No hay visitas para mostrar".
-                JOptionPane.showMessageDialog(this, "El Cliente todavia no realizo visitas!");
+                JOptionPane.showMessageDialog(this, "El Cliente todavía no ha realizado visitas!");
             } else {
-                // El mapa contiene datos, itera y agrega filas a la tabla
                 for (Map.Entry<Visita, String> entry : visitasConAlias.entrySet()) {
                     Visita tipo = entry.getKey();
                     String val = entry.getValue();
@@ -866,28 +798,31 @@ public class Historial extends javax.swing.JInternalFrame {
         }
     }
 
+    /**
+     * Carga en la tabla de tratamientos los tipos de tratamiento activos.
+     */
     private void tablaTipoTratamiento() {
         try {
-
             TratamientoDAO cursadas = TratamientoDAO.obtenerInstancia();
-            Collection<Tratamiento> listaTratamiento = new ArrayList<>(); // Inicialización predeterminada
-
-            listaTratamiento = cursadas.obtenerTratamientos();
+            Collection<Tratamiento> listaTratamiento = cursadas.obtenerTratamientos();
             tratamientoModel.setRowCount(0); // Limpia la tabla de tratamientos antes de agregar nuevos datos
+
+            // Itera sobre los tipos de tratamiento y agrega filas a la tabla
             for (Tratamiento tipo : listaTratamiento) {
                 if (tipo.isEstado()) {
-                    //tratamientoModel.addRow(new Object[]{tipo.getIdTratamiento(), tipo.getTipo()});
                     tratamientoModel.addRow(new Object[]{tipo.getIdTratamiento(), tipo.getTipo()});
-
                 }
             }
         } catch (Exception ex) {
             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
         }
-
     }
 
-    // Método para ajustar el ancho de las columnas automáticamente
+    /**
+     * Ajusta automáticamente el ancho de las columnas de una tabla.
+     *
+     * @param table Tabla a la que se le ajustarán las columnas.
+     */
     private void packAll(JTable table) {
         TableColumnModel model = table.getColumnModel();
         for (int column = 0; column < table.getColumnCount(); column++) {
@@ -901,6 +836,9 @@ public class Historial extends javax.swing.JInternalFrame {
         }
     }
 
+    /**
+     * Inicializa las cabeceras de las tablas al iniciar la ventana.
+     */
     private void inicializarCabezeras() {
         armarCabeceraMascota();
         armarCabeceraTipo();
@@ -908,6 +846,12 @@ public class Historial extends javax.swing.JInternalFrame {
         armarCabeceraHistorialVisita();
     }
 
+    /**
+     * Oculta una columna específica en una tabla.
+     *
+     * @param table Tabla en la que se ocultará la columna.
+     * @param nombreColumna Nombre de la columna que se ocultará.
+     */
     private void ocultarColumna(JTable table, String nombreColumna) {
         int indiceColumnaOculta = table.getColumn(nombreColumna).getModelIndex();
         TableColumn columna = table.getColumnModel().getColumn(indiceColumnaOculta);
@@ -916,184 +860,300 @@ public class Historial extends javax.swing.JInternalFrame {
         columna.setMaxWidth(0);
     }
 
+    /**
+     * Configura los listeners para el JComboBox que permite seleccionar
+     * diferentes opciones de historial.
+     */
     private void configurarListeners() {
         // Listener para el JComboBox
         jCBListar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Obtiene el índice de la opción seleccionada en el JComboBox
                 int selectedIndex = jCBListar.getSelectedIndex();
                 switch (selectedIndex) {
+                    // Opción 0: Listar todas las visitas de una misma mascota
                     case 0:
+                        // Configuración de la interfaz y los datos para mostrar el historial de una mascota específica
                         setTitle("Historial - Listar todas las visitas de una misma mascota.");
-                        ////                    jLHistoriales.setText("Historial");
                         jLHistoriales.setText("Historial - Listar todas las visitas de una misma mascota");
+
+                        // Limpia los datos de las tablas de clientes, mascotas, historial y tratamientos
                         clientesModel.setRowCount(0);
                         mascotaModel.setRowCount(0);
                         historialModel.setRowCount(0);
                         tratamientoModel.setRowCount(0);
+
+                        // Configura las cabeceras de las tablas de clientes y historial de visitas
                         armarCabeceraCliente();
-                        cargarTablaClientes();
                         armarCabeceraHistorialVisita();
+
+                        // Carga los datos de los clientes en la tabla de clientes
+                        cargarTablaClientes();
+
+                        // Oculta la columna de ID en la tabla de clientes
                         ocultarColumna(jTClientes, "Id");
-                        //seleccionarCliente();
+
+                        // Cambia el estado del programa para indicar que se está mostrando el historial de una mascota
                         estado = Estado.CLIENTE_MASCOTA;
                         break;
+                    // Opción 1: Listar todas las visitas de un mismo Cliente
                     case 1:
+                        // Configuración de la interfaz y los datos para mostrar el historial de un cliente específico
                         setTitle("Historial - Listar todas las visitas de un mismo Cliente.");
-                        ////                    jLHistoriales.setText("Historial");
                         jLHistoriales.setText("Historial - Listar todas las visitas de un mismo Cliente.");
+
+                        // Limpia los datos de las tablas de clientes, mascotas, historial y tratamientos
                         clientesModel.setRowCount(0);
                         mascotaModel.setRowCount(0);
                         historialModel.setRowCount(0);
                         tratamientoModel.setRowCount(0);
+
+                        // Configura las cabeceras de las tablas de clientes y historial de visitas
                         armarCabeceraCliente();
-                        cargarTablaClientes();
                         armarCabeceraHistorialVisita();
+
+                        // Carga los datos de los clientes en la tabla de clientes
+                        cargarTablaClientes();
+
+                        // Oculta la columna de ID en la tabla de clientes
                         ocultarColumna(jTClientes, "Id");
-                        //seleccionarCliente();
+
+                        // Cambia el estado del programa para indicar que se está mostrando el historial de un cliente
                         estado = Estado.CLIENTE_VISITA;
                         break;
+                    // Opción 11: Listar todas las mascotas que hacen el mismo tratamiento
                     case 11:
+                        // Configuración de la interfaz y los datos para mostrar mascotas con un tratamiento específico
+                        setTitle("Historial - Listar todas las mascotas que hacen el mismo tratamiento");
+                        jLHistoriales.setText("Historial - Listar todas las mascotas que hacen el mismo tratamiento");
 
+                        // Limpia los datos de las tablas de clientes, mascotas, historial y tratamientos
                         clientesModel.setRowCount(0);
                         mascotaModel.setRowCount(0);
                         historialModel.setRowCount(0);
                         tratamientoModel.setRowCount(0);
+
+                        // Configura las cabeceras de las tablas de historial de tratamientos y tipos de tratamiento
                         armarCabeceraHistorialTratamiento();
                         armarCabeceraTipo();
+
+                        // Carga los datos de los tipos de tratamiento en la tabla de tratamientos
                         tablaTipoTratamiento();
+
+                        // Cambia el estado del programa para indicar que no se está mostrando el historial de una mascota o cliente
                         estado = Estado.NADA;
-                        setTitle("Historial - Listar todas las mascotas que hacen el mismo tratamiento");
-                        //seleccionarTratamiento();
+
+                        // Oculta la columna de ID en la tabla de tratamientos
                         ocultarColumna(jTTTratamientos, "Id");
+
+                        // Cambia el título de la interfaz y la etiqueta para indicar que se están mostrando mascotas
                         jLHistoriales.setText("Historial - Mascotas");
                         break;
+                    // Opción 2: Listar Clientes que tienen Mascotas Activas
                     case 2:
-                        clientesModel.setRowCount(0);
-                        mascotaModel.setRowCount(0);
-                        historialModel.setRowCount(0);
-                        tratamientoModel.setRowCount(0);
-                        //jLHistoriales.setText("Historial");
-                        // Si se selecciona la cuarta opción en el JComboBox
-                        //armarCabeceraHistorialEstado();
-//                        setTitle("Historial - Listar los tratamientos de la mascota en una visita");
+                        // Configura la etiqueta para mostrar que se están listando clientes con mascotas
                         jLHistoriales.setText("Historial - Listar Clientes que tienen Mascotas");
-////                    // Si se selecciona la tercera opción en el JComboBox
-                        armarCabeceraClienteConSinMascota();
                         setTitle("Historial - Listar Clientes que tienen Mascotas");
-                        cargarTablaClientesConSinMascota(true);
-                        estado = Estado.NADA;
-                        //cargarTablaClientes();
-                        //ocultarColumna(JTHistoriales, "Id");
-                        ;
-                        break;
-                    case 3:
+
+                        // Limpia los datos de las tablas de clientes, mascotas, historial y tratamientos
                         clientesModel.setRowCount(0);
                         mascotaModel.setRowCount(0);
                         historialModel.setRowCount(0);
                         tratamientoModel.setRowCount(0);
-                        //jLHistoriales.setText("Historial");
-                        // Si se selecciona la cuarta opción en el JComboBox
-                        //armarCabeceraHistorialEstado();
-//                        setTitle("Historial - Listar los tratamientos de la mascota en una visita");
-                        jLHistoriales.setText("Historial - Listar Clientes que no tienen Mascotas");
-////                    // Si se selecciona la tercera opción en el JComboBox
+
+                        // Configura las cabeceras de las tablas de clientes con o sin mascotas
                         armarCabeceraClienteConSinMascota();
-                        setTitle("Historial - Listar Clientes que no tienen Mascotas");
-                        cargarTablaClientesConSinMascota(false);
+
+                        // Carga los datos de los clientes con mascotas en la tabla de clientes
+                        cargarTablaClientesConSinMascota(true);
+
+                        // Cambia el estado del programa para indicar que no se está mostrando el historial de una mascota o cliente
                         estado = Estado.NADA;
-                        //cargarTablaClientes();
-                        //ocultarColumna(JTHistoriales, "Id");
-                        // ...
                         break;
-                    case 5:
+
+                    // Opción 3: Listar Clientes que no tienen Mascotas Activas
+                    case 3:
+                        // Configura la etiqueta para mostrar que se están listando clientes sin mascotas
+                        jLHistoriales.setText("Historial - Listar Clientes que no tienen Mascotas");
+                        setTitle("Historial - Listar Clientes que no tienen Mascotas");
+
+                        // Limpia los datos de las tablas de clientes, mascotas, historial y tratamientos
                         clientesModel.setRowCount(0);
                         mascotaModel.setRowCount(0);
                         historialModel.setRowCount(0);
                         tratamientoModel.setRowCount(0);
-                        armarCabeceraHistorialMascotaActivo();
-                        cargarTablaMascotasActivoInactivo(true);
+
+                        // Configura las cabeceras de las tablas de clientes con o sin mascotas
+                        armarCabeceraClienteConSinMascota();
+
+                        // Carga los datos de los clientes sin mascotas en la tabla de clientes
+                        cargarTablaClientesConSinMascota(false);
+
+                        // Cambia el estado del programa para indicar que no se está mostrando el historial de una mascota o cliente
+                        estado = Estado.NADA;
+                        break;
+                    // Opción 5: Listar Mascotas Activas
+                    case 5:
+                        // Limpia los datos de las tablas de clientes, mascotas, historial y tratamientos
+                        clientesModel.setRowCount(0);
+                        mascotaModel.setRowCount(0);
+                        historialModel.setRowCount(0);
+                        tratamientoModel.setRowCount(0);
+
+                        // Configura la etiqueta para mostrar que se están listando mascotas activas
                         jLHistoriales.setText("Historial - Activas");
                         setTitle("Historial - Listar Mascotas Activos");
+
+                        // Configura las cabeceras de las tablas de mascotas activas
+                        armarCabeceraHistorialMascotaActivo();
+
+                        // Carga los datos de las mascotas activas en la tabla de mascotas
+                        cargarTablaMascotasActivoInactivo(true);
+
+                        // Cambia el estado del programa para indicar que no se está mostrando el historial de una mascota o cliente
                         estado = Estado.NADA;
-                        break;
+                    // Opción 4: Listar Mascotas Inactivas
                     case 4:
+                        // Limpia los datos de las tablas de clientes, mascotas, historial y tratamientos
                         clientesModel.setRowCount(0);
                         mascotaModel.setRowCount(0);
                         historialModel.setRowCount(0);
                         tratamientoModel.setRowCount(0);
-                        armarCabeceraHistorialMascotaActivo();
-                        cargarTablaMascotasActivoInactivo(false);
+
+                        // Configura la etiqueta para mostrar que se están listando mascotas inactivas
                         jLHistoriales.setText("Historial - Inactivas");
                         setTitle("Historial - Listar Mascotas Inactivas");
+
+                        // Configura las cabeceras de las tablas de mascotas inactivas
+                        armarCabeceraHistorialMascotaActivo();
+
+                        // Carga los datos de las mascotas inactivas en la tabla de mascotas
+                        cargarTablaMascotasActivoInactivo(false);
+
+                        // Cambia el estado del programa para indicar que no se está mostrando el historial de una mascota o cliente
                         estado = Estado.NADA;
                         break;
+                    // Opción 6: Listar Tratamientos Activos
                     case 6:
+                        // Limpia los datos de las tablas de clientes, mascotas, historial y tratamientos
                         clientesModel.setRowCount(0);
                         mascotaModel.setRowCount(0);
                         historialModel.setRowCount(0);
                         tratamientoModel.setRowCount(0);
+
+                        // Configura las cabeceras de las tablas para mostrar tratamientos activos
                         armarCabeceraHistorialTratamientoXEstado();
+
+                        // Carga los datos de los tratamientos activos en la tabla de tratamientos
                         cargarTablaTratamientoActivoInactivo(true);
+
+                        // Configura las etiquetas y el título para reflejar que se están mostrando tratamientos activos
                         jLHistoriales.setText("Historial - Activas");
                         setTitle("Historial - Listar Tratamientos Activos");
+
+                        // Cambia el estado del programa para indicar que no se está mostrando el historial de una mascota o cliente
                         estado = Estado.NADA;
                         break;
+                    // Opción 7: Listar Tratamientos Inactivos
                     case 7:
+                        // Limpia los datos de las tablas de clientes, mascotas, historial y tratamientos
                         clientesModel.setRowCount(0);
                         mascotaModel.setRowCount(0);
                         historialModel.setRowCount(0);
                         tratamientoModel.setRowCount(0);
+
+                        // Configura las cabeceras de las tablas para mostrar tratamientos inactivos
                         armarCabeceraHistorialTratamientoXEstado();
+
+                        // Carga los datos de los tratamientos inactivos en la tabla de tratamientos
                         cargarTablaTratamientoActivoInactivo(false);
+
+                        // Configura las etiquetas y el título para reflejar que se están mostrando tratamientos inactivos
                         jLHistoriales.setText("Historial - Inactivas");
                         setTitle("Historial - Listar Tratamientos Inactivos");
+
+                        // Cambia el estado del programa para indicar que no se está mostrando el historial de una mascota o cliente
                         estado = Estado.NADA;
                         break;
+                    // Opción 8: Listar Clientes Activos
                     case 8:
+                        // Limpia los datos de las tablas de clientes, mascotas, historial y tratamientos
                         clientesModel.setRowCount(0);
                         mascotaModel.setRowCount(0);
                         historialModel.setRowCount(0);
                         tratamientoModel.setRowCount(0);
+
+                        // Configura las cabeceras de las tablas para mostrar clientes activos
                         armarCabeceraHistorialClienteXEstado();
+
+                        // Carga los datos de los clientes activos en la tabla de clientes
                         cargarTablaClienteActivoInactivo(true);
+
+                        // Configura las etiquetas y el título para reflejar que se están mostrando clientes activos
                         jLHistoriales.setText("Historial - Activos");
                         setTitle("Historial - Listar Clientes Activos");
+
+                        // Cambia el estado del programa para indicar que no se está mostrando el historial de una mascota o cliente
                         estado = Estado.NADA;
                         break;
+                    // Opción 9: Listar Clientes Inactivos
                     case 9:
+                        // Limpia los datos de las tablas de clientes, mascotas, historial y tratamientos
                         clientesModel.setRowCount(0);
                         mascotaModel.setRowCount(0);
                         historialModel.setRowCount(0);
                         tratamientoModel.setRowCount(0);
+
+                        // Configura las cabeceras de las tablas para mostrar clientes inactivos
                         armarCabeceraHistorialClienteXEstado();
+
+                        // Carga los datos de los clientes inactivos en la tabla de clientes
                         cargarTablaClienteActivoInactivo(false);
+
+                        // Configura las etiquetas y el título para reflejar que se están mostrando clientes inactivos
                         jLHistoriales.setText("Historial - Inactivos");
                         setTitle("Historial - Listar Clientes Inactivos");
+
+                        // Cambia el estado del programa para indicar que no se está mostrando el historial de una mascota o cliente
                         estado = Estado.NADA;
                         break;
+                    // Opción 10: Listar Tratamientos Realizados por Mascota
                     case 10:
-                        setTitle("Historial - Listar los Tratamientos Realizados por Mascota.");
-                        ////                    jLHistoriales.setText("Historial");
+                        // Configura las etiquetas y el título para reflejar que se están mostrando tratamientos realizados por mascota
+                        setTitle("Historial - Listar los Tratamientos Realizados por Mascota");
                         jLHistoriales.setText("Historial - Listar los Tratamientos Realizados por Mascota");
+
+                        // Limpia los datos de las tablas de clientes, mascotas, historial y tratamientos
                         clientesModel.setRowCount(0);
                         mascotaModel.setRowCount(0);
                         historialModel.setRowCount(0);
                         tratamientoModel.setRowCount(0);
+
+                        // Configura las cabeceras de las tablas para mostrar información de clientes y mascotas
                         armarCabeceraCliente();
                         cargarTablaClientes();
                         armarCabeceraHistorialMascotaTratamientos();
+
+                        // Oculta la columna de identificación del cliente en la tabla de clientes
                         ocultarColumna(jTClientes, "Id");
-                        //seleccionarCliente();
+
+                        // Cambia el estado del programa para indicar que se está mostrando el historial de tratamientos realizados por mascota
                         estado = Estado.MASCOTA_TRATAMIENTO;
                         break;
+                    // Opción por defecto: Mostrar el estado inicial del programa sin ningún historial específico
                     default:
+                        // Configura las etiquetas y el título para reflejar que no se está mostrando ningún historial específico
                         setTitle("Historial");
                         jLHistoriales.setText("Historial");
+
+                        // Limpia los datos de las tablas de clientes, mascotas, historial y tratamientos
                         tratamientoModel.setRowCount(0);
                         clientesModel.setRowCount(0);
                         mascotaModel.setRowCount(0);
                         historialModel.setRowCount(0);
+
+                        // Cambia el estado del programa para indicar que no se está mostrando el historial de una mascota o cliente
                         estado = Estado.NADA;
                         break;
                 }
@@ -1103,52 +1163,69 @@ public class Historial extends javax.swing.JInternalFrame {
     }
 
     private void seleccionarCliente() {
-
+        // Agregar un listener para detectar cambios en la selección de filas en la tabla de clientes
         jTClientes.getSelectionModel().addListSelectionListener(e -> {
+            // Obtener la fila seleccionada en la tabla de clientes
             int selectedRow = jTClientes.getSelectedRow();
+
+            // Verificar si se ha seleccionado una fila válida (-1 indica que no hay selección)
             if (selectedRow != -1) {
+                // Obtener el ID del cliente seleccionado en la tabla
                 idCliente = (Integer) jTClientes.getValueAt(selectedRow, indiceColumnaOcultaCliente);
+
+                // Deshabilitar el ajuste automático del tamaño de las columnas y ajustar el tamaño de las columnas de la tabla
                 jTClientes.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
                 packAll(jTClientes);
+
+                // Verificar el estado actual del programa para determinar qué acción realizar
                 if (estado.equals(Estado.CLIENTE_MASCOTA) || estado.equals(Estado.MASCOTA_TRATAMIENTO)) {
+                    // Si se está mostrando el historial de una mascota o tratamientos por mascota,
+                    // cargar y mostrar las mascotas asociadas a este cliente
                     cargarTablaMascotas(idCliente);
+
+                    // Ocultar la columna de identificación de mascota en la tabla de mascotas
                     ocultarColumna(jTMascotas, "Id");
+
+                    // Actualizar la etiqueta para indicar que se está mostrando el historial de mascotas
                     jLHistoriales.setText("Historial - Mascotas");
                 } else if (estado.equals(Estado.CLIENTE_VISITA)) {
+                    // Si se está mostrando el historial de visitas de un cliente,
+                    // cargar y mostrar el historial de visitas asociado a este cliente
                     tablaHistorialVisitaCliente(idCliente);
+
+                    // Actualizar la etiqueta para indicar que se está mostrando el historial de visitas
                     jLHistoriales.setText("Historial - Mascotas");
                 }
-
             }
         });
 
-        // Configurar otras operaciones relacionadas con listar visitas de mascota aquí
-        // ...
     }
 
     private void seleccionarMascotas() {
-
-        // Listener para la tabla de mascotas
+        // Agregar un listener para detectar cambios en la selección de filas en la tabla de mascotas
         jTMascotas.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                // Verifica si la selección está cambiada y no está en modo de ajuste
+                // Verificar si la selección ha cambiado y no está en modo de ajuste
                 if (!e.getValueIsAdjusting()) {
-                    // Obtiene la fila seleccionada
+                    // Obtener la fila seleccionada en la tabla de mascotas
                     int selectedRow = jTMascotas.getSelectedRow();
-                    // Verifica si hay una fila seleccionada
+                    // Verificar si hay una fila seleccionada
                     if (selectedRow != -1) {
-                        // Obtén el valor de todas las columnas en la fila seleccionada
+                        // Obtener el valor de la columna de ID de mascota y el alias de la mascota seleccionada
                         idMascotas = (Integer) jTMascotas.getValueAt(selectedRow, indiceColumnaOcultaMacota);
                         alias = (String) jTMascotas.getValueAt(selectedRow, 1);
 
+                        // Verificar el estado actual del programa para determinar qué acción realizar
                         if (estado.equals(Estado.CLIENTE_MASCOTA)) {
+                            // Si se está mostrando el historial de una mascota específica,
+                            // cargar y mostrar el historial de visitas de esa mascota
                             jLHistoriales.setText("Historial - Mascota con Alias: " + alias);
-                            //JOptionPane.showMessageDialog(null, "estoy en la opcion 0");
                             tablaHistorialVisita(idMascotas);
                         } else if (estado.equals(Estado.MASCOTA_TRATAMIENTO)) {
+                            // Si se está mostrando el historial de tratamientos de una mascota específica,
+                            // cargar y mostrar el historial de tratamientos de esa mascota
                             jLHistoriales.setText("Historial - Mascota con Alias: " + alias);
-                            // JOptionPane.showMessageDialog(null, "estoy en la opcion 11");
                             tablaHistorialMascotaTratamientos(idMascotas);
                         }
                     }
@@ -1158,19 +1235,20 @@ public class Historial extends javax.swing.JInternalFrame {
     }
 
     private void seleccionarTratamiento() {
-        // Listener para la tabla de tratamiento
+        // Agregar un listener para detectar cambios en la selección de filas en la tabla de tratamientos
         jTTTratamientos.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
             @Override
             public void valueChanged(ListSelectionEvent e) {
-                // Verifica si la selección está cambiada y no está en modo de ajuste
+                // Verificar si la selección ha cambiado y no está en modo de ajuste
                 if (!e.getValueIsAdjusting()) {
-                    // Obtiene la fila seleccionada
+                    // Obtener la fila seleccionada en la tabla de tratamientos
                     int selectedRow = jTTTratamientos.getSelectedRow();
-                    // Verifica si hay una fila seleccionada
+                    // Verificar si hay una fila seleccionada
                     if (selectedRow != -1) {
                         try {
-                            // Obtén el valor de todas las columnas en la fila seleccionada
+                            // Obtener el valor de la columna de ID de tratamiento en la fila seleccionada
                             idTratamiento = (Integer) jTTTratamientos.getValueAt(selectedRow, indiceColumnaOcultaTratamiento);
+                            // Cargar y mostrar las mascotas asociadas a este tipo de tratamiento
                             cargarMascotaXTipo(idTratamiento);
                         } catch (Exception ex) {
                             Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
