@@ -31,7 +31,7 @@ public class UsuarioDAO extends DAO {
     public int guardarUsuario(Usuario usuario) throws Exception {
         try {
             validarUsuario(usuario);
-            String sql = "INSERT INTO clientes (nombre, password, rol, estado) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO usuarios (nombre, password, rol, estado) VALUES (?, ?, ?, ?)";
             try (PreparedStatement preparedStatement = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
                 preparedStatement.setString(1, usuario.getNombre());
                 preparedStatement.setString(2, usuario.getPassword());
@@ -52,7 +52,7 @@ public class UsuarioDAO extends DAO {
 
     public int modificarUsuario(Usuario usuario) throws Exception {
         validarUsuario(usuario);
-        String sql = "UPDATE usuario SET =?, nombre=?, password=?, rol=?, estado=? WHERE idUsuario=?";
+        String sql = "UPDATE usuarios SET nombre=?, password=?, rol=?, estado=? WHERE idUsuario=?";
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, usuario.getNombre());
             preparedStatement.setString(2, usuario.getPassword());
@@ -71,7 +71,7 @@ public class UsuarioDAO extends DAO {
     }
 
     public int bajaLogica(String nombre) throws Exception {
-        String sql = "UPDATE clientes SET estado=? WHERE nombre=?";
+        String sql = "UPDATE usuarios SET estado=? WHERE nombre=?";
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setBoolean(1, false);
             preparedStatement.setString(2, nombre);
@@ -83,7 +83,7 @@ public class UsuarioDAO extends DAO {
         }
     }
       public int altaLogica(String nombre) throws Exception {
-        String sql = "UPDATE clientes SET estado=? WHERE nombre=?";
+        String sql = "UPDATE usuarios SET estado=? WHERE nombre=?";
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setBoolean(1, true);
             preparedStatement.setString(2, nombre);
@@ -100,7 +100,7 @@ public class UsuarioDAO extends DAO {
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
             preparedStatement.setString(1, nombre);
-            JOptionPane.showMessageDialog(null, nombre);
+            //JOptionPane.showMessageDialog(null, nombre);
             resultado = consultarBase(preparedStatement);
 
             Usuario usuario = null;
@@ -120,7 +120,7 @@ public class UsuarioDAO extends DAO {
 
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
             preparedStatement.setString(1, password);
-            JOptionPane.showMessageDialog(null, password);
+            //JOptionPane.showMessageDialog(null, password);
             resultado = consultarBase(preparedStatement);
 
             Usuario usuario = null;
@@ -134,7 +134,7 @@ public class UsuarioDAO extends DAO {
         }
 
     }
-
+ 
     public Usuario obtenerUsuarioxNombre(String nombre) throws Exception {
         String sql = "SELECT * FROM `usuarios` WHERE nombre=?";
         try (PreparedStatement preparedStatement = conexion.prepareStatement(sql)) {
@@ -185,6 +185,7 @@ public class UsuarioDAO extends DAO {
 //            return mascota;
 //        }
 //    }
+    
     private Usuario obtenerUsuarioDesdeResultado(ResultSet result) throws SQLException {
         Usuario usuario = new Usuario();
 

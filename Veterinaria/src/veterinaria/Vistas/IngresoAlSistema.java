@@ -277,9 +277,12 @@ public class IngresoAlSistema extends javax.swing.JFrame {
                                       IngresoAlSistema login = new IngresoAlSistema();
                                       login.dispose();
                                       Menu menu = new Menu(username);
+                                      menu.setSize(800,600);
              
                                       menu.setVisible(true);
                                       menu.setLocationRelativeTo(null);
+                                      // Cerrar el formulario actual
+                                      this.dispose();
                                                                           
                                   } else {
                               JOptionPane.showMessageDialog(this, "Usuario y/aaao contraseña incorrectos");

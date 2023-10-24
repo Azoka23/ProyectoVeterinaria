@@ -16,7 +16,9 @@ import veterinaria.Entidades.Usuario;
 import veterinaria.Utilidades;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import veterinaria.AccesoADatos.TratamientoDAO;
 import veterinaria.Entidades.Cliente;
+import veterinaria.Entidades.Tratamiento;
 	
 
 
@@ -25,7 +27,8 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
      private Estado estado= Estado.NADA;
      private String nombre;
      private Usuario selectedCliente = null;
-     private int idUsuario = 0;
+     private boolean estadoUsuario;
+     private int idUsuario =0 ;
      private boolean estadoCliente;
      private final DefaultTableModel modelo = new DefaultTableModel() {
 
@@ -190,12 +193,12 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
             } else {
                 if (estado.equals(Estado.NUEVO) || estado.equals(Estado.BUSCAR)) {
 
-                    guardarUsuario();
+                    guardar();
                     limpiar();
 
                 } else {
 
-                    JOptionPane.showMessageDialog(this, "Elija buscar o Nuevo DNI");
+                    JOptionPane.showMessageDialog(this, "Elija buscar ");
                     limpiar();
                 }
 
@@ -227,6 +230,7 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
     private void jBBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBBuscarActionPerformed
 
          try {
+             estado = Estado.BUSCAR;
              buscarxNombre();
          } catch (ClassNotFoundException ex) {
              Logger.getLogger(RegistroUsuarios.class.getName()).log(Level.SEVERE, null, ex);
@@ -319,15 +323,84 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
             nombre = Utilidades.obtenerTextoDesdeCampo(jTNombre);
             //nombre= jTNombre.getText();
             Usuario usuario = usuarioD.buscarListaUsuarioxNombre(nombre);
-            if (usuario == null) {
-                JOptionPane.showMessageDialog(this, "que no encontro ");
+            if (usuario != null) {
+                setTitle("Cargar Tratamiento" + (usuario.isEstado() ? "" : " -- Codigo dado de Baja"));
+                jRBEstado.setSelected(usuario.isEstado());
+
+                mostrarUsuarioEnFormulario(usuario);
+            } else {
                 estado = Estado.NUEVO;
+                //JOptionPane.showMessageDialog(this, "No se encontró el codigo,el codigo disponible es " + ultimoRegistro());
+                //jTCodigo.setText(ultimoRegistro() + "");
             }
             
             mostrarUsuarioEnFormulario(usuario);
 
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(this, "No se encontro el DNI");
+            JOptionPane.showMessageDialog(this, "No se encontro el usuario");
+        }
+    }
+    private void guardar() throws Exception {
+        nombre = Utilidades.obtenerTextoDesdeCampo(jTNombre);
+        
+        try {
+            
+            try { 
+               
+                // Obtiene los datos del cliente desde los campos de texto
+                
+                if (nombre == null) {
+                JOptionPane.showMessageDialog(this, "Error: Debes ingresar un nombre válido.");
+                return;
+                }
+                UsuarioDAO usuarioD = UsuarioDAO.obtenerInstancia();
+                Usuario usuario = usuarioD.obtenerUsuarioxNombre(nombre);
+
+                if (usuario != null && estado.equals(Estado.NUEVO)) {
+
+                    JOptionPane.showMessageDialog(this, "El Codigo ya existe, no puede darlo de Alta.");
+                    return;
+                } else if (estado.equals(Estado.NUEVO)) {
+
+                try {
+                    JOptionPane.showMessageDialog(this, "o aca ");
+                    usuario.setEstado(true);
+                    usuarioD.guardarUsuario(usuario);
+                } catch (Exception ex) {
+                    Utilidades.mostrarError(ex, this);
+                }
+
+            } else if (estado.equals(Estado.BUSCAR)) {
+                // mascota.setEstado(true);
+                
+                JOptionPane.showMessageDialog(this, "Hasta aca llego "+usuario.getIdUsuario());
+                  idUsuario = usuario.getIdUsuario();
+                    usuario = new Usuario(
+                            idUsuario,
+                            nombre,
+                            Utilidades.obtenerTextoDesdeCampo(jTPassword),
+                            Utilidades.obtenerEnteroDesdeCampo(jTRol),
+                            jRBEstado.isSelected()
+                    );
+                     usuarioD.modificarUsuario(usuario);
+                     JOptionPane.showMessageDialog(this, "Hasta aca llego "+usuario.getIdUsuario());
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, "Error: Debes ingresar un número de documento válido.");
+                return;
+            }
+
+            // Asignar los valores al objeto Usuario
+//            
+//            usuario.setNombre(nombreU);
+//            usuario.setPassword(password);
+//            usuario.setRol(rol);
+//            usuario.setEstado(estadoUser);
+            //usuario.getIdUsuario(usuarioD.obtenerIDxNombre(nombre));
+            
+            
+        } catch (NumberFormatException ex) {
+            Utilidades.mostrarError(ex, this);
         }
     }
      private void guardarUsuario() {
@@ -345,10 +418,10 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
             //se fija si existe el cliente
             Usuario usuario = usuarioD.buscarListaUsuarioxNombre(nombre);
 
-            if (usuario != null && estado.equals(Estado.NUEVO)) {
-                JOptionPane.showMessageDialog(this, "El nombre ya existe, no puede darlo de Alta.");
-                return;
-            }
+//            if (usuario != null && estado.equals(Estado.NUEVO)) {
+//                JOptionPane.showMessageDialog(this, "El nombre ya existe, no puede darlo de Alta.");
+//                return;
+//            }
 
             // Obtiene los datos de los campos de texto
             usuario = new Usuario(
@@ -361,6 +434,7 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
             // Llama al método para guardar el cliente en la base de datos
             usuario.setEstado(true);
             if (estado.equals(Estado.NUEVO)) {
+                
                  idUsuario = usuarioD.guardarUsuario(usuario);
             }
             JOptionPane.showMessageDialog(this, "Usuario dado de Alta correctamente!");
@@ -428,13 +502,21 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
 //            Utilidades.mostrarError(ex, this);
 //        }
 //    }
+     
     private void mostrarUsuarioEnFormulario(Usuario usuario) {
         
         jTNombre.setText(usuario.getNombre());
         jTPassword.setText(usuario.getPassword());
         jTRol.setText(Integer.toString(usuario.getRol()));
         jRBEstado.setSelected(usuario.isEstado());
+        if (usuario.isEstado()) {
+            setTitle("Cargar Tratamiento");
+        } else {
+            setTitle("Tratamiento -- Codigo dado de Baja");
+        }
+        estadoUsuario = usuario.isEstado();
     }
+    
     /*
      private void cargarTabla(String nombre) throws Exception {
 

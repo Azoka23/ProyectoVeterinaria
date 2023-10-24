@@ -53,7 +53,7 @@ public class Menu extends javax.swing.JFrame {
     private class AdministradorMenu extends JMenu {
 
         public AdministradorMenu() {
-            setText("Usuario Administrador");
+            setTitle("PET DOCTOR -- Usuario Administrador");
 
         }
     }
@@ -62,7 +62,7 @@ public class Menu extends javax.swing.JFrame {
     private class VeterinarioMenu extends JMenu {
 
         public VeterinarioMenu() {
-            setText("Usuario Veterinario");
+            setTitle("PET DOCTOR -- Usuario Veterinario");
 
             // Agregar elementos de menú específicos para el Veterinario
               
@@ -74,7 +74,8 @@ public class Menu extends javax.swing.JFrame {
     private class AsistenteMenu extends JMenu {
 
         public AsistenteMenu() {
-            setText("Usuario Asistente");
+            //label.setHorizontalAlignment(JLabel.CENTER);
+            setTitle("PET DOCTOR -- Usuario Asistente");
 
             // Agregar elementos de menú específicos para el Asistente
                jMBarUsuario.setVisible(false);
@@ -84,7 +85,7 @@ public class Menu extends javax.swing.JFrame {
     
     // Método principal para iniciar la aplicación
     public static void main(String args[]) {
-        SwingUtilities.invokeLater(Menu::new);
+      //  SwingUtilities.invokeLater(Menu::new);
     }
 
     /**
