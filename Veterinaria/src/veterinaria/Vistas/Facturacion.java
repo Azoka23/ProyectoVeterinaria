@@ -1,6 +1,7 @@
 package veterinaria.Vistas;
 
 // Importaciones necesarias
+import java.io.File;
 import veterinaria.Vistas.CustomPanel;
 import veterinaria.Vistas.CustomTableCellRenderer;
 import java.io.IOException;
@@ -105,7 +106,7 @@ public class Facturacion extends javax.swing.JInternalFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 126, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -597,6 +598,12 @@ public class Facturacion extends javax.swing.JInternalFrame {
 
     public void generarPDF() {
         try {
+            // Crea una carpeta llamada "pdfs" en el directorio del proyecto si no existe
+            File directorioPDFs = new File("pdfs");
+            if (!directorioPDFs.exists()) {
+                directorioPDFs.mkdirs(); // Crea la carpeta si no existe
+            }
+
             PDDocument document = new PDDocument();
             PDPage page = new PDPage(PDRectangle.A4);
             document.addPage(page);
@@ -629,13 +636,12 @@ public class Facturacion extends javax.swing.JInternalFrame {
             }
 
             contentStream.close();
-            //String directorioApp = System.getProperty("user.dir");
-
-            String clienteText = jTCliente1.getText().trim(); // Obtener el texto del jTextField y eliminar espacios en blanco
-            String nombreArchivo = "factura" + clienteText + ".pdf";
+            
+            String clienteText = Utilidades.obtenerTextoDesdeCampo(jTCliente1); // Obtener el texto del campo jTCliente1
+            String nombreArchivo = "pdfs/factura_" + clienteText + ".pdf"; // Ruta del archivo en la carpeta "pdfs"
             document.save(nombreArchivo);
-            //document.save("factura"+jTCliente1.toString().trim()+".pdf");
             document.close();
+
             JOptionPane.showMessageDialog(this, "Remito generado correctamente.");
             System.out.println("Remito generado correctamente.");
 

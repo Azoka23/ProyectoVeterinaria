@@ -912,6 +912,12 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
 
     public void generarPDF(Factura factura) {
         try {
+            // Crea una carpeta llamada "pdfs" en el directorio del proyecto si no existe
+            File directorioPDFs = new File("pdfs");
+            if (!directorioPDFs.exists()) {
+                directorioPDFs.mkdirs(); // Crea la carpeta si no existe
+            }
+            
             PDDocument document = new PDDocument();
             PDPage page = new PDPage(PDRectangle.A4);
             document.addPage(page);
@@ -947,7 +953,7 @@ public class FormularioVisitas extends javax.swing.JInternalFrame {
             contentStream.close();
             //String directorioApp = System.getProperty("user.dir");
 
-            document.save("remito" + String.valueOf(factura.getIdVisita()) + ".pdf");
+            document.save("pdfs/remito_" + String.valueOf(factura.getIdVisita()) + ".pdf");
             document.close();
 
             System.out.println("Remito generado correctamente.");

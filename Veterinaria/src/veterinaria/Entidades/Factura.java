@@ -107,7 +107,9 @@ public class Factura {
         factura.append("Total: $").append(total).append("\n");
         factura.append("Descuento por pago efectivo: $").append(descuento).append("\n");
         factura.append("Total a pagar: $").append(total - descuento).append("\n");
-        factura.append("Clínica Veterinaria: Nombre, Dirección, Teléfono, etc.\n");
+                factura.append("---------------------------------------------\n");
+        factura.append("Calle de los Animales Felices, 123 Colonia Mascotaville - Ciudad Petrópolis, PV.\n");
+        factura.append("PV Código Postal: 12345 - info@petdoctorveterinaria.com.\n");
 
         return factura.toString();
     }
@@ -127,7 +129,5 @@ public class Factura {
     public String toString() {
         return "Factura{" + "idVisita=" + idVisita + ", fecha=" + fecha + ", cliente=" + cliente + ", mascota=" + mascota + ", tratamientos=" + tratamientos + ", total=" + total + ", descuento=" + descuento + '}';
     }
-
-
 
 }
