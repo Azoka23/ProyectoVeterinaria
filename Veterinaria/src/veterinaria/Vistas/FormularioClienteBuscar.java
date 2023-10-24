@@ -110,7 +110,7 @@ public class FormularioClienteBuscar extends javax.swing.JInternalFrame implemen
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        jPanel1 = new CustomPanel();
         jLDocumento = new javax.swing.JLabel();
         jLApellido = new javax.swing.JLabel();
         jLNombre = new javax.swing.JLabel();

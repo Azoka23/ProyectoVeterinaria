@@ -110,7 +110,7 @@ public class Horarios extends javax.swing.JInternalFrame {
         ));
         jScrollPane1.setViewportView(TablaTurnos);
 
-        jBSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/reservaturnos/Imagenes/home256_24783.png"))); // NOI18N
+        jBSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/home256_24783.png"))); // NOI18N
         jBSalir.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jBSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -120,7 +120,7 @@ public class Horarios extends javax.swing.JInternalFrame {
 
         jLFecha.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
 
-        jBGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/reservaturnos/Imagenes/Save_37110.png"))); // NOI18N
+        jBGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/Save_37110.png"))); // NOI18N
         jBGuardar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jBGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

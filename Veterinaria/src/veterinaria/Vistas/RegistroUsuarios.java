@@ -1,8 +1,7 @@
-
 package veterinaria.Vistas;
 
-
-
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,23 +18,22 @@ import java.security.NoSuchAlgorithmException;
 import veterinaria.AccesoADatos.TratamientoDAO;
 import veterinaria.Entidades.Cliente;
 import veterinaria.Entidades.Tratamiento;
-	
-
-
 
 public class RegistroUsuarios extends javax.swing.JInternalFrame {
-     private Estado estado= Estado.NADA;
-     private String nombre;
-     private Usuario selectedCliente = null;
-     private boolean estadoUsuario;
-     private int idUsuario =0 ;
-     private boolean estadoCliente;
-     private final DefaultTableModel modelo = new DefaultTableModel() {
+
+    private Estado estado = Estado.NADA;
+    private String nombre;
+    private Usuario selectedCliente = null;
+    private boolean estadoUsuario;
+    private int idUsuario = 0;
+    private boolean estadoCliente;
+    private final DefaultTableModel modelo = new DefaultTableModel() {
 
         public boolean isCellEditable(int fila, int columna) {
             return false;
         }
     };
+
     /**
      * Creates new form Visitas
      */
@@ -44,7 +42,22 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
         setTitle("Cargar usuario");
         // Establecer el foco en jTDocumento
         jTNombre.requestFocusInWindow();
-        
+        // Agregar KeyListener al campo jTDocumento
+        jTNombre.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    try {
+                        estado = Estado.BUSCAR;
+                        buscarxNombre();
+                    } catch (ClassNotFoundException ex) {
+                        Logger.getLogger(RegistroUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (SQLException ex) {
+                        Logger.getLogger(RegistroUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
+        });
     }
 
     /**
@@ -57,7 +70,7 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jCheckBox1 = new javax.swing.JCheckBox();
-        jPanel1 = new javax.swing.JPanel();
+        jPanel1 = new CustomPanel();
         jLApellido = new javax.swing.JLabel();
         jLNombre = new javax.swing.JLabel();
         jLMail = new javax.swing.JLabel();
@@ -73,13 +86,18 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
         jCheckBox1.setText("jCheckBox1");
 
         setClosable(true);
+        setTitle("Usuarios");
 
+        jLApellido.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
         jLApellido.setText("Nombre");
 
+        jLNombre.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
         jLNombre.setText("Password");
 
+        jLMail.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
         jLMail.setText("Rol");
 
+        jLMascota.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
         jLMascota.setText("Estado");
 
         jBBuscar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/search_find_lupa_21889.png"))); // NOI18N
@@ -89,17 +107,17 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
             }
         });
 
-        jRBEstado.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jRBEstado.setFont(new java.awt.Font("Roboto", 1, 14)); // NOI18N
         jRBEstado.setText("Estado");
 
-        jBGuardar.setText("Guardar");
+        jBGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/Save_37110.png"))); // NOI18N
         jBGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBGuardarActionPerformed(evt);
             }
         });
 
-        jBEliminar.setText("Eliminar");
+        jBEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/gui_cancel_icon_157198.png"))); // NOI18N
         jBEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBEliminarActionPerformed(evt);
@@ -119,54 +137,53 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
                     .addComponent(jLApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(26, 26, 26)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jTNombre)
+                    .addComponent(jTPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTRol, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jBBuscar)
+                .addContainerGap(20, Short.MAX_VALUE))
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTNombre)
-                        .addGap(89, 89, 89))
+                        .addGap(132, 132, 132)
+                        .addComponent(jRBEstado))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jTPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 297, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(jPanel1Layout.createSequentialGroup()
-                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jTRol, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(jRBEstado))
-                                    .addGap(68, 68, 68)
-                                    .addComponent(jBBuscar)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(jBGuardar)
-                                .addGap(101, 101, 101)
-                                .addComponent(jBEliminar)))
-                        .addContainerGap(89, Short.MAX_VALUE))))
+                        .addGap(183, 183, 183)
+                        .addComponent(jBGuardar)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jBEliminar)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(20, 20, 20)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLNombre)
-                    .addComponent(jTPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
+                        .addContainerGap()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTRol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLMail))
-                        .addGap(18, 18, 18)
+                            .addComponent(jLApellido, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(20, 20, 20)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jRBEstado)
-                            .addComponent(jLMascota)))
+                            .addComponent(jLNombre)
+                            .addComponent(jTPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
+                        .addGap(15, 15, 15)
                         .addComponent(jBBuscar)))
-                .addGap(36, 36, 36)
+                .addGap(21, 21, 21)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTRol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLMail))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jRBEstado)
+                    .addComponent(jLMascota))
+                .addGap(52, 52, 52)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jBGuardar)
                     .addComponent(jBEliminar))
-                .addContainerGap(117, Short.MAX_VALUE))
+                .addContainerGap(101, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -185,9 +202,9 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
- 
+
     private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuardarActionPerformed
-          try {
+        try {
             if (jTNombre.getText().isEmpty() || jTPassword.getText().isEmpty() || jTRol.getText().isEmpty()) {
                 JOptionPane.showMessageDialog(this, "No debe dejar algun dato vacio");
             } else {
@@ -208,39 +225,39 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
             Utilidades.mostrarError(ex, this);
     }//GEN-LAST:event_jBGuardarActionPerformed
     }
+
     public String convertirSHA256(String password) {
-	MessageDigest md = null;
-	try {
-		md = MessageDigest.getInstance("SHA-256");
-	} 
-	catch (NoSuchAlgorithmException e) {		
-		e.printStackTrace();
-		return null;
-	}
-	    
-	byte[] hash = md.digest(password.getBytes());
-	StringBuffer sb = new StringBuffer();
-	    
-	for(byte b : hash) {        
-		sb.append(String.format("%02x", b));
-	}
-	    
-	return sb.toString();
-}
+        MessageDigest md = null;
+        try {
+            md = MessageDigest.getInstance("SHA-256");
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        byte[] hash = md.digest(password.getBytes());
+        StringBuffer sb = new StringBuffer();
+
+        for (byte b : hash) {
+            sb.append(String.format("%02x", b));
+        }
+
+        return sb.toString();
+    }
     private void jBBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBBuscarActionPerformed
 
-         try {
-             estado = Estado.BUSCAR;
-             buscarxNombre();
-         } catch (ClassNotFoundException ex) {
-             Logger.getLogger(RegistroUsuarios.class.getName()).log(Level.SEVERE, null, ex);
-         } catch (SQLException ex) {
-             Logger.getLogger(RegistroUsuarios.class.getName()).log(Level.SEVERE, null, ex);
-         }
+        try {
+            estado = Estado.BUSCAR;
+            buscarxNombre();
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(RegistroUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(RegistroUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jBBuscarActionPerformed
 
     private void jBEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEliminarActionPerformed
-      eliminadologico();
+        eliminadologico();
     }//GEN-LAST:event_jBEliminarActionPerformed
 
 
@@ -318,7 +335,7 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
 
         UsuarioDAO usuarioD = UsuarioDAO.obtenerInstancia();
         //
-       
+
         try {
             nombre = Utilidades.obtenerTextoDesdeCampo(jTNombre);
             //nombre= jTNombre.getText();
@@ -333,25 +350,25 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
                 //JOptionPane.showMessageDialog(this, "No se encontró el codigo,el codigo disponible es " + ultimoRegistro());
                 //jTCodigo.setText(ultimoRegistro() + "");
             }
-            
+
             mostrarUsuarioEnFormulario(usuario);
 
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(this, "No se encontro el usuario");
         }
     }
+
     private void guardar() throws Exception {
         nombre = Utilidades.obtenerTextoDesdeCampo(jTNombre);
-        
+
         try {
-            
-            try { 
-               
+
+            try {
+
                 // Obtiene los datos del cliente desde los campos de texto
-                
                 if (nombre == null) {
-                JOptionPane.showMessageDialog(this, "Error: Debes ingresar un nombre válido.");
-                return;
+                    JOptionPane.showMessageDialog(this, "Error: Debes ingresar un nombre válido.");
+                    return;
                 }
                 UsuarioDAO usuarioD = UsuarioDAO.obtenerInstancia();
                 Usuario usuario = usuarioD.obtenerUsuarioxNombre(nombre);
@@ -362,19 +379,19 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
                     return;
                 } else if (estado.equals(Estado.NUEVO)) {
 
-                try {
-                    JOptionPane.showMessageDialog(this, "o aca ");
-                    usuario.setEstado(true);
-                    usuarioD.guardarUsuario(usuario);
-                } catch (Exception ex) {
-                    Utilidades.mostrarError(ex, this);
-                }
+                    try {
+                        JOptionPane.showMessageDialog(this, "o aca ");
+                        usuario.setEstado(true);
+                        usuarioD.guardarUsuario(usuario);
+                    } catch (Exception ex) {
+                        Utilidades.mostrarError(ex, this);
+                    }
 
-            } else if (estado.equals(Estado.BUSCAR)) {
-                // mascota.setEstado(true);
-                
-                JOptionPane.showMessageDialog(this, "Hasta aca llego "+usuario.getIdUsuario());
-                  idUsuario = usuario.getIdUsuario();
+                } else if (estado.equals(Estado.BUSCAR)) {
+                    // mascota.setEstado(true);
+
+                    JOptionPane.showMessageDialog(this, "Hasta aca llego " + usuario.getIdUsuario());
+                    idUsuario = usuario.getIdUsuario();
                     usuario = new Usuario(
                             idUsuario,
                             nombre,
@@ -382,8 +399,8 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
                             Utilidades.obtenerEnteroDesdeCampo(jTRol),
                             jRBEstado.isSelected()
                     );
-                     usuarioD.modificarUsuario(usuario);
-                     JOptionPane.showMessageDialog(this, "Hasta aca llego "+usuario.getIdUsuario());
+                    usuarioD.modificarUsuario(usuario);
+                    JOptionPane.showMessageDialog(this, "Hasta aca llego " + usuario.getIdUsuario());
                 }
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Error: Debes ingresar un número de documento válido.");
@@ -397,13 +414,12 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
 //            usuario.setRol(rol);
 //            usuario.setEstado(estadoUser);
             //usuario.getIdUsuario(usuarioD.obtenerIDxNombre(nombre));
-            
-            
         } catch (NumberFormatException ex) {
             Utilidades.mostrarError(ex, this);
         }
     }
-     private void guardarUsuario() {
+
+    private void guardarUsuario() {
         try {
 
             // Obtiene los datos del cliente desde los campos de texto
@@ -422,7 +438,6 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
 //                JOptionPane.showMessageDialog(this, "El nombre ya existe, no puede darlo de Alta.");
 //                return;
 //            }
-
             // Obtiene los datos de los campos de texto
             usuario = new Usuario(
                     nombre,
@@ -434,8 +449,8 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
             // Llama al método para guardar el cliente en la base de datos
             usuario.setEstado(true);
             if (estado.equals(Estado.NUEVO)) {
-                
-                 idUsuario = usuarioD.guardarUsuario(usuario);
+
+                idUsuario = usuarioD.guardarUsuario(usuario);
             }
             JOptionPane.showMessageDialog(this, "Usuario dado de Alta correctamente!");
         } catch (Exception ex) {
@@ -502,21 +517,21 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
 //            Utilidades.mostrarError(ex, this);
 //        }
 //    }
-     
+
     private void mostrarUsuarioEnFormulario(Usuario usuario) {
-        
+
         jTNombre.setText(usuario.getNombre());
         jTPassword.setText(usuario.getPassword());
         jTRol.setText(Integer.toString(usuario.getRol()));
         jRBEstado.setSelected(usuario.isEstado());
         if (usuario.isEstado()) {
-            setTitle("Cargar Tratamiento");
+            setTitle("Usuario");
         } else {
-            setTitle("Tratamiento -- Codigo dado de Baja");
+            setTitle("Usuario  dado de baja");
         }
         estadoUsuario = usuario.isEstado();
     }
-    
+
     /*
      private void cargarTabla(String nombre) throws Exception {
 
@@ -540,7 +555,5 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
         modelo.addColumn("Rol");
         jTUsuarios.setModel(modelo); 
     }
-    */
-    
-    
+     */
 }
