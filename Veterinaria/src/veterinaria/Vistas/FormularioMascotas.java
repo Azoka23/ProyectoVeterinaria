@@ -72,7 +72,7 @@ public class FormularioMascotas extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        jPanel1 = new CustomPanel();
         jLCodigo = new javax.swing.JLabel();
         jLAlias = new javax.swing.JLabel();
         jLSexo = new javax.swing.JLabel();
