@@ -84,7 +84,7 @@ public class Menu extends javax.swing.JFrame {
     
     // Método principal para iniciar la aplicación
     public static void main(String args[]) {
-        SwingUtilities.invokeLater(Menu::new);
+       // SwingUtilities.invokeLater(Menu::new);
     }
 
     /**

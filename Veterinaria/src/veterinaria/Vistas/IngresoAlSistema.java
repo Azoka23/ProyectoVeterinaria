@@ -9,9 +9,10 @@ import veterinaria.Entidades.Usuario;
 import veterinaria.Utilidades;
 
 public class IngresoAlSistema extends javax.swing.JFrame {
-
+    
     private boolean passwordVisible = false; // Variable de estado para rastrear la visibilidad de la contraseña
     private String nombre;
+
     /**
      * Creates new form MenuPrincipal
      */
@@ -145,7 +146,7 @@ public class IngresoAlSistema extends javax.swing.JFrame {
     }//GEN-LAST:event_jTUsuarioActionPerformed
 
     private void jBIngresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBIngresarActionPerformed
-
+        
         try {
             //ingresar();
             ingresar2();
@@ -214,7 +215,7 @@ public class IngresoAlSistema extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new IngresoAlSistema().setVisible(true);
-
+                
             }
         });
     }
@@ -235,7 +236,7 @@ public class IngresoAlSistema extends javax.swing.JFrame {
         String usuario = jTUsuario.getText();
         char[] passwordChars = jTPassword.getPassword();
         String password = new String(passwordChars);
-
+        
         if (usuario.isEmpty() || password.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Debe llenar todos los campos");
         } else if (usuario.equals("ulp") && password.equals("hola")) {
@@ -244,13 +245,10 @@ public class IngresoAlSistema extends javax.swing.JFrame {
 
             // Establecer el tamaño preferido del Menú
             //menu.setSize(800, 700);
-
             // Hacer el Menú visible
             //menu.setVisible(true);
-
             // Centrar el Menú en la pantalla
             //menu.setLocationRelativeTo(null);
-
             // Cerrar el formulario actual
             this.dispose();
         } else {
@@ -259,39 +257,39 @@ public class IngresoAlSistema extends javax.swing.JFrame {
             jTPassword.setText("");
         }
     }
-        public void ingresar2() throws ClassNotFoundException, SQLException, Exception {{
-        nombre = jTUsuario.getText();
-        char[] passwordChars = jTPassword.getPassword();
-        String password = new String(passwordChars);
-                    if(nombre.isEmpty() || password.isEmpty()){
-                    JOptionPane.showMessageDialog(this, "Debe llenar todos los campos");
-                    }    
-                      try{
-                          UsuarioDAO usuarioDAO = UsuarioDAO.obtenerInstancia();
-                          Usuario username = new Usuario();
-                          username = usuarioDAO.buscarListaUsuarioxNombre(nombre);
-                          String passwordDAO = username.getPassword();
-                             if (username==null){
-                              JOptionPane.showMessageDialog(this, "El usuario no existe");
-                          } else if(password.equals(passwordDAO)){
-                                      IngresoAlSistema login = new IngresoAlSistema();
-                                      login.dispose();
-                                      Menu menu = new Menu(username);
-             
-                                      menu.setVisible(true);
-                                      menu.setLocationRelativeTo(null);
-                                                                          
-                                  } else {
-                              JOptionPane.showMessageDialog(this, "Usuario y/aaao contraseña incorrectos");
-                              jTUsuario.setText("");
-                              jTPassword.setText("");
-                              }
-                             }
-                         catch (Exception e) {
+
+    public void ingresar2() throws ClassNotFoundException, SQLException, Exception {
+        {
+            nombre = jTUsuario.getText();
+            char[] passwordChars = jTPassword.getPassword();
+            String password = new String(passwordChars);
+            if (nombre.isEmpty() || password.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Debe llenar todos los campos");
+            }            
+            try {
+                UsuarioDAO usuarioDAO = UsuarioDAO.obtenerInstancia();
+                Usuario username = new Usuario();
+                username = usuarioDAO.buscarListaUsuarioxNombre(nombre);
+                String passwordDAO = username.getPassword();
+                if (username == null) {
+                    JOptionPane.showMessageDialog(this, "El usuario no existe");
+                } else if (password.equals(passwordDAO)) {
+                    IngresoAlSistema login = new IngresoAlSistema();
+                    login.dispose();
+                    Menu menu = new Menu(username);
+                    menu.setSize(800, 600);
+                    menu.setVisible(true);
+                    menu.setLocationRelativeTo(null);
+                    
+                } else {
+                    JOptionPane.showMessageDialog(this, "Usuario y/aaao contraseña incorrectos");
+                    jTUsuario.setText("");
+                    jTPassword.setText("");
+                }
+            } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "Se produjo un error al eliminar el usuario.");
             }
-        
-         
-}
-}
+            
+        }
+    }
 }
