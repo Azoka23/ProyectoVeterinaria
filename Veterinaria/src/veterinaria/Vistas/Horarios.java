@@ -1,9 +1,12 @@
 package veterinaria.Vistas;
 
+import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -14,6 +17,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -28,6 +32,7 @@ import veterinaria.Entidades.Cliente;
 import veterinaria.Entidades.Mascota;
 import veterinaria.Entidades.Reserva;
 import veterinaria.Utilidades;
+import veterinaria.Vistas.HorariosListener;
 
 public class Horarios extends javax.swing.JInternalFrame {
 
@@ -40,6 +45,7 @@ public class Horarios extends javax.swing.JInternalFrame {
             return false;
         }
     };
+    private HorariosListener listener;
 
     /**
      * Creates new form Horarios
@@ -53,8 +59,9 @@ public class Horarios extends javax.swing.JInternalFrame {
         //updateFechaLabel();
         updateFechaTField();
         armarCabecerareservaTurno();
+// Configura la tabla para que muestre las cuadrículas
         TablaTurnos.setShowGrid(true);
-        TablaTurnos.setGridColor(Color.GRAY); // Puedes cambiar el color de las cuadrículas según tus preferencias
+        TablaTurnos.setGridColor(Color.GRAY);
         showSelectedDate();
 
     }
@@ -103,7 +110,7 @@ public class Horarios extends javax.swing.JInternalFrame {
         ));
         jScrollPane1.setViewportView(TablaTurnos);
 
-        jBSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/home256_24783.png"))); // NOI18N
+        jBSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/reservaturnos/Imagenes/home256_24783.png"))); // NOI18N
         jBSalir.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jBSalir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -113,7 +120,7 @@ public class Horarios extends javax.swing.JInternalFrame {
 
         jLFecha.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
 
-        jBGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/Save_37110.png"))); // NOI18N
+        jBGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/reservaturnos/Imagenes/Save_37110.png"))); // NOI18N
         jBGuardar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jBGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -138,7 +145,7 @@ public class Horarios extends javax.swing.JInternalFrame {
                         .addGap(245, 245, 245)
                         .addComponent(jBGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(25, 25, 25)
-                        .addComponent(jBSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jBSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLFecha, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -157,10 +164,10 @@ public class Horarios extends javax.swing.JInternalFrame {
                 .addGap(2, 2, 2)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBSalir)
-                    .addComponent(jBGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(6, 6, 6))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jBGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jBSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(12, 12, 12))
         );
 
         pack();
@@ -200,12 +207,11 @@ public class Horarios extends javax.swing.JInternalFrame {
 
     }
 
-    private void salirAplicacion() {
-        if (Utilidades.confirmarSalida(this)) {
-            dispose();
-        }
-    }
-
+//    private void salirAplicacion() {
+//        if (Utilidades.confirmarSalida(this)) {
+//            dispose();
+//        }
+//    }
     private void showSelectedDate() {
 
         if (selectedDate != null) {
@@ -331,7 +337,13 @@ public class Horarios extends javax.swing.JInternalFrame {
         }
 
         TablaTurnos.setModel(TurnosModel);
-
+        //si quiero ponerle colores a la tabla por columna o por fila
+// Crear una instancia del renderizador personalizado
+//CustomTableCellRenderer renderer = new CustomTableCellRenderer();
+// Aplicar el renderizador a la columna (por ejemplo, columna 0)
+//TablaTurnos.getColumnModel().getColumn(0).setCellRenderer(renderer);
+//TablaTurnos.getColumnModel().getColumn(1).setCellRenderer(renderer);
+//TablaTurnos.getColumnModel().getColumn(2).setCellRenderer(renderer);
 //con el listener espera y responde a la accion del clic y seleccion en la tabla
         TablaTurnos.addMouseListener(new MouseAdapter() {
             @Override
@@ -359,7 +371,7 @@ public class Horarios extends javax.swing.JInternalFrame {
                                 // Maneja cualquier error que ocurra al cancelar la reserva.
                             }
 
-                            // Luego, actualizas la tabla
+                            // actualiza la tabla
                             //TurnosModel.setValueAt(null, filaSeleccionada, 0); // Marca el turno como cancelado.
                             TurnosModel.setValueAt("", filaSeleccionada, 1); // Borra el DNI del cliente.
                             TurnosModel.setValueAt("", filaSeleccionada, 2); // Borra el nombre de la mascota.
@@ -370,59 +382,22 @@ public class Horarios extends javax.swing.JInternalFrame {
                         // String horarioSeleccionado = (String) TurnosModel.getValueAt(filaSeleccionada, 0);
                         String DniCliente = JOptionPane.showInputDialog("Ingrese el DNI del cliente:");
                         int dniCliente = Integer.parseInt(DniCliente);
-
+                        System.out.println("DNI del cliente: " + dniCliente);
                         if (verificarExistenciaCliente(dniCliente)) {
-                            String nombreMascota = JOptionPane.showInputDialog("Ingrese el nombre de la mascota");
-                            TurnosModel.setValueAt(DniCliente, filaSeleccionada, 1);
-                            TurnosModel.setValueAt(nombreMascota, filaSeleccionada, 2);
-                            TablaTurnos.repaint();
-                        } //else {
-//   JOptionPane.showMessageDialog(null, "El cliente no existe");
-//}
-                        //String nombreMascota = JOptionPane.showInputDialog("Ingrese el nombre de la mascota");
+                            String alias = JOptionPane.showInputDialog("Ingrese el nombre de la mascota");
+                            System.out.println("Nombre de la mascota: " + alias);
+                            if (verificarExistenciaMascota(alias)) {
 
+                                TurnosModel.setValueAt(DniCliente, filaSeleccionada, 1);
+                                TurnosModel.setValueAt(alias, filaSeleccionada, 2);
+                                TablaTurnos.repaint();
+                            }
+                        }
                     }
                 }
             }
         });
 
-//        TablaTurnos.addMouseListener(new MouseAdapter() {
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                int filaSeleccionada = TablaTurnos.getSelectedRow();
-//                if (filaSeleccionada != -1) {
-//                    Object horarioSeleccionado = TurnosModel.getValueAt(filaSeleccionada, 0);
-//
-//                    if (horarioSeleccionado instanceof LocalTime) {
-//                        //  horario seleccionado
-//                        LocalTime horario = (LocalTime) horarioSeleccionado;
-//
-//                        //pregunta de confirmacion
-//                        int respuesta = JOptionPane.showConfirmDialog(null, "¿Desea cancelar el turno?", "Confirmación", JOptionPane.YES_NO_OPTION);
-//
-//                        if (respuesta == JOptionPane.YES_OPTION) {
-//                            // Realizas la cancelación en la base de datos
-//                            try {
-//                                ReservaDAO reservaDAO = ReservaDAO.obtenerInstancia();
-//                                LocalDate fechaSeleccionada = selectedDate; // Obtiene la fecha correspondiente a la fila seleccionada.
-//
-//                                reservaDAO.cancelarReserva(fechaSeleccionada, horario);
-//                                JOptionPane.showMessageDialog(null, "Reserva cancelada con exito");
-//                            } catch (Exception ex) {
-//                                Logger.getLogger(Horarios.class.getName()).log(Level.SEVERE, null, ex);
-//                                // Maneja cualquier error que ocurra al cancelar la reserva.
-//                            }
-//
-//                            // Luego, actualizas la tabla
-//                            TurnosModel.setValueAt(null, filaSeleccionada, 0); // Marca el turno como cancelado (deberás adaptar esto según cómo funcione tu modelo de datos).
-//                            TurnosModel.setValueAt("", filaSeleccionada, 1); // Borra el DNI del cliente.
-//                            TurnosModel.setValueAt("", filaSeleccionada, 2); // Borra el nombre de la mascota.
-//                            TablaTurnos.repaint();
-//                        }
-//                    }
-//                }
-//            }
-//        });
     }
 
 //por si ingresa el dni de un cliente no registrado
@@ -442,6 +417,46 @@ public class Horarios extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(this, "Ocurrió un error al verificar la existencia del cliente.", "Error", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(Horarios.class.getName()).log(Level.SEVERE, null, ex);
             return false;
+        }
+    }
+
+    private boolean verificarExistenciaMascota(String alias) {
+        MascotaDAO mascotaDAO = MascotaDAO.obtenerInstancia();
+        try {
+            Collection<Mascota> mascotas = mascotaDAO.buscarListaMascotaxAlias(alias);
+            System.out.println(mascotas);
+
+            // Utiliza una expresión lambda para verificar si alguna mascota tiene el alias deseado
+            boolean mascotaEncontrada = mascotas.stream().anyMatch(mascota -> mascota.getAlias().equals(alias));
+
+            if (mascotaEncontrada) {
+                System.out.println("Mascota encontrada. Puedes guardar la reserva.");
+                JOptionPane.showMessageDialog(null, "Mascota encontrada. Puedes guardar la reserva.");
+                return true;
+            } else {
+                // Mascota no encontrada, muestra un mensaje en la ventana de la aplicación
+                JOptionPane.showMessageDialog(this, "La mascota no está registrada.", "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                return false;
+            }
+        } catch (Exception ex) {
+            // Manejar la excepción y mostrar un mensaje de error
+            JOptionPane.showMessageDialog(this, "Ocurrió un error al verificar la existencia de la mascota.", "Error", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(Horarios.class.getName()).log(Level.SEVERE, null, ex);
+            return false;
+        }
+    }
+
+    public void setHorariosListener(HorariosListener listener) {
+        this.listener = listener;
+    }
+
+// ...
+    private void salirAplicacion() {
+        if (Utilidades.confirmarSalida(this)) {
+            if (listener != null) {
+                listener.onHorariosFormClosed();
+            }
+            dispose();
         }
     }
 

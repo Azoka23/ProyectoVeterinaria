@@ -151,12 +151,22 @@ public class Calendario extends javax.swing.JInternalFrame {
                     System.out.println("Cambio en el calendario");
                     // Obtener la fecha seleccionada
                     LocalDate selectedDate = selectDateFromCalendar();
-
+                    // Obtener la fecha actual
+            LocalDate currentDate = LocalDate.now();
+//Verificar si la fecha seleccionada es igual o posterior a la fecha actual
+            if (selectedDate != null && !selectedDate.isBefore(currentDate)) {
+                // La fecha seleccionada es válida, permitir la reserva
+                System.out.println("Fecha seleccionada: " + selectedDate);
+                siguiente();
+            } else {
+                // La fecha seleccionada no es válida, mostrar un mensaje o realizar alguna acción
+                System.out.println("Seleccione una fecha válida (igual o posterior a hoy).");
+            }
                     // Mostrar mensaje con la fecha seleccionada
-                    System.out.println("Fecha seleccionada: " + selectedDate);
+                    //System.out.println("Fecha seleccionada: " + selectedDate);
 
                     // Pasar a la siguiente ventana
-                    siguiente();
+                    //siguiente();
                 }
             }
         });
