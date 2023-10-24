@@ -6,6 +6,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 
@@ -70,5 +71,10 @@ public class Utilidades {
     public static String obtenerTextoDesdeCampo(JTextField campo) {
         return campo.getText().trim(); // Obtiene y devuelve el texto del campo de texto
     }
-}
 
+    // Método para obtener texto desde un JTextArea
+    public static String obtenerTextoDesdeArea(JTextArea area) {
+        return area.getText().trim(); // Obtiene y devuelve el texto del JTextArea
+    }
+
+}

@@ -1,57 +1,69 @@
 package veterinaria.Vistas;
 
+// Importaciones de clases necesarias
 import veterinaria.Vistas.Estado;
 import veterinaria.Vistas.DecimalDocumentFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
-import java.sql.SQLException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.text.AbstractDocument;
 import veterinaria.AccesoADatos.TratamientoDAO;
 import veterinaria.Vistas.CustomPanel;
-import veterinaria.Entidades.Cliente;
 import veterinaria.Entidades.Tratamiento;
 import veterinaria.Utilidades;
 
+// Definición de la clase FormularioTratamiento
 public class FormularioTratamiento extends javax.swing.JInternalFrame {
 
+    // Enumeración para el estado actual del formulario (NUEVO, BUSCAR, etc.)
     private Estado estado = Estado.NADA;
 
-    private Cliente selectedCliente = null;
-    private int idMascotas = 0;
-    private int idCliente = 0;
+//    private Cliente selectedCliente = null;
+//    private int idMascotas = 0;
+//    private int idCliente = 0;
     private boolean estadoTratamiento;
+
+    // Variable para almacenar el código del tratamiento
     private String codigo;
 
     /**
-     * Creates new form FormularioTratamiento
+     * Constructor de la clase FormularioTratamiento.
      */
     public FormularioTratamiento() {
-        CustomPanel customPanel = new CustomPanel(); // Crea un panel personalizado
-        this.setContentPane(customPanel); // Establece el panel personalizado como el contenido del marco interno
-       
+        // Configurar el panel personalizado
+        CustomPanel customPanel = new CustomPanel();
+        this.setContentPane(customPanel);
+
+        // Inicializar los componentes del formulario
         initComponents();
+
+        // Establecer el título del formulario
         setTitle("Cargar Tratamientos");
 
-        // Obtener el Document asociado al campo de texto jTPesoA
+        // Obtener el Document asociado al campo de texto jTImporte y aplicar el DocumentFilter para reemplazar comas por puntos
         AbstractDocument doc = (AbstractDocument) jTImporte.getDocument();
-
-        // Aplicar el DocumentFilter para reemplazar comas por puntos
         doc.setDocumentFilter(new DecimalDocumentFilter());
-
-        // Agregar ActionListener al campo jTDocumento
-        jTCodigo.addActionListener(new ActionListener() {
+        // Agregar un KeyListener al campo de texto jTCodigo para manejar la tecla "Enter"
+        jTCodigo.addKeyListener(new KeyAdapter() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                // Método para procesar el código
-                codigo = Utilidades.obtenerTextoDesdeCampo(jTCodigo).trim();
-                if (codigo.isEmpty()) {
-                    JOptionPane.showMessageDialog(null, "Debes escribir el Codigo");
-                } else {
-                    limpiarBuscar();
-                    estado = Estado.BUSCAR;
-                    buscarxCodigo();
+            public void keyPressed(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                    // Método para procesar el código ingresado
+                    codigo = Utilidades.obtenerTextoDesdeCampo(jTCodigo).trim();
+                    if (codigo.isEmpty()) {
+                        // Mostrar un mensaje si el campo de código está vacío
+                        JOptionPane.showMessageDialog(null, "Debes escribir el Codigo");
+                    } else {
+                        // Limpiar y buscar el tratamiento asociado al código ingresado
+                        limpiarBuscar();
+                        estado = Estado.BUSCAR;
+                        buscarxCodigo();
+                    }
                 }
             }
         });
@@ -299,50 +311,68 @@ public class FormularioTratamiento extends javax.swing.JInternalFrame {
 
     private void jRBEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRBEstadoActionPerformed
         // TODO add your handling code here:
-        
-    }//GEN-LAST:event_jRBEstadoActionPerformed
 
+    }//GEN-LAST:event_jRBEstadoActionPerformed
+    /**
+     * Método invocado cuando se hace clic en el botón "Buscar". Se encarga de
+     * obtener el código ingresado, verificar que no esté vacío, limpiar el
+     * formulario y luego realizar una búsqueda del tratamiento asociado al
+     * código ingresado.
+     *
+     * @param evt Evento de acción generado por el botón "Buscar".
+     */
     private void jBBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBBuscarActionPerformed
+        // Obtener el código ingresado desde el campo de texto
         String codigo = jTCodigo.getText().trim();
 
+        // Verificar si el campo de código está vacío
         if (codigo.isEmpty()) {
+            // Mostrar un mensaje si el campo de código está vacío y salir del método
             JOptionPane.showMessageDialog(this, "Debes escribir un Codigo");
             return;
         } else {
-            //            try {
+            // Limpiar el formulario y establecer el estado como Búsqueda
             limpiarBuscar();
             estado = Estado.BUSCAR;
+
+            // Realizar la búsqueda del tratamiento asociado al código ingresado
             buscarxCodigo();
-            //            } catch (ClassNotFoundException ex) {
-            //                Logger.getLogger(FormularioMascotas.class.getName()).log(Level.SEVERE, null, ex);
-            //            } catch (SQLException ex) {
-            //                Logger.getLogger(FormularioMascotas.class.getName()).log(Level.SEVERE, null, ex);
-            //            }
-
-        }       // TODO add your handling code here:
+        }     // TODO add your handling code here:
     }//GEN-LAST:event_jBBuscarActionPerformed
-
+    /**
+     * Método invocado cuando se hace clic en el botón "Guardar". Se encarga de
+     * validar los campos del formulario, guardar el tratamiento y luego limpiar
+     * el formulario para permitir la entrada de nuevos datos.
+     *
+     * @param evt Evento de acción generado por el botón "Guardar".
+     */
     private void jBGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuardarActionPerformed
         try {
+            // Verificar si hay campos vacíos en el formulario
             if (camposVacios()) {
-                JOptionPane.showMessageDialog(this, "No debe dejar algun dato vacio");
+                // Mostrar un mensaje si hay campos vacíos y salir del método
+                JOptionPane.showMessageDialog(this, "No debe dejar algún dato vacío");
             } else {
-
+                // Llamar a la función guardar() para guardar el tratamiento
                 guardar();
+
+                // Limpiar el formulario después de guardar los datos
                 limpiar();
-
             }
-
         } catch (Exception ex) {
+            // Manejar cualquier excepción mostrando un mensaje de error
             Utilidades.mostrarError(ex, this);
         }
-
-        // TODO add your handling code here:
     }//GEN-LAST:event_jBGuardarActionPerformed
-
+    /**
+     * Método invocado cuando se hace clic en el botón "Salir". Se encarga de
+     * salir de la aplicación al invocar la función salirAplicacion().
+     *
+     * @param evt Evento de acción generado por el botón "Salir".
+     */
     private void jBSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSalirActionPerformed
+        // Salir de la aplicación
         salirAplicacion();
-        // TODO add your handling code here:
     }//GEN-LAST:event_jBSalirActionPerformed
 
 
@@ -367,144 +397,161 @@ public class FormularioTratamiento extends javax.swing.JInternalFrame {
     private javax.swing.JTextField jTTipo;
     // End of variables declaration//GEN-END:variables
 
+    // Método para salir de la aplicación si el usuario confirma la salida
     private void salirAplicacion() {
         if (Utilidades.confirmarSalida(this)) {
             dispose();
         }
     }
 
+    // Método para verificar si hay campos vacíos en el formulario
     private boolean camposVacios() {
         return jTTipo.getText().isEmpty() || jTCodigo.getText().isEmpty() || jTImporte.getText().isEmpty() || jTADescripcion.getText().trim().isEmpty();
     }
 
+    // Método para limpiar los campos del formulario
     private void limpiar() {
         Utilidades.limpiarSetText(jTCodigo, jTTipo, jTImporte);
         jRBEstado.setSelected(false);
         jTADescripcion.setText("");
         estado = Estado.NADA;
-        // Para limpiar el formulario y deseleccionar los JComboBox
-        //JCSexo.setSelectedIndex(-1); // Desselecciona el elemento en el JComboBox
-        //jCBClientes.setSelectedIndex(-1); // Desselecciona el elemento en el JComboBox
-
     }
 
+    // Método para limpiar los campos y deseleccionar los JComboBox del formulario
     private void limpiarBuscar() {
         Utilidades.limpiarSetText(jTTipo, jTImporte);
         jTADescripcion.setText("");
-        // Para limpiar el formulario y deseleccionar los JComboBox
-        // JCSexo.setSelectedIndex(-1); // Desselecciona el elemento en el JComboBox
-        //jCBClientes.setSelectedIndex(-1); // Desselecciona el elemento en el JComboBox
     }
 
+    // Método para realizar la búsqueda del tratamiento por el código ingresado
     private void buscarxCodigo() {
-
         TratamientoDAO tratamientoD = TratamientoDAO.obtenerInstancia();
-        int codigo = 0;
+        int codigo = obtenerCodigoDesdeCampo();
 
         try {
-            codigo = Integer.parseInt(jTCodigo.getText());
-
             Tratamiento tratamiento = tratamientoD.buscarListaTratamientoxId(codigo);
 
             if (tratamiento != null) {
-                setTitle("Cargar Tratamiento" + (tratamiento.isEstado() ? "" : " -- Codigo dado de Baja"));
-                jRBEstado.setSelected(tratamiento.isEstado());
-
-                mostrarTratamientoEnFormulario(tratamiento);
+                configurarFormularioParaTratamientoExistente(tratamiento);
             } else {
-                estado = Estado.NUEVO;
-                JOptionPane.showMessageDialog(this, "No se encontró el codigo,el codigo disponible es " + ultimoRegistro());
-                jTCodigo.setText(ultimoRegistro() + "");
+                configurarFormularioParaNuevoTratamiento();
             }
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, "Error: El código debe ser un número valido.");
+            mostrarMensajeError("El código debe ser un número válido.");
         } catch (Exception ex) {
             Utilidades.mostrarError(ex, this);
         }
     }
 
-    private void guardar() throws Exception {
-        TratamientoDAO tratamientoD = TratamientoDAO.obtenerInstancia();
-        Tratamiento tratamiento = new Tratamiento();
-        int codigo = 0;
-
+    // Método para obtener el código desde el campo de texto y manejar posibles excepciones
+    private int obtenerCodigoDesdeCampo() {
         try {
-            try {
-                codigo = Integer.parseInt(jTCodigo.getText());
+            return Integer.parseInt(jTCodigo.getText());
+        } catch (NumberFormatException e) {
+            mostrarMensajeError("Error: El código debe ser un número válido.");
+            return 0;
+        }
+    }
 
-                tratamiento = tratamientoD.obtenerTratamientoxId(codigo);
+    // Método para configurar el formulario cuando se encuentra un tratamiento existente
+    private void configurarFormularioParaTratamientoExistente(Tratamiento tratamiento) {
+        setTitle("Cargar Tratamiento" + (tratamiento.isEstado() ? "" : " -- Codigo dado de Baja"));
+        jRBEstado.setSelected(tratamiento.isEstado());
+        estado = Estado.BUSCAR;
+        mostrarTratamientoEnFormulario(tratamiento);
+    }
 
-                if (tratamiento != null && estado.equals(Estado.NUEVO)) {
+    // Método para configurar el formulario para un nuevo tratamiento
+    private void configurarFormularioParaNuevoTratamiento() {
+        try {
+            estado = Estado.NUEVO;
+            int ultimoCodigo = ultimoRegistro();
+            jTCodigo.setText(ultimoCodigo + "");
+            mostrarMensajeError("No se encontró el código, el código disponible es " + ultimoCodigo);
+        } catch (Exception ex) {
+            Logger.getLogger(FormularioTratamiento.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
-                    JOptionPane.showMessageDialog(this, "El Codigo ya existe, no puede darlo de Alta.");
-                    return;
-                } else {
-                    tratamiento = new Tratamiento();
-                }
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, "Error: Debes ingresar un número de documento válido.");
-                return;
+    // Método para mostrar un mensaje de error en un cuadro de diálogo
+    private void mostrarMensajeError(String mensaje) {
+        JOptionPane.showMessageDialog(this, mensaje);
+    }
+
+    // Método para guardar o modificar un tratamiento en la base de datos
+    private void guardar() {
+        try {
+            int codigo = obtenerCodigoDesdeCampo(); // Obtiene el código del campo de texto
+            TratamientoDAO tratamientoD = TratamientoDAO.obtenerInstancia(); // Obtiene la instancia del DAO de tratamiento
+            Tratamiento tratamiento = tratamientoD.obtenerTratamientoxId(codigo); // Obtiene el tratamiento por el código
+
+            // Verifica si el tratamiento ya existe y el estado es Nuevo
+            if (tratamiento != null && estado.equals(Estado.NUEVO)) {
+                mostrarMensajeError("El Codigo ya existe, no puede darlo de Alta.");
+                return; // Muestra un mensaje y sale del método si el tratamiento ya existe y es Nuevo
             }
 
-            String tipo = jTTipo.getText();
-            String descripcion = jTADescripcion.getText();
-            double importe = Double.parseDouble(jTImporte.getText());
-            boolean estadoMascota = jRBEstado.isSelected();
+            //String tipo = jTTipo.getText(); // Obtiene el tipo del campo de texto
+            //String descripcion = jTADescripcion.getText(); // Obtiene la descripción del campo de texto
+            double importe = obtenerImporteDesdeCampo(); // Obtiene el importe del campo de texto
+            boolean estadoMascota = jRBEstado.isSelected(); // Obtiene el estado del tratamiento desde el botón de radio
 
-            // Asignar los valores al objeto Tratamiento
-            //tratamiento.setIdTratamiento(tipo);
-            tratamiento.setTipo(tipo);
-
-            tratamiento.setDescripcion(descripcion);
-
-            tratamiento.setImporte(importe);
-            //tratamiento.setPesoActual(pesoA);
-            // tratamiento.setIdCliente(idCliente);
+            // Crea un nuevo objeto Tratamiento con los datos del formulario
+            tratamiento = new Tratamiento(
+                    codigo,
+                    Utilidades.obtenerTextoDesdeCampo(jTTipo),
+                    Utilidades.obtenerTextoDesdeArea(jTADescripcion),
+                    importe,
+                    estadoMascota);
 
             tratamiento.setEstado(estadoMascota);
 
+            // Guarda el tratamiento si el estado es Nuevo, o lo modifica si el estado es Búsqueda
             if (estado.equals(Estado.NUEVO)) {
-
-                try {
-                    tratamiento.setEstado(true);
-                    tratamientoD.guardarTratamiento(tratamiento);
-                } catch (Exception ex) {
-                    Utilidades.mostrarError(ex, this);
-                }
-
+                tratamientoD.guardarTratamiento(tratamiento); // Guarda el tratamiento en la base de datos
             } else if (estado.equals(Estado.BUSCAR)) {
-                // mascota.setEstado(true);
-
-                tratamientoD.modificarTratamiento(tratamiento);
+                tratamientoD.modificarTratamiento(tratamiento); // Modifica el tratamiento en la base de datos
             }
+
         } catch (NumberFormatException ex) {
-            Utilidades.mostrarError(ex, this);
+            Utilidades.mostrarError(ex, this); // Maneja errores de formato de número mostrando un mensaje de error
+        } catch (Exception ex) {
+            Utilidades.mostrarError(ex, this); // Maneja otras excepciones mostrando un mensaje de error
         }
     }
 
-    private int ultimoRegistro() throws ClassNotFoundException, SQLException, Exception {
-        TratamientoDAO tratamientoD = TratamientoDAO.obtenerInstancia();
-        return tratamientoD.contarTotalRegistros();
+    // Método para obtener el importe desde el campo de texto y manejar posibles excepciones
+    private double obtenerImporteDesdeCampo() {
+        try {
+            return Double.parseDouble(jTImporte.getText()); // Parsea el importe y lo devuelve como un valor double
+        } catch (NumberFormatException e) {
+            mostrarMensajeError("Error: Debes ingresar un importe válido.");
+            return 0.0; // Muestra un mensaje de error y devuelve 0.0 si el formato del importe no es válido
+        }
+    }
+
+    // Método para obtener el último registro de la base de datos
+    private int ultimoRegistro() throws Exception {
+        TratamientoDAO tratamientoD = TratamientoDAO.obtenerInstancia(); // Obtiene la instancia del DAO de tratamiento
+        return tratamientoD.contarTotalRegistros(); // Retorna el número total de registros en la base de datos
 
     }
 
+    // Método para mostrar los detalles del tratamiento en el formulario
     private void mostrarTratamientoEnFormulario(Tratamiento tratamiento) {
+        jTTipo.setText(tratamiento.getTipo()); // Establece el tipo del tratamiento en el campo de texto correspondiente
+        jTADescripcion.setText(tratamiento.getDescripcion()); // Establece la descripción en el área de texto correspondiente
+        jTImporte.setText(tratamiento.getImporte() + ""); // Establece el importe en el campo de texto correspondiente
 
-        jTTipo.setText(tratamiento.getTipo());
-
-        jTADescripcion.setText(tratamiento.getDescripcion());
-
-        jTImporte.setText(tratamiento.getImporte() + "");
-
+        // Establece el título del formulario dependiendo del estado del tratamiento (Activo o dado de baja)
         if (tratamiento.isEstado()) {
-            setTitle("Cargar Tratamiento");
+            setTitle("Cargar Tratamiento"); // Si está activo, muestra el título como "Cargar Tratamiento"
         } else {
-            setTitle("Tratamiento -- Codigo dado de Baja");
+            setTitle("Tratamiento -- Codigo dado de Baja"); // Si está dado de baja, muestra el título con indicación
         }
 
-        jRBEstado.setSelected(tratamiento.isEstado());
-        estadoTratamiento = tratamiento.isEstado();
-
+        jRBEstado.setSelected(tratamiento.isEstado()); // Establece el estado del tratamiento en el botón de radio correspondiente
+        estadoTratamiento = tratamiento.isEstado(); // Actualiza el estado del tratamiento en la variable de instancia
     }
 
     // Método para asociar la tecla Enter con componentes específicos
@@ -557,6 +604,5 @@ public class FormularioTratamiento extends javax.swing.JInternalFrame {
         } else {
             jRBEstado.setSelected(!jRBEstado.isSelected());
         }
-        // }
     }
 }
