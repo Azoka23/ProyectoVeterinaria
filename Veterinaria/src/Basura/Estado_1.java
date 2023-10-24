@@ -1,5 +1,5 @@
 
-package veterinaria.Vistas;
+package Basura;
 
 public enum Estado_1 {
     ALTA,

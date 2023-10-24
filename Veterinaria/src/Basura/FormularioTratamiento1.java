@@ -1,4 +1,4 @@
-package veterinaria.Vistas;
+package Basura;
 
 import veterinaria.Vistas.Estado;
 import veterinaria.Vistas.DecimalDocumentFilter;
@@ -13,6 +13,9 @@ import veterinaria.Vistas.CustomPanel;
 import veterinaria.Entidades.Cliente;
 import veterinaria.Entidades.Tratamiento;
 import veterinaria.Utilidades;
+import veterinaria.Vistas.CustomPanel;
+import veterinaria.Vistas.DecimalDocumentFilter;
+import veterinaria.Vistas.Estado;
 
 public class FormularioTratamiento1 extends javax.swing.JInternalFrame {
 
