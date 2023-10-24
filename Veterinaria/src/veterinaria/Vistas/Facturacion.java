@@ -631,7 +631,10 @@ public class Facturacion extends javax.swing.JInternalFrame {
             contentStream.close();
             //String directorioApp = System.getProperty("user.dir");
 
-            document.save("factura.pdf");
+            String clienteText = jTCliente1.getText().trim(); // Obtener el texto del jTextField y eliminar espacios en blanco
+            String nombreArchivo = "factura" + clienteText + ".pdf";
+            document.save(nombreArchivo);
+            //document.save("factura"+jTCliente1.toString().trim()+".pdf");
             document.close();
             JOptionPane.showMessageDialog(this, "Remito generado correctamente.");
             System.out.println("Remito generado correctamente.");
