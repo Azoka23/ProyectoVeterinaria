@@ -24,7 +24,7 @@ import veterinaria.Entidades.Tratamiento;
 
 public class RegistroUsuarios extends javax.swing.JInternalFrame {
 
-    private Usuario usuario;
+    //private Usuario usuario;
     private Estado estado = Estado.NADA;
     private String nombre;
     private Usuario selectedCliente = null;
@@ -46,19 +46,15 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
         setTitle("Cargar usuario");
         // Establecer el foco en jTDocumento
         jTNombre.requestFocusInWindow();
+                // Asociar tecla "Enter" con componentes
+        asociarCamposConEnter();
         // Agregar KeyListener al campo jTDocumento
         jTNombre.addKeyListener(new KeyAdapter() {
             @Override
             public void keyPressed(KeyEvent e) {
                 if (e.getKeyCode() == KeyEvent.VK_ENTER) {
-                    try {
-                        estado = Estado.BUSCAR;
-                        buscarxNombre();
-                    } catch (ClassNotFoundException ex) {
-                        Logger.getLogger(RegistroUsuarios.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(RegistroUsuarios.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    estado = Estado.BUSCAR;
+                    buscarxNombre();
                 }
             }
         });
@@ -250,14 +246,8 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
     }
     private void jBBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBBuscarActionPerformed
 
-        try {
-            estado = Estado.BUSCAR;
-            buscarxNombre();
-        } catch (ClassNotFoundException ex) {
-            Logger.getLogger(RegistroUsuarios.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SQLException ex) {
-            Logger.getLogger(RegistroUsuarios.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        estado = Estado.BUSCAR;
+        buscarxNombre();
     }//GEN-LAST:event_jBBuscarActionPerformed
 
     private void jBEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEliminarActionPerformed
@@ -322,10 +312,8 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
                 nombre = jTNombre.getText();
                 UsuarioDAO usuarioD = UsuarioDAO.obtenerInstancia();
                 usuarioD.bajaLogica(nombre);
-                JOptionPane.showMessageDialog(this, "El alumno fue dado de baja");
+                JOptionPane.showMessageDialog(this, "El Usuario fue dado de baja");
                 limpiar();
-            } catch (NumberFormatException ex) {
-                JOptionPane.showMessageDialog(this, "Por favor, ingrese un usuario válido.");
             } catch (Exception ex) {
                 JOptionPane.showMessageDialog(this, "Se produjo un error al eliminar el usuario.");
                 ex.printStackTrace();
@@ -335,7 +323,7 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
         }
     }
 
-    private void buscarxNombre() throws ClassNotFoundException, SQLException {
+    private void buscarxNombre() {
 
         UsuarioDAO usuarioD = UsuarioDAO.obtenerInstancia();
         //
@@ -343,17 +331,20 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
         try {
             nombre = Utilidades.obtenerTextoDesdeCampo(jTNombre);
             //nombre= jTNombre.getText();
-            usuario = usuarioD.buscarListaUsuarioxNombre(nombre);
+            Usuario usuario = usuarioD.buscarListaUsuarioxNombre(nombre);
             if (usuario != null) {
                 setTitle("Usuario" + (usuario.isEstado() ? "" : " -- Codigo dado de Baja"));
                 jRBEstado.setSelected(usuario.isEstado());
 
                 mostrarUsuarioEnFormulario(usuario);
             } else {
-                estado = Estado.NUEVO;
+                
                 //JOptionPane.showMessageDialog(this, "No se encontró el codigo,el codigo disponible es " + ultimoRegistro());
                 //jTCodigo.setText(ultimoRegistro() + "");
                 JOptionPane.showMessageDialog(this, "No se encontro el usuario");
+                limpiar();
+                estado = Estado.NUEVO;
+                Utilidades.asociarEnterConComponente(jTNombre, jTNombre);
             }
 
             //mostrarUsuarioEnFormulario(usuario);
@@ -362,66 +353,57 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
         }
     }
 
-    private void guardar() throws Exception {
-        nombre = Utilidades.obtenerTextoDesdeCampo(jTNombre);
-
-        //try {
-
-         //   try {
-
-                // Obtiene los datos del cliente desde los campos de texto
-                if (nombre == null) {
-                    JOptionPane.showMessageDialog(this, "Error: Debes ingresar un nombre válido.");
-                    return;
-                }
-                UsuarioDAO usuarioD = UsuarioDAO.obtenerInstancia();
-                 usuario = usuarioD.obtenerUsuarioxNombre(nombre);
-
-                JOptionPane.showMessageDialog(this, "Hasta aca llego " + usuario.getIdUsuario());
-                idUsuario = usuario.getIdUsuario();
-                usuario = new Usuario(
-                        idUsuario,
-                        nombre,
-                        Utilidades.obtenerTextoDesdeCampo(jTPassword),
-                        Utilidades.obtenerEnteroDesdeCampo(jTRol),
-                        jRBEstado.isSelected()
-                );
-                if (usuario != null && estado.equals(Estado.NUEVO)) {
-
-                    JOptionPane.showMessageDialog(this, "El Codigo ya existe, no puede darlo de Alta.");
-                    return;
-                } else if (estado.equals(Estado.NUEVO)) {
-
-                    try {
-                        JOptionPane.showMessageDialog(this, usuario);
-                        usuario.setEstado(true);
-                        usuarioD.guardarUsuario(usuario);
-                    } catch (Exception ex) {
-                        Utilidades.mostrarError(ex, this);
-                    }
-
-                } else if (estado.equals(Estado.BUSCAR)) {
-                    // mascota.setEstado(true);
-
-                    usuarioD.modificarUsuario(usuario);
-                    JOptionPane.showMessageDialog(this, "Hasta aca llego1 " + usuario.getIdUsuario());
-                }
-           // } catch (Exception e) {
-                //JOptionPane.showMessageDialog(this, "Error: Debes ingresar un número de documento válido.");
-               // return;
+    private void guardar(){
+        try {
+            nombre = Utilidades.obtenerTextoDesdeCampo(jTNombre);
+            
+            // Obtiene los datos del cliente desde los campos de texto
+            if (nombre == null) {
+                JOptionPane.showMessageDialog(this, "Error: Debes ingresar un nombre válido.");
+                return;
             }
+            
+            UsuarioDAO usuarioD = UsuarioDAO.obtenerInstancia();
+            Usuario usuario = usuarioD.obtenerUsuarioxNombre(nombre);
+            
+            if (usuario != null && estado.equals(Estado.NUEVO)) {
+                
+                JOptionPane.showMessageDialog(this, "El Codigo ya existe, no puede darlo de Alta.");
+                return;
+            }
+            //boolean estadoUsuario = jRBEstado.isSelected();
+            //JOptionPane.showMessageDialog(this, "Hasta aca llego " + usuario.getIdUsuario());
+            if (usuario==null) {
+                idUsuario=0;
+            }else{
+                idUsuario = usuario.getIdUsuario();
+            }
+            
+            usuario = new Usuario(
+                    idUsuario,
+                    nombre,
+                    Utilidades.obtenerTextoDesdeCampo(jTPassword),
+                    Utilidades.obtenerEnteroDesdeCampo(jTRol),
+                    jRBEstado.isSelected()
+            );
+            
+            if (estado.equals(Estado.NUEVO)) {
+                
+//                JOptionPane.showMessageDialog(this, usuario);
+                usuario.setEstado(true);
+                usuarioD.guardarUsuario(usuario);
+                
+            } else if (estado.equals(Estado.BUSCAR)) {
+                // mascota.setEstado(true);
+//                JOptionPane.showMessageDialog(this, usuario);
+                usuarioD.modificarUsuario(usuario);
+                // JOptionPane.showMessageDialog(this, "Hasta aca llego1 " + usuario.getIdUsuario());
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(RegistroUsuarios.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
-            // Asignar los valores al objeto Usuario
-//            
-//            usuario.setNombre(nombreU);
-//            usuario.setPassword(password);
-//            usuario.setRol(rol);
-//            usuario.setEstado(estadoUser);
-            //usuario.getIdUsuario(usuarioD.obtenerIDxNombre(nombre));
-      //  } catch (NumberFormatException ex) {
-            //Utilidades.mostrarError(ex, this);
-      //  }
-   // }
+    }
 
 //No se usa
     private void guardarUsuario() {
@@ -439,11 +421,6 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
             //se fija si existe el cliente
             Usuario usuario = usuarioD.buscarListaUsuarioxNombre(nombre);
 
-//            if (usuario != null && estado.equals(Estado.NUEVO)) {
-//                JOptionPane.showMessageDialog(this, "El nombre ya existe, no puede darlo de Alta.");
-//                return;
-//            }
-            // Obtiene los datos de los campos de texto
             usuario = new Usuario(
                     nombre,
                     Utilidades.obtenerTextoDesdeCampo(jTPassword),
@@ -537,28 +514,12 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
         estadoUsuario = usuario.isEstado();
     }
 
-    /*
-     private void cargarTabla(String nombre) throws Exception {
-
-        UsuarioDAO cursadas = new UsuarioDAO();
-        Collection<Usuario> listaUsuario = new ArrayList<>(); // Inicialización predeterminada
-
-        listaUsuario = (Collection<Usuario>) cursadas.buscarListaUsuarioxNombre(nombre);
-
-        for (Usuario tipo : listaUsuario) {
-            if (tipo.isEstado()) {
-                modelo.addRow(new Object[]{tipo.getNombre(), tipo.getNombre(), tipo.getPassword()});
-
-            }
-
-        }
-     }
-        private void armarCabecera() {
-        modelo.addColumn("Id");
-        modelo.addColumn("Nombre");
-        modelo.addColumn("Contraseña");
-        modelo.addColumn("Rol");
-        jTUsuarios.setModel(modelo); 
+   // Método para asociar la tecla Enter con componentes específicos
+    private void asociarCamposConEnter() {
+        // Utilidades.asociarEnterConComponente asocia la tecla Enter con el componente proporcionado como argumento  
+        Utilidades.asociarEnterConComponente(jTNombre, jTPassword);
+        Utilidades.asociarEnterConComponente(jTPassword, jTRol);
+        Utilidades.asociarEnterConComponente(jTRol, jBGuardar);
+        
     }
-     */
 }

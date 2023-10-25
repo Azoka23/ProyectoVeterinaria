@@ -277,7 +277,7 @@ public class IngresoAlSistema extends javax.swing.JFrame {
                         IngresoAlSistema login = new IngresoAlSistema();
                         login.dispose();
                         Menu menu = new Menu(username);
-                        menu.setSize(900, 600);
+                        menu.setSize(900, 800);
 
                         menu.setVisible(true);
                         menu.setLocationRelativeTo(null);

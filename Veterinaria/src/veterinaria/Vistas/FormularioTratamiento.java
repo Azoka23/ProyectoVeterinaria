@@ -508,6 +508,7 @@ public class FormularioTratamiento extends javax.swing.JInternalFrame {
 
             // Guarda el tratamiento si el estado es Nuevo, o lo modifica si el estado es Búsqueda
             if (estado.equals(Estado.NUEVO)) {
+                tratamiento.setEstado(true);
                 tratamientoD.guardarTratamiento(tratamiento); // Guarda el tratamiento en la base de datos
             } else if (estado.equals(Estado.BUSCAR)) {
                 tratamientoD.modificarTratamiento(tratamiento); // Modifica el tratamiento en la base de datos
