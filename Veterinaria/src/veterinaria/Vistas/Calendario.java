@@ -184,31 +184,11 @@ public class Calendario extends javax.swing.JInternalFrame {
     }
 
 
-//    private void siguiente() {
-//        
-//        // Obtén la fecha seleccionada
-//        LocalDate selectedDate = selectDateFromCalendar();
-//
-//        // Verifica si la fecha es válida
-//        if (selectedDate != null) {
-//            // Crea e inicia el JInternalFrame de Horarios
-//            Horarios horarios = new Horarios(selectedDate);
-//            horarios.initTimeTable(selectedDate);
-//
-//            // Agrega el JInternalFrame al JDesktopPane
-//            JDesktopPane desktopPane = getDesktopPane();
-//            desktopPane.add(horarios);
-//
-//            // Házlo visible
-//            horarios.setVisible(true);
-//        } else {
-//            System.out.println("Debes seleccionar una fecha.");
-//        }
-//    }
 
 
 
-// ...
+
+
 
 private void siguiente() {
     // Obtén la fecha seleccionada
