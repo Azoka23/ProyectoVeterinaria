@@ -5,6 +5,8 @@ import java.io.File;
 import veterinaria.Vistas.CustomPanel;
 import veterinaria.Vistas.CustomTableCellRenderer;
 import java.io.IOException;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -82,6 +84,7 @@ public class Facturacion extends javax.swing.JInternalFrame {
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
+        jBSalir = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -223,6 +226,13 @@ public class Facturacion extends javax.swing.JInternalFrame {
             }
         });
 
+        jBSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/home256_24783.png"))); // NOI18N
+        jBSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBSalirActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -232,7 +242,9 @@ public class Facturacion extends javax.swing.JInternalFrame {
                 .addComponent(jBImprimir)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 182, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 84, Short.MAX_VALUE)
+                .addComponent(jBSalir)
+                .addGap(56, 56, 56)
                 .addComponent(jButton3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton2)
@@ -243,6 +255,7 @@ public class Facturacion extends javax.swing.JInternalFrame {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jBSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton3)
                     .addComponent(jButton2)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -436,9 +449,14 @@ public class Facturacion extends javax.swing.JInternalFrame {
         actualizarTotales();
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jBSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSalirActionPerformed
+        salirAplicacion();
+    }//GEN-LAST:event_jBSalirActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBImprimir;
+    private javax.swing.JButton jBSalir;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -470,24 +488,32 @@ public class Facturacion extends javax.swing.JInternalFrame {
         tratamientoModel.addColumn("Importe"); // Agrega la columna de importe
         jTTTratamientos.setModel(tratamientoModel); // Establece el modelo de tabla en la tabla visual
     }
-
+// Método para salir de la aplicación
+    private void salirAplicacion() {
+        if (Utilidades.confirmarSalida(this)) {
+            dispose();
+        }
+    }
     private void armarTabla() {
+
+        DecimalFormat formato = new DecimalFormat("#.##"); // Formato para dos dígitos decimales
+
         // Añade filas fijas a la tabla
         for (int i = 0; i < 5; i++) {
-            tratamientoModel.addRow(new Object[]{"", 0.0}); // Agrega filas con valores iniciales en blanco y 0.0
+            tratamientoModel.addRow(new Object[]{"", formato.format(0.0)}); // Agrega filas con valores iniciales en blanco y 0.0 formateados
         }
 
         // Calcula el total de las primeras 5 filas
         double total = calcularTotal();
-        tratamientoModel.addRow(new Object[]{"Importe Total", total}); // Agrega fila con el importe total
+        tratamientoModel.addRow(new Object[]{"Importe Total", formato.format(total)}); // Agrega fila con el importe total formateado
 
         // Descuento inicial del 0%
-        double descuento = total * 0.0;
-        tratamientoModel.addRow(new Object[]{"Descuento %", descuento}); // Agrega fila con el descuento inicial
+        double descuento = total * 0.0; // Suponiendo que el descuento es del 10%
+        tratamientoModel.addRow(new Object[]{"Descuento 10%", formato.format(descuento)}); // Agrega fila con el descuento formateado
 
         // Calcula el total después del descuento
         double totalConDescuento = total - descuento;
-        tratamientoModel.addRow(new Object[]{"Total", totalConDescuento}); // Agrega fila con el total después del descuento
+        tratamientoModel.addRow(new Object[]{"Total", formato.format(totalConDescuento)}); // Agrega fila con el total después del descuento formateado
 
         // Configura el ancho de la columna "Detalles" y el alto de las filas
         jTTTratamientos.getColumnModel().getColumn(0).setPreferredWidth(300);
@@ -499,7 +525,7 @@ public class Facturacion extends javax.swing.JInternalFrame {
     }
 
     private double calcularTotal() {
-        double total = 0;
+        double total = 0.0;
         // Suma los importes de las primeras 5 filas
         for (int i = 0; i < 5; i++) {
             Object importe = tratamientoModel.getValueAt(i, 1);
@@ -520,12 +546,13 @@ public class Facturacion extends javax.swing.JInternalFrame {
 
     // Método para limpiar todos los campos del formulario y la tabla de tratamientos
     private void limpiar() {
-        // Limpia los campos de texto Cliente y Mascota
+        // Restablece los campos de texto Cliente y Mascota
         Utilidades.limpiarSetText(jTCliente1, jTCliente1, jTMascota);
 
-        // Establece los importes de las filas en la columna 1 de la tabla de tratamientos a 0.0
+        // Formatea los importes de las filas en la columna 1 de la tabla de tratamientos a 0.0
+        DecimalFormat formato = new DecimalFormat("#.##");
         for (int i = 0; i < 8; i++) {
-            tratamientoModel.setValueAt(0.0, i, 1); // Establece el importe en 0.0
+            tratamientoModel.setValueAt(formato.format(0.0), i, 1); // Establece el importe en 0.0 formateado
         }
 
         // Establece los detalles de las primeras 5 filas en blanco
@@ -535,7 +562,7 @@ public class Facturacion extends javax.swing.JInternalFrame {
 
         // Establece los detalles de las últimas 3 filas en blanco y el descuento a 0.0
         for (int i = 0; i < 3; i++) {
-            tratamientoModel.setValueAt(0.0, i + 5, 1); // Establece el importe en 0.0
+            tratamientoModel.setValueAt(formato.format(0.0), i + 5, 1); // Establece el importe en 0.0 formateado
         }
 
         des = 0.0; // Restablece el descuento a 0.0
@@ -636,7 +663,7 @@ public class Facturacion extends javax.swing.JInternalFrame {
             }
 
             contentStream.close();
-            
+
             String clienteText = Utilidades.obtenerTextoDesdeCampo(jTCliente1); // Obtener el texto del campo jTCliente1
             String nombreArchivo = "pdfs/factura_" + clienteText + ".pdf"; // Ruta del archivo en la carpeta "pdfs"
             document.save(nombreArchivo);
@@ -669,32 +696,49 @@ public class Facturacion extends javax.swing.JInternalFrame {
         actualizandoTotales = true;
 
         try {
-            double total = 0;
+            double total = 0.0d;
+            DecimalFormat formato = new DecimalFormat("#.##"); // Formato para dos dígitos decimales
+            DecimalFormatSymbols symbols = new DecimalFormatSymbols();
+            symbols.setDecimalSeparator('.'); // Establece el separador decimal como punto
+            formato.setDecimalFormatSymbols(symbols);
+
             // Recorrer las filas de la tabla y sumar los importes
             for (int i = 0; i < 5; i++) {
                 Object importeObject = tratamientoModel.getValueAt(i, 1);
 
-                // Intentar convertir el valor a Double si es una cadena
+                // Reemplazar comas por puntos en la cadena antes de convertirla a Double
+                String importeString = importeObject.toString().replace(",", ".");
+
+                // Intentar convertir el valor a Double
                 try {
-                    double importe = Double.parseDouble(importeObject.toString());
+                    double importe = Double.parseDouble(importeString);
                     total += importe;
                 } catch (NumberFormatException e) {
                     // Manejar el caso en el que la cadena no pueda ser convertida a Double
                     System.out.println("Error: No se pudo convertir la cadena a Double.");
                     JOptionPane.showMessageDialog(this, "Error: No se pudo convertir la cadena a Double.");
-
                     // Establecer el valor problemático a 0.0
                     tratamientoModel.setValueAt(0.0, i, 1);
                 }
             }
 
-            // Actualizar la fila de total en la tabla
-            tratamientoModel.setValueAt(total, tratamientoModel.getRowCount() - 3, 1);
+            // Formatear los totales con dos dígitos decimales y actualizar las filas de total y descuento
+            double totalFormateado = Double.parseDouble(formato.format(total));
+            // System.out.println(totalFormateado);
+            double descuento = totalFormateado * des;
+            //System.out.println(descuento);
+            double descuentoFormateado = Double.parseDouble(formato.format(descuento));
+            //System.out.println(descuentoFormateado);
+            double totalConDescuento = totalFormateado - descuentoFormateado;
 
-            // Calcular y actualizar el descuento y el total después del descuento
-            double descuento = total * des;
-            tratamientoModel.setValueAt(descuento, tratamientoModel.getRowCount() - 2, 1);
-            tratamientoModel.setValueAt(total - descuento, tratamientoModel.getRowCount() - 1, 1);
+            // Actualizar la fila de total en la tabla
+            tratamientoModel.setValueAt(totalFormateado, tratamientoModel.getRowCount() - 3, 1);
+
+            // Actualizar la fila de descuento en la tabla
+            tratamientoModel.setValueAt(descuentoFormateado, tratamientoModel.getRowCount() - 2, 1);
+
+            // Actualizar la fila de total después del descuento en la tabla
+            tratamientoModel.setValueAt(totalConDescuento, tratamientoModel.getRowCount() - 1, 1);
         } finally {
             actualizandoTotales = false;
         }
