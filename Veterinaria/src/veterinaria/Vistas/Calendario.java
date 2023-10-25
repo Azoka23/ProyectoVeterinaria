@@ -1,5 +1,6 @@
 package veterinaria.Vistas;
 
+import veterinaria.CustomPanel;
 import com.toedter.calendar.JCalendar;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;

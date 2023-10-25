@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import veterinaria.Vistas.CustomPanel;
+import veterinaria.CustomPanel;
 import veterinaria.AccesoADatos.MascotaDAO;
 import veterinaria.Entidades.Cliente;
 import veterinaria.Entidades.Mascota;
@@ -23,8 +23,8 @@ import javax.swing.JComboBox;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.text.AbstractDocument;
-import veterinaria.Vistas.DecimalDocumentFilter;
-import veterinaria.Vistas.Estado;
+import veterinaria.DecimalDocumentFilter;
+import veterinaria.Entidades.Estado;
 
 public class FormularioMascotasBuscar extends javax.swing.JInternalFrame {
 

@@ -1,8 +1,8 @@
 package veterinaria.Vistas;
 
 // Importaciones de clases necesarias
-import veterinaria.Vistas.Estado;
-import veterinaria.Vistas.DecimalDocumentFilter;
+import veterinaria.Entidades.Estado;
+import veterinaria.DecimalDocumentFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.text.AbstractDocument;
 import veterinaria.AccesoADatos.TratamientoDAO;
-import veterinaria.Vistas.CustomPanel;
+import veterinaria.CustomPanel;
 import veterinaria.Entidades.Tratamiento;
 import veterinaria.Utilidades;
 

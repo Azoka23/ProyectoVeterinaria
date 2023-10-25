@@ -2,8 +2,8 @@ package veterinaria.Vistas;
 
 // Importaciones necesarias
 import java.io.File;
-import veterinaria.Vistas.CustomPanel;
-import veterinaria.Vistas.CustomTableCellRenderer;
+import veterinaria.CustomPanel;
+import veterinaria.CustomTableCellRenderer;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -25,7 +25,7 @@ import veterinaria.Utilidades;
 /**
  * Clase que representa la interfaz de usuario para la facturación.
  */
-public class Facturacion extends javax.swing.JInternalFrame {
+public class FormularioFacturacion extends javax.swing.JInternalFrame {
 
     private boolean actualizandoTotales = false; // Bandera para evitar recursión infinita al actualizar totales
     private double des = 0.0; // Variable para almacenar el descuento
@@ -40,7 +40,7 @@ public class Facturacion extends javax.swing.JInternalFrame {
     /**
      * Constructor de la clase Facturacion.
      */
-    public Facturacion() {
+    public FormularioFacturacion() {
         CustomPanel customPanel = new CustomPanel(); // Crea un panel personalizado
         this.setContentPane(customPanel); // Establece el panel personalizado como el contenido del marco interno
         initComponents(); // Inicializa los componentes de la interfaz

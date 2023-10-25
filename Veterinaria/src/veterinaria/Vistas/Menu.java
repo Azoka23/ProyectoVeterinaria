@@ -1,5 +1,6 @@
 package veterinaria.Vistas;
 
+import veterinaria.DesktopPaneWithBackground;
 import javax.swing.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -233,6 +234,7 @@ public class Menu extends javax.swing.JFrame {
 
         jMenuBar1.add(jMBarFacturacion);
 
+        jMBarUsuario.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/rotation_102346.png"))); // NOI18N
         jMBarUsuario.setText("Usuarios");
 
         jMIRegisUsuarios.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_U, java.awt.event.InputEvent.CTRL_MASK));
@@ -249,6 +251,16 @@ public class Menu extends javax.swing.JFrame {
 
         jMBarSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/veterinaria/Imagenes/477A86B10B034C3087ADC368774218B1.png"))); // NOI18N
         jMBarSalir.setText("Salir");
+        jMBarSalir.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMBarSalirMouseClicked(evt);
+            }
+        });
+        jMBarSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMBarSalirActionPerformed(evt);
+            }
+        });
         jMenuBar1.add(jMBarSalir);
 
         setJMenuBar(jMenuBar1);
@@ -330,7 +342,7 @@ public class Menu extends javax.swing.JFrame {
         // Crear y mostrar el formulario para ver el historial
         jEscritorio.removeAll();
         jEscritorio.repaint();
-        Historial historial = new Historial();
+        FormularioListados historial = new FormularioListados();
         // Configurar el tamaño del JInternalFrame
         historial.setSize(600, 500);
         historial.pack();
@@ -433,7 +445,7 @@ public class Menu extends javax.swing.JFrame {
         jEscritorio.removeAll();
         jEscritorio.repaint();
         //jEscritorio.add(jLULP);
-        Facturacion facturacion = new Facturacion();
+        FormularioFacturacion facturacion = new FormularioFacturacion();
         // Configurar el tamaño del JInternalFrame
        facturacion.setSize(600, 500);
         facturacion.pack();
@@ -464,6 +476,15 @@ public class Menu extends javax.swing.JFrame {
          // TODO add your handling code here:
     }//GEN-LAST:event_jMIRegisUsuariosActionPerformed
 
+    private void jMBarSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMBarSalirActionPerformed
+        salir();
+    }//GEN-LAST:event_jMBarSalirActionPerformed
+
+    private void jMBarSalirMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMBarSalirMouseClicked
+        // TODO add your handling code here:
+        salir();
+    }//GEN-LAST:event_jMBarSalirMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu jBarClientes;
@@ -485,4 +506,12 @@ public class Menu extends javax.swing.JFrame {
     private javax.swing.JMenuBar jMenuBar1;
     // End of variables declaration//GEN-END:variables
 
+    
+    private void salir() {
+        int respuesta = JOptionPane.showConfirmDialog(this, "Estas seguro que "
+                + "quieres salir?", "Salir de la aplicacion", JOptionPane.YES_NO_OPTION);
+        if (respuesta == JOptionPane.YES_OPTION) {
+            System.exit(0);
+        }
+    }
 }

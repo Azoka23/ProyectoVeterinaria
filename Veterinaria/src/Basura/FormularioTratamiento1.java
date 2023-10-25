@@ -1,7 +1,7 @@
 package Basura;
 
-import veterinaria.Vistas.Estado;
-import veterinaria.Vistas.DecimalDocumentFilter;
+import veterinaria.Entidades.Estado;
+import veterinaria.DecimalDocumentFilter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -9,13 +9,13 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.text.AbstractDocument;
 import veterinaria.AccesoADatos.TratamientoDAO;
-import veterinaria.Vistas.CustomPanel;
+import veterinaria.CustomPanel;
 import veterinaria.Entidades.Cliente;
 import veterinaria.Entidades.Tratamiento;
 import veterinaria.Utilidades;
-import veterinaria.Vistas.CustomPanel;
-import veterinaria.Vistas.DecimalDocumentFilter;
-import veterinaria.Vistas.Estado;
+import veterinaria.CustomPanel;
+import veterinaria.DecimalDocumentFilter;
+import veterinaria.Entidades.Estado;
 
 public class FormularioTratamiento1 extends javax.swing.JInternalFrame {
 

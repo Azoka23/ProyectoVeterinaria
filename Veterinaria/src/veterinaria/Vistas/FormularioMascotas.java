@@ -1,7 +1,7 @@
 package veterinaria.Vistas;
 
 // Importación de librerías necesarias
-import veterinaria.Vistas.CustomPanel;
+import veterinaria.CustomPanel;
 import veterinaria.AccesoADatos.ClienteDAO;
 import veterinaria.AccesoADatos.MascotaDAO;
 import veterinaria.Entidades.Cliente;
@@ -20,9 +20,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.text.AbstractDocument;
-import veterinaria.Vistas.DecimalDocumentFilter;
-import veterinaria.Vistas.Estado;
-import veterinaria.Vistas.MascotaFormListener;
+import veterinaria.DecimalDocumentFilter;
+import veterinaria.Entidades.Estado;
+import veterinaria.MascotaFormListener;
 
 // Definición de la clase del formulario de mascotas
 public class FormularioMascotas extends javax.swing.JInternalFrame {

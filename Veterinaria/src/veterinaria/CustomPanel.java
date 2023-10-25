@@ -3,7 +3,7 @@
 
 
 
- package veterinaria.Vistas;
+ package veterinaria;
 
 import javax.swing.*;
 import java.awt.*;

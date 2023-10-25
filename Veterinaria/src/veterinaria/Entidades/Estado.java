@@ -1,5 +1,5 @@
 
-package veterinaria.Vistas;
+package veterinaria.Entidades;
 
 public enum Estado {
     ALTA,

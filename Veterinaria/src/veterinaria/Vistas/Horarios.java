@@ -1,5 +1,7 @@
 package veterinaria.Vistas;
 
+import veterinaria.CustomPanel;
+import veterinaria.Entidades.Estado;
 import static com.sun.java.accessibility.util.AWTEventMonitor.addWindowListener;
 import java.awt.Color;
 import java.awt.Image;
@@ -32,7 +34,7 @@ import veterinaria.Entidades.Cliente;
 import veterinaria.Entidades.Mascota;
 import veterinaria.Entidades.Reserva;
 import veterinaria.Utilidades;
-import veterinaria.Vistas.HorariosListener;
+import veterinaria.HorariosListener;
 
 public class Horarios extends javax.swing.JInternalFrame {
 

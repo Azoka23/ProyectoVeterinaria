@@ -1,4 +1,4 @@
-package veterinaria.Vistas;
+package veterinaria;
 
 import java.awt.Graphics;
 import java.awt.Image;

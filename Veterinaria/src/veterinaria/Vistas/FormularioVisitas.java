@@ -1,9 +1,9 @@
 package veterinaria.Vistas;
 
 // Importación de paquetes y librerías necesarias para la clase
-import veterinaria.Vistas.Estado;
-import veterinaria.Vistas.DesktopPaneWithBackground;
-import veterinaria.Vistas.DecimalDocumentFilter;
+import veterinaria.Entidades.Estado;
+import veterinaria.DesktopPaneWithBackground;
+import veterinaria.DecimalDocumentFilter;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
@@ -43,7 +43,7 @@ import veterinaria.AccesoADatos.MascotaDAO;
 import veterinaria.AccesoADatos.TratamientoDAO;
 import veterinaria.AccesoADatos.TratamientoRealizadoDAO;
 import veterinaria.AccesoADatos.VisitaDAO;
-import veterinaria.Vistas.CustomPanel;
+import veterinaria.CustomPanel;
 import veterinaria.Entidades.Cliente;
 import veterinaria.Entidades.Factura;
 import veterinaria.Entidades.Mascota;

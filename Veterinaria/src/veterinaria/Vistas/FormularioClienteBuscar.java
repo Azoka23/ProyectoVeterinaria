@@ -10,15 +10,15 @@ import veterinaria.AccesoADatos.MascotaDAO;
 import veterinaria.Entidades.Cliente;
 import veterinaria.Entidades.Mascota;
 import veterinaria.Utilidades;
-import veterinaria.Vistas.CustomPanel;
+import veterinaria.CustomPanel;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.table.DefaultTableModel;
-import veterinaria.Vistas.DesktopPaneWithBackground;
-import veterinaria.Vistas.Estado;
-import veterinaria.Vistas.MascotaFormListener;
+import veterinaria.DesktopPaneWithBackground;
+import veterinaria.Entidades.Estado;
+import veterinaria.MascotaFormListener;
 
 public class FormularioClienteBuscar extends javax.swing.JInternalFrame implements MascotaFormListener {
 
@@ -544,17 +544,28 @@ public class FormularioClienteBuscar extends javax.swing.JInternalFrame implemen
             // Intenta buscar un cliente con el DNI ingresado en la base de datos
             ClienteDAO clienteD = ClienteDAO.obtenerInstancia();
             Cliente cliente = clienteD.buscarListaClientexDni(dni);
+            if (cliente != null) {
+                estado = Estado.BUSCAR;
+                mostrarClienteEnFormulario(cliente);
+                idCliente = cliente.getIdCliente();
+                cargarTabla(cliente.getIdCliente());
 
-            estado = Estado.BUSCAR;
-            if (cliente == null) {
-
+            } else {
                 estado = Estado.NUEVO;
+                JOptionPane.showMessageDialog(this, "El cliente no existe, elija otro");
+                Utilidades.limpiarSetText(jTDocumento);
             }
 
-            mostrarClienteEnFormulario(cliente);
-            idCliente = cliente.getIdCliente();
-
-            cargarTabla(cliente.getIdCliente());
+//            estado = Estado.BUSCAR;
+//            if (cliente == null) {
+//
+//                estado = Estado.NUEVO;
+//            }
+//
+//            mostrarClienteEnFormulario(cliente);
+//            idCliente = cliente.getIdCliente();
+//
+//            cargarTabla(cliente.getIdCliente());
 
         } catch (NumberFormatException ex) {
             JOptionPane.showMessageDialog(this, "Error: Debes ingresar un número de documento válido.");

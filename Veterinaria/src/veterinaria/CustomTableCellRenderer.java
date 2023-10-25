@@ -1,4 +1,4 @@
-package veterinaria.Vistas;
+package veterinaria;
 
 import java.awt.Color;
 import java.awt.Component;

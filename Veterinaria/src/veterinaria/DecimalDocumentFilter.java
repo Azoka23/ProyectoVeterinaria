@@ -1,5 +1,5 @@
 
-package veterinaria.Vistas;
+package veterinaria;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;

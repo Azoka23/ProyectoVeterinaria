@@ -1,6 +1,6 @@
 package veterinaria.Vistas;
 
-import veterinaria.Vistas.CustomPanel;
+import veterinaria.CustomPanel;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
@@ -14,9 +14,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
-import veterinaria.Vistas.DesktopPaneWithBackground;
-import veterinaria.Vistas.Estado;
-import veterinaria.Vistas.MascotaFormListener;
+import veterinaria.DesktopPaneWithBackground;
+import veterinaria.Entidades.Estado;
+import veterinaria.MascotaFormListener;
 
 // Clase FormularioCliente que extiende JInternalFrame e implementa la interfaz MascotaFormListener
 public class FormularioCliente extends javax.swing.JInternalFrame implements MascotaFormListener {

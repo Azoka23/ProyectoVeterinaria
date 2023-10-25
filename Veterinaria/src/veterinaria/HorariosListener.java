@@ -1,5 +1,5 @@
 
-package veterinaria.Vistas;
+package veterinaria;
 
 
 

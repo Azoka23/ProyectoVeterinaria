@@ -43,7 +43,7 @@ public class UsuarioDAO extends DAO {
         } catch (ClassNotFoundException | SQLException ex) {
             // Manejar la excepción aquí, ya sea registrándola, mostrando un mensaje o loggeándola.
             // Por ejemplo, puedes imprimir el mensaje de error en la consola:
-            System.err.println("Error al guardar el cliente: " + ex.getMessage());
+            System.err.println("Error al guardar el usuario " + ex.getMessage());
             // Devolver un valor específico para indicar que ocurrió un error (por ejemplo, -1).
             return -1;
         }

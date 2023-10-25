@@ -1,7 +1,7 @@
 package veterinaria.Vistas;
 
-import veterinaria.Vistas.Estado;
-import veterinaria.Vistas.DesktopPaneWithBackground;
+import veterinaria.Entidades.Estado;
+import veterinaria.DesktopPaneWithBackground;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -26,7 +26,7 @@ import veterinaria.AccesoADatos.MascotaDAO;
 import veterinaria.AccesoADatos.TratamientoDAO;
 import veterinaria.AccesoADatos.TratamientoRealizadoDAO;
 import veterinaria.AccesoADatos.VisitaDAO;
-import veterinaria.Vistas.CustomPanel;
+import veterinaria.CustomPanel;
 import veterinaria.Entidades.Cliente;
 import veterinaria.Entidades.ConsultasLista;
 import veterinaria.Entidades.Mascota;
@@ -39,7 +39,7 @@ import veterinaria.Utilidades;
  *
  * @author marcelaaliciaarroyo
  */
-public class Historial extends javax.swing.JInternalFrame {
+public class FormularioListados extends javax.swing.JInternalFrame {
 
     // Declaración de variables de instancia y atributos para la clase
     private Estado estado; // Variable para controlar el estado del formulario
@@ -86,7 +86,7 @@ public class Historial extends javax.swing.JInternalFrame {
     /**
      * Creates new form Historial
      */
-    public Historial() {
+    public FormularioListados() {
         CustomPanel customPanel = new CustomPanel(); // Crea un panel personalizado
         this.setContentPane(customPanel); // Establece el panel personalizado como el contenido del marco interno
         
@@ -440,7 +440,7 @@ public class Historial extends javax.swing.JInternalFrame {
                 jCBListar.addItem(tipo);
             }
         } catch (Exception ex) {
-            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FormularioListados.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -590,7 +590,7 @@ public class Historial extends javax.swing.JInternalFrame {
                 }
             }
         } catch (Exception ex) {
-            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FormularioListados.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -611,7 +611,7 @@ public class Historial extends javax.swing.JInternalFrame {
                     mascota.getIdCliente().getApellido(), mascota.getIdCliente().getNombre()});
             }
         } catch (Exception ex) {
-            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FormularioListados.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -631,7 +631,7 @@ public class Historial extends javax.swing.JInternalFrame {
                 historialModel.addRow(new Object[]{tipo.getTipo(), tipo.getDescripcion(), tipo.getImporte()});
             }
         } catch (Exception ex) {
-            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FormularioListados.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -651,7 +651,7 @@ public class Historial extends javax.swing.JInternalFrame {
                 historialModel.addRow(new Object[]{tipo.getApellido(), tipo.getNombre(), tipo.getDni(), tipo.getTelefono(), tipo.getEmail()});
             }
         } catch (Exception ex) {
-            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FormularioListados.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -670,7 +670,7 @@ public class Historial extends javax.swing.JInternalFrame {
                 }
             }
         } catch (Exception ex) {
-            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FormularioListados.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -698,7 +698,7 @@ public class Historial extends javax.swing.JInternalFrame {
                 }
             }
         } catch (Exception ex) {
-            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FormularioListados.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -738,7 +738,7 @@ public class Historial extends javax.swing.JInternalFrame {
                 historialModel.addRow(new Object[]{tipo.getFechaVisita(), tipo.getDetallesSintoma(), tipo.getImporteVisita()});
             }
         } catch (Exception ex) {
-            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FormularioListados.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -759,7 +759,7 @@ public class Historial extends javax.swing.JInternalFrame {
                 historialModel.addRow(new Object[]{tipo.getIdVisita().getFechaVisita(), tipo.getIdTratamiento().getTipo(), tipo.getIdTratamiento().getDescripcion()});
             }
         } catch (Exception ex) {
-            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FormularioListados.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -786,7 +786,7 @@ public class Historial extends javax.swing.JInternalFrame {
                 }
             }
         } catch (Exception ex) {
-            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FormularioListados.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -806,7 +806,7 @@ public class Historial extends javax.swing.JInternalFrame {
                 }
             }
         } catch (Exception ex) {
-            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(FormularioListados.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -1243,7 +1243,7 @@ public class Historial extends javax.swing.JInternalFrame {
                             // Cargar y mostrar las mascotas asociadas a este tipo de tratamiento
                             cargarMascotaXTipo(idTratamiento);
                         } catch (Exception ex) {
-                            Logger.getLogger(Historial.class.getName()).log(Level.SEVERE, null, ex);
+                            Logger.getLogger(FormularioListados.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }
                 }
