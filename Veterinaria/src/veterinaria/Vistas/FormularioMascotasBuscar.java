@@ -597,7 +597,7 @@ public class FormularioMascotasBuscar extends javax.swing.JInternalFrame {
         jTPesoA.setText(mascota.getPesoActual()+ "");
 
         if (mascota.isEstado()) {
-            setTitle("Cargar Mascotas");
+            setTitle("Modificar Mascota");
         } else {
             setTitle("Mascota -- Codigo dado de Baja");
         }

@@ -625,7 +625,7 @@ public class FormularioClienteBuscar extends javax.swing.JInternalFrame implemen
         jTMail.setText(cliente.getEmail());
 
         if (cliente.isEstado()) {
-            setTitle("Cargar Clientes");
+            setTitle("Modificar Cliente");
         } else {
             setTitle("Cliente -- DNI dado de Baja");
         }
