@@ -381,20 +381,31 @@ public class Horarios extends javax.swing.JInternalFrame {
                         }
                     } else {
                         String DniCliente = JOptionPane.showInputDialog("Ingrese el DNI del cliente:");
-                        if (DniCliente != null) { // Asegúrate de verificar si el usuario cancela el cuadro de diálogo
+                        if (DniCliente == null) {
+                            return;
+                        }
+                        //  if (DniCliente != null) { // Asegúrate de verificar si el usuario cancela el cuadro de diálogo
+                        if (!DniCliente.isEmpty()) { // Asegúrate de verificar si el usuario cancela el cuadro de diálogo
                             int dniCliente = Integer.parseInt(DniCliente);
                             System.out.println("DNI del cliente: " + dniCliente);
                             if (verificarExistenciaCliente(dniCliente)) {
                                 String alias = JOptionPane.showInputDialog("Ingrese el nombre de la mascota:");
-                                if (alias != null) { // Asegúrate de verificar si el usuario cancela el cuadro de diálogo
+                                if (alias == null) {
+                                    return;
+                                }
+                                if (!alias.isEmpty()) { // Asegúrate de verificar si el usuario cancela el cuadro de diálogo
                                     System.out.println("Nombre de la mascota: " + alias);
                                     if (verificarExistenciaMascota(alias)) {
                                         TurnosModel.setValueAt(DniCliente, filaSeleccionada, 1);
                                         TurnosModel.setValueAt(alias, filaSeleccionada, 2);
                                         TablaTurnos.repaint();
                                     }
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Debes ingresar una mascota");
                                 }
                             }
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Debes ingresar un dni");
                         }
                     }
                 }

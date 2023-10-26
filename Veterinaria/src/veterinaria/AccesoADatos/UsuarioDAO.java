@@ -109,7 +109,7 @@ public class UsuarioDAO extends DAO {
 
                 usuario = obtenerUsuarioDesdeResultado(resultado);
             }
-
+//JOptionPane.showMessageDialog(null,usuario);
             return usuario;
         }
 

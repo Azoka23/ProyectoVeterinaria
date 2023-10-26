@@ -269,11 +269,29 @@ public class IngresoAlSistema extends javax.swing.JFrame {
                 try {
                     UsuarioDAO usuarioDAO = UsuarioDAO.obtenerInstancia();
                     Usuario username = new Usuario();
+                    //System.out.print(nombre);
                     username = usuarioDAO.buscarListaUsuarioxNombre(nombre);
-                    String passwordDAO = username.getPassword();
+                    //System.out.print(username);
+
                     if (username == null) {
                         JOptionPane.showMessageDialog(this, "El usuario no existe");
-                    } else if (password.equals(passwordDAO)) {
+                        jTUsuario.setText("");
+                        jTPassword.setText("");
+                        Utilidades.asociarEnterConComponente(jBIngresar, jTUsuario);
+                        return;
+                    }
+                    boolean estado = username.isEstado();
+                    if (!estado) {
+                        JOptionPane.showMessageDialog(null, "El usuario esta dado de baja");
+                        jTUsuario.setText("");
+                        jTPassword.setText("");
+                        Utilidades.asociarEnterConComponente(jBIngresar, jTUsuario);
+                        return;
+                    }
+                    String passwordDAO = username.getPassword();
+
+                    if (password.equals(passwordDAO)) {
+
                         IngresoAlSistema login = new IngresoAlSistema();
                         login.dispose();
                         Menu menu = new Menu(username);
@@ -285,7 +303,7 @@ public class IngresoAlSistema extends javax.swing.JFrame {
                         this.dispose();
 
                     } else {
-                        JOptionPane.showMessageDialog(this, "Usuario y/aaao contraseña incorrectos");
+                        JOptionPane.showMessageDialog(this, "Contraseña incorrecta ");
                         jTUsuario.setText("");
                         jTPassword.setText("");
                     }

@@ -342,9 +342,9 @@ public class RegistroUsuarios extends javax.swing.JInternalFrame {
                 //JOptionPane.showMessageDialog(this, "No se encontró el codigo,el codigo disponible es " + ultimoRegistro());
                 //jTCodigo.setText(ultimoRegistro() + "");
                 JOptionPane.showMessageDialog(this, "No se encontro el usuario");
-                limpiar();
+               // limpiar();
                 estado = Estado.NUEVO;
-                Utilidades.asociarEnterConComponente(jTNombre, jTNombre);
+               // Utilidades.asociarEnterConComponente(jTNombre, jTNombre);
             }
 
             //mostrarUsuarioEnFormulario(usuario);
